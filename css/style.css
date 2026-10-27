@@ -103,16 +103,18 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
   .nav-links > :last-child { margin-bottom: auto; }
   .nav-links a { font-size: 1.15rem; font-family: var(--serif); }
   .nav.is-open .nav-links { opacity: 1; pointer-events: auto; }
-  /* 手機版：子選單直接展開成一排小標籤 */
-  .nav-drop { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-  .nav-drop .caret { display: none; }
-  .nav-drop-menu {
+  /* 手機版：子選單平常收合，點一下大項才展開 */
+  .nav-drop { display: flex; flex-direction: column; align-items: center; }
+  .nav-drop .caret { transition: transform .25s; }
+  .nav-drop.is-open .caret { transform: translateY(1px) rotate(225deg); }
+  .nav-drop-menu, .nav-drop:hover .nav-drop-menu, .nav-drop:focus-within .nav-drop-menu {
     position: static; transform: none; margin: 0; padding: 0; min-width: 0;
-    flex-direction: row; gap: 6px; background: none; border: 0; box-shadow: none;
-    opacity: 1; visibility: visible;
+    background: none; border: 0; box-shadow: none; border-radius: 0;
+    opacity: 1; visibility: visible; display: none;
   }
+  .nav-drop.is-open .nav-drop-menu { display: flex; margin-top: 8px; gap: 2px; }
   .nav-drop-menu::before { display: none; }
-  .nav .nav-drop-menu a { font-family: var(--sans); font-size: .82rem; padding: 3px 12px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted) !important; }
+  .nav .nav-drop-menu a { font-family: var(--sans); font-size: .95rem; padding: 6px 18px; color: var(--muted) !important; }
 }
 
 /* ========== 主視覺 ========== */
