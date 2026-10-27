@@ -191,7 +191,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .prose p { margin: 0 0 1.1em; }
 .prose ul { margin: 0 0 1.1em; padding-left: 1.3em; }
 .prose strong { color: var(--bronze-deep); font-weight: 500; }
-.intro-reiki .prose strong { color: var(--gold); }
+.intro-reiki .prose strong { color: var(--earth); }
 .prose img { border-radius: 12px; margin: 1.2em 0; }
 .prose h2, .prose h3 { margin: 1.6em 0 .6em; font-size: 1.25rem; }
 .prose blockquote { margin: 1.4em 0; padding: 4px 0 4px 20px; border-left: 2px solid var(--gold); color: var(--muted); font-family: var(--serif); }
@@ -250,19 +250,29 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 
 /* ========== 頌缽／靈氣介紹 ========== */
 .intro-bowl { background: var(--cream); }
-.intro-reiki { background: var(--earth-deep); color: #efe9df; }
-.intro-reiki .prose { color: rgba(239, 233, 223, .82); }
-.intro-reiki .lead { color: rgba(239, 233, 223, .7); }
-.intro-reiki .eyebrow { color: var(--gold); }
+/* 大地靈氣：背景照片淡化成柔和的底圖（後台可在「網站基本資料」更換） */
+.intro-reiki {
+  position: relative; isolation: isolate;
+  background: var(--reiki-bg, url("../images/uploads/reiki-bg.jpg")) center bottom / cover no-repeat;
+}
+.intro-reiki::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(247, 242, 234, .95) 0%, rgba(247, 242, 234, .86) 45%, rgba(247, 242, 234, .78) 100%);
+  backdrop-filter: saturate(.75);
+}
+.intro-reiki .prose { color: #4a433b; }
+.intro-reiki .eyebrow { color: var(--earth); }
+.intro-reiki .section-title { color: var(--earth-deep); }
 .intro-grid { display: grid; grid-template-columns: 4fr 7fr; gap: clamp(32px, 6vw, 90px); }
 .intro-grid.reverse .intro-head { order: 2; }
 .intro-head .lead { margin-top: 22px; }
 .intro-head { position: sticky; top: 110px; align-self: start; }
 .benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 32px; }
 .benefit { padding: 22px 22px 20px; border-radius: var(--radius); background: rgba(255, 255, 255, .6); border: 1px solid var(--line); }
-.intro-reiki .benefit { background: rgba(255, 255, 255, .05); border-color: rgba(201, 164, 106, .25); }
+.intro-reiki .benefit { background: rgba(255, 255, 255, .72); border-color: rgba(74, 82, 64, .18); backdrop-filter: blur(6px); }
 .benefit h3 { font-size: 1.05rem; margin-bottom: 6px; color: var(--bronze-deep); }
-.intro-reiki .benefit h3 { color: var(--gold); }
+.intro-reiki .benefit h3 { color: var(--earth); }
 .benefit p { margin: 0; font-size: .92rem; line-height: 1.8; opacity: .85; }
 
 /* ========== 課程 ========== */
@@ -484,6 +494,7 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
   .course { grid-template-columns: 1fr; }
   .course-media { min-height: 200px; aspect-ratio: 16 / 9; }
   .course-body { padding: 22px; }
+  .intro-reiki { background-position: 28% center; }
   .event-list { grid-template-columns: 1fr; }
   .event-list.is-single .event-card { flex-direction: column; }
   .event-list.is-single .event-body { padding: 24px 22px 26px; }
