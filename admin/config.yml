@@ -232,6 +232,7 @@ collections:
               - { name: title, label: 標題, widget: string }
               - { name: text, label: 說明, widget: text }
           - { name: reikiIntro, label: 大地靈氣介紹, widget: markdown }
+          - { name: reikiBg, label: 大地靈氣區塊背景圖（可不放，不放就用目前的圖）, widget: image, required: false, hint: "網站會自動把圖片淡化，讓文字清楚" }
           - name: reikiBenefits
             label: 大地靈氣的好處
             widget: list
