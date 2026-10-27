@@ -2,7 +2,7 @@
 # ★ 只需要修改下面「repo」這一行：改成「GitHub 帳號名稱/儲存庫名稱」
 backend:
   name: github
-  repo: 你的GitHub帳號/你的GitHub帳號.github.io
+  repo: Inner988/inner988.github.io
   branch: main
 
 # 上傳的相片會存到這個資料夾
