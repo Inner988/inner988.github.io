@@ -72,6 +72,16 @@
   }
 
   /* ---------- 課程 ---------- */
+  // 有早鳥價時：早鳥價放大、原價加刪除線；沒有就只顯示原價
+  const priceHTML = (c) => {
+    if (!c.earlyPrice) return `<span class="course-price">${c.price ? esc(c.price) : ''}</span>`;
+    return `<div class="course-price has-early">
+      <span class="price-early"><small>早鳥價</small>${esc(c.earlyPrice)}</span>
+      ${c.price ? `<span class="price-original"><small>原價</small><s>${esc(c.price)}</s></span>` : ''}
+      ${c.earlyDeadline ? `<span class="price-deadline">早鳥優惠至 ${esc(c.earlyDeadline)}</span>` : ''}
+    </div>`;
+  };
+
   function renderCourses(data) {
     const order = { '招生中': 0, '即將開課': 1, '已額滿': 2, '已結束': 3 };
     const items = (data.items || []).filter((c) => c.show !== false)
@@ -92,7 +102,7 @@
           <ul class="course-meta">${meta}</ul>
           <div class="course-desc">${md(c.description)}</div>
           <div class="course-foot">
-            <span class="course-price">${esc(c.price)}</span>
+            ${priceHTML(c)}
             ${canSignup ? `<a class="btn btn-primary btn-small" href="${esc(c.link)}" target="_blank" rel="noopener">我要報名</a>` : ''}
           </div>
         </div></article>`;
@@ -108,14 +118,16 @@
   };
 
   /* ---------- 療癒分享（學員心得） ---------- */
+  // 網站只放（目前分類中）最新 5 篇，其他引導到臉書粉專
   function renderStories(data) {
-    const items = (data.items || []).slice().sort(byDateDesc);
+    const all = (data.items || []).slice().sort(byDateDesc);
     const grid = $('#story-grid');
-    const more = $('#story-more');
-    const PAGE = 6;
-    let shown = PAGE;
-    const draw = () => {
-      grid.innerHTML = items.slice(0, shown).map((s, i) => `
+    const group = $('[data-filter-group="stories"]');
+    const SHOW = 5;
+    let items = [];
+    const draw = (cat) => {
+      items = all.filter((s) => cat === 'all' || s.category === cat).slice(0, SHOW);
+      grid.innerHTML = items.map((s, i) => `
         <button class="story-card reveal is-visible" data-i="${i}">
           ${s.photo ? `<div class="story-photo"><img src="${esc(img(s.photo))}" alt="" loading="lazy"></div>` : ''}
           <span class="story-course">${esc(s.course)}</span>
@@ -123,10 +135,15 @@
           <p>${esc(s.summary)}</p>
           <span class="story-who">— ${esc(s.student || '學員')}</span>
         </button>`).join('');
-      more.hidden = shown >= items.length;
+      $('#story-empty').hidden = items.length > 0;
     };
-    draw();
-    more.addEventListener('click', () => { shown += PAGE; draw(); });
+    draw('all');
+    group.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-filter]');
+      if (!btn) return;
+      $$('.chip', group).forEach((c) => c.classList.toggle('is-active', c === btn));
+      draw(btn.dataset.filter);
+    });
     grid.addEventListener('click', (e) => {
       const card = e.target.closest('.story-card');
       if (!card) return;
@@ -235,7 +252,15 @@
       const open = nav.classList.toggle('is-open');
       toggle.setAttribute('aria-expanded', open);
     });
-    $$('.nav-links a').forEach((a) => a.addEventListener('click', () => nav.classList.remove('is-open')));
+    $$('.nav-links a').forEach((a) => a.addEventListener('click', () => {
+      nav.classList.remove('is-open');
+      a.blur(); // 收起桌機版的下拉選單
+      // 下拉選單的分類：跳到該區塊並套用同名的分類篩選
+      if (a.dataset.jump) {
+        const chip = $(`[data-filter-group="${a.dataset.jump}"] [data-filter="${a.dataset.cat}"]`);
+        if (chip) chip.click();
+      }
+    }));
 
     $$('dialog').forEach((d) => {
       $('.modal-close', d).addEventListener('click', () => d.close());
