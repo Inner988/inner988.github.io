@@ -10,6 +10,33 @@ media_folder: images/uploads
 public_folder: /images/uploads
 
 collections:
+  # ───────── 最新活動 ─────────
+  - name: events
+    label: 最新活動
+    files:
+      - name: events
+        label: 活動列表（拖曳或用 ⋯ 選單上移／下移調整順序；全部刪除後首頁會自動隱藏這個區塊）
+        file: content/events.json
+        format: json
+        fields:
+          - name: items
+            label: 活動
+            label_singular: 活動
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { name: title, label: 活動名稱, widget: string }
+              - { name: tag, label: 小標籤（可不填）, widget: string, required: false, hint: "例：招生中、名額有限" }
+              - { name: image, label: 活動海報或照片, widget: image, required: false, hint: "海報會完整顯示，不會被裁切" }
+              - { name: date, label: 日期, widget: string, required: false }
+              - { name: time, label: 時間, widget: string, required: false }
+              - { name: location, label: 地點, widget: string, required: false }
+              - { name: description, label: 活動說明, widget: markdown, required: false }
+              - { name: link, label: 按鈕連結（可不填）, widget: string, required: false, hint: "報名表單、Messenger 或 LINE 網址" }
+              - { name: linkText, label: 按鈕文字, widget: string, required: false, default: 私訊報名 }
+              - { name: show, label: 顯示在網站上, widget: boolean, default: true }
+
   # ───────── 課程 ─────────
   - name: courses
     label: 課程活動
@@ -41,10 +68,66 @@ collections:
               - { name: time, label: 時間, widget: string, required: false, hint: "例：19:30 – 21:00" }
               - { name: duration, label: 時長, widget: string, required: false }
               - { name: location, label: 地點, widget: string, required: false }
-              - { name: price, label: 費用, widget: string, required: false, hint: "例：NT$ 800" }
+              - { name: price, label: 原價, widget: string, required: false, hint: "例：NT$ 3,600" }
+              - { name: earlyPrice, label: 早鳥價（沒有可不填）, widget: string, required: false, hint: "例：NT$ 3,200。有填時，網站會把原價加上刪除線" }
+              - { name: earlyDeadline, label: 早鳥優惠截止日（可不填）, widget: string, required: false, hint: "例：11/1（六）" }
               - { name: description, label: 課程介紹, widget: markdown, required: false }
               - { name: link, label: 報名連結, widget: string, required: false, hint: "Google 表單、LINE 或粉專的網址" }
               - { name: show, label: 顯示在網站上, widget: boolean, default: true }
+
+  # ───────── 購物商城 ─────────
+  - name: shop
+    label: 購物商城
+    files:
+      - name: products
+        label: 商品（全部刪除或都不顯示時，首頁會自動隱藏商城）
+        file: content/shop.json
+        format: json
+        fields:
+          - name: items
+            label: 商品
+            label_singular: 商品
+            widget: list
+            required: false
+            summary: "{{fields.status}}｜{{fields.name}}｜{{fields.price}}"
+            fields:
+              - { name: name, label: 商品名稱, widget: string }
+              - name: status
+                label: 狀態
+                widget: select
+                options: [現貨, 預購, 售完]
+                default: 現貨
+              - { name: image, label: 主要相片, widget: image, required: false }
+              - name: images
+                label: 更多相片（可不放）
+                widget: list
+                required: false
+                field: { name: image, label: 相片, widget: image }
+              - { name: price, label: 售價（數字）, widget: number, value_type: int, hint: "只填數字，例：3800" }
+              - { name: salePrice, label: 特價（沒有可不填）, widget: number, value_type: int, required: false, hint: "有填時，網站會顯示特價並把售價加上刪除線" }
+              - { name: summary, label: 簡短介紹（商品卡片上顯示）, widget: text, required: false }
+              - { name: description, label: 詳細介紹, widget: markdown, required: false }
+              - { name: show, label: 上架（顯示在網站上）, widget: boolean, default: true }
+      - name: settings
+        label: 付款與運費設定
+        file: content/shop-settings.json
+        format: json
+        fields:
+          - { name: intro, label: 商城副標題, widget: string, required: false }
+          - { name: bankName, label: 銀行名稱, widget: string, required: false, hint: "例：台灣銀行" }
+          - { name: bankCode, label: 銀行代碼, widget: string, required: false, hint: "例：004" }
+          - { name: bankBranch, label: 分行, widget: string, required: false }
+          - { name: accountName, label: 戶名, widget: string, required: false }
+          - { name: accountNumber, label: 帳號, widget: string, required: false, hint: "沒填的話，結帳後會顯示「匯款帳號請私訊老師索取」" }
+          - { name: payDays, label: 幾天內完成匯款, widget: string, required: false, default: "3" }
+          - { name: shippingFee, label: 宅配運費（數字）, widget: number, value_type: int, required: false }
+          - { name: freeShippingOver, label: 滿多少免運（數字，0 代表不提供）, widget: number, value_type: int, required: false }
+          - { name: allowPickup, label: 提供面交自取, widget: boolean, default: true }
+          - { name: pickupNote, label: 面交說明, widget: string, required: false }
+          - { name: lineUrl, label: LINE 連結（訂單傳送用）, widget: string, required: false }
+          - { name: messengerUrl, label: Messenger 連結（訂單傳送用）, widget: string, required: false }
+          - { name: email, label: 接收訂單的 Email（可不填）, widget: string, required: false }
+          - { name: orderNote, label: 結帳完成頁的補充說明（可不填）, widget: text, required: false }
 
   # ───────── 療癒分享（學員心得）─────────
   - name: stories
@@ -63,6 +146,14 @@ collections:
             fields:
               - { name: title, label: 標題, widget: string }
               - { name: student, label: 學員稱呼, widget: string, hint: "例：護理師・頌缽初階學員（可不寫真名）" }
+              - name: category
+                label: 分類
+                widget: select
+                options:
+                  - { label: 頌缽, value: 頌缽 }
+                  - { label: 大地靈氣, value: 大地靈氣 }
+                  - { label: 個案療癒, value: 個案 }
+                default: 頌缽
               - { name: course, label: 上過的課程, widget: string, required: false }
               - { name: date, label: 日期, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
               - { name: quote, label: 一句話引言（卡片上的大字）, widget: string, required: false }
@@ -121,6 +212,7 @@ collections:
         format: json
         fields:
           - { name: siteName, label: 網站名稱（顯示在左上角與瀏覽器分頁）, widget: string }
+          - { name: logo, label: Logo 圖案（可不放，不放就用目前的 logo）, widget: image, required: false, hint: "建議用正方形圖片，網站會裁成圓形；也會用在瀏覽器分頁的小圖示" }
           - { name: name, label: 老師姓名（顯示在「關於老師」）, widget: string }
           - { name: heroEyebrow, label: 首頁小標, widget: string, required: false }
           - { name: heroTitle, label: 首頁大標（可換行）, widget: text, required: false }
