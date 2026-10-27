@@ -1,0 +1,169 @@
+# 網站後台設定
+# ★ 只需要修改下面「repo」這一行：改成「GitHub 帳號名稱/儲存庫名稱」
+backend:
+  name: github
+  repo: 你的GitHub帳號/你的GitHub帳號.github.io
+  branch: main
+
+# 上傳的相片會存到這個資料夾
+media_folder: images/uploads
+public_folder: /images/uploads
+
+collections:
+  # ───────── 課程 ─────────
+  - name: courses
+    label: 課程活動
+    files:
+      - name: courses
+        label: 課程列表（拖曳可調整順序）
+        file: content/courses.json
+        format: json
+        fields:
+          - name: items
+            label: 課程
+            label_singular: 課程
+            widget: list
+            summary: "{{fields.status}}｜{{fields.title}}"
+            fields:
+              - { name: title, label: 課程名稱, widget: string }
+              - name: category
+                label: 分類
+                widget: select
+                options: [頌缽, 大地靈氣, 個案, 其他]
+                default: 頌缽
+              - name: status
+                label: 狀態
+                widget: select
+                options: [招生中, 即將開課, 已額滿, 已結束]
+                default: 招生中
+              - { name: image, label: 課程照片, widget: image, required: false }
+              - { name: date, label: 日期, widget: string, required: false, hint: "例：2026/11/15（六）" }
+              - { name: time, label: 時間, widget: string, required: false, hint: "例：19:30 – 21:00" }
+              - { name: duration, label: 時長, widget: string, required: false }
+              - { name: location, label: 地點, widget: string, required: false }
+              - { name: price, label: 費用, widget: string, required: false, hint: "例：NT$ 800" }
+              - { name: description, label: 課程介紹, widget: markdown, required: false }
+              - { name: link, label: 報名連結, widget: string, required: false, hint: "Google 表單、LINE 或粉專的網址" }
+              - { name: show, label: 顯示在網站上, widget: boolean, default: true }
+
+  # ───────── 療癒分享（學員心得）─────────
+  - name: stories
+    label: 療癒分享（學員心得）
+    files:
+      - name: stories
+        label: 學員心得
+        file: content/stories.json
+        format: json
+        fields:
+          - name: items
+            label: 心得
+            label_singular: 心得
+            widget: list
+            summary: "{{fields.date}}｜{{fields.student}}｜{{fields.title}}"
+            fields:
+              - { name: title, label: 標題, widget: string }
+              - { name: student, label: 學員稱呼, widget: string, hint: "例：護理師・頌缽初階學員（可不寫真名）" }
+              - { name: course, label: 上過的課程, widget: string, required: false }
+              - { name: date, label: 日期, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+              - { name: quote, label: 一句話引言（卡片上的大字）, widget: string, required: false }
+              - { name: summary, label: 摘要（卡片上的小字）, widget: text, required: false }
+              - { name: body, label: 完整心得, widget: markdown, required: false }
+              - { name: photo, label: 相片（可不放）, widget: image, required: false }
+              - { name: link, label: 原文連結（可不填）, widget: string, required: false }
+
+  # ───────── 老師隨筆 ─────────
+  - name: posts
+    label: 老師隨筆
+    files:
+      - name: posts
+        label: 老師的文章
+        file: content/posts.json
+        format: json
+        fields:
+          - name: items
+            label: 文章
+            label_singular: 文章
+            widget: list
+            summary: "{{fields.date}}｜{{fields.title}}"
+            fields:
+              - { name: title, label: 標題, widget: string }
+              - { name: date, label: 日期, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+              - { name: cover, label: 封面照片, widget: image, required: false }
+              - { name: summary, label: 摘要（列表上顯示的短文字）, widget: text, required: false }
+              - { name: body, label: 內文, widget: markdown, required: false }
+
+  # ───────── 相簿 ─────────
+  - name: gallery
+    label: 活動相簿
+    files:
+      - name: gallery
+        label: 相片
+        file: content/gallery.json
+        format: json
+        fields:
+          - name: items
+            label: 相片
+            label_singular: 相片
+            widget: list
+            summary: "{{fields.album}}｜{{fields.caption}}"
+            fields:
+              - { name: image, label: 相片, widget: image }
+              - { name: caption, label: 說明文字, widget: string, required: false }
+              - { name: album, label: 相簿分類, widget: string, required: false, hint: "例：頌缽音浴、大地靈氣、日常（同名的會分在一起）" }
+
+  # ───────── 網站基本資料 ─────────
+  - name: settings
+    label: 網站基本資料
+    files:
+      - name: site
+        label: 老師介紹與聯絡方式
+        file: content/site.json
+        format: json
+        fields:
+          - { name: siteName, label: 網站名稱（顯示在左上角與瀏覽器分頁）, widget: string }
+          - { name: name, label: 老師姓名（顯示在「關於老師」）, widget: string }
+          - { name: heroEyebrow, label: 首頁小標, widget: string, required: false }
+          - { name: heroTitle, label: 首頁大標（可換行）, widget: text, required: false }
+          - { name: heroSubtitle, label: 首頁副標, widget: string, required: false }
+          - { name: heroImage, label: 首頁背景照片（可不放）, widget: image, required: false }
+          - { name: teacherPhoto, label: 老師照片, widget: image, required: false }
+          - { name: about, label: 關於老師, widget: markdown }
+          - name: credentials
+            label: 身分標籤
+            widget: list
+            field: { name: tag, label: 標籤, widget: string }
+          - { name: bowlIntro, label: 頌缽介紹, widget: markdown }
+          - name: bowlBenefits
+            label: 頌缽的好處
+            widget: list
+            fields:
+              - { name: title, label: 標題, widget: string }
+              - { name: text, label: 說明, widget: text }
+          - { name: reikiIntro, label: 大地靈氣介紹, widget: markdown }
+          - name: reikiBenefits
+            label: 大地靈氣的好處
+            widget: list
+            fields:
+              - { name: title, label: 標題, widget: string }
+              - { name: text, label: 說明, widget: text }
+          - { name: contactNote, label: 聯絡說明, widget: text, required: false }
+          - name: contacts
+            label: 聯絡方式
+            widget: list
+            summary: "{{fields.label}}"
+            fields:
+              - name: type
+                label: 類型
+                widget: select
+                options:
+                  - { label: 電話, value: phone }
+                  - { label: LINE, value: line }
+                  - { label: Email, value: email }
+                  - { label: Facebook, value: facebook }
+                  - { label: Instagram, value: instagram }
+                  - { label: 地址, value: address }
+                  - { label: 其他, value: other }
+              - { name: label, label: 顯示名稱, widget: string }
+              - { name: value, label: 內容, widget: string }
+              - { name: url, label: 連結網址（可不填）, widget: string, required: false, hint: "臉書、LINE 填了連結會自動產生 QR Code" }
+              - { name: qr, label: QR Code 圖片（可不放）, widget: image, required: false, hint: "有上傳就用這張，不會自動產生" }

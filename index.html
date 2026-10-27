@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>頌缽音藥・大地靈氣</title>
+  <meta name="description" content="頌缽音療與大地靈氣課程、療癒分享與活動相簿。">
+  <meta property="og:title" content="頌缽音藥・大地靈氣">
+  <meta property="og:description" content="以聲音與大地的能量，回到身心的平靜。頌缽音療、大地靈氣課程與個案。">
+  <link rel="icon" href="images/logo-small.webp" type="image/webp">
+  <link rel="apple-touch-icon" href="images/logo-small.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a href="#top" class="brand">
+    <img class="brand-mark" src="images/logo-small.webp" alt="" width="48" height="48">
+    <span class="brand-name">
+      <span class="brand-text" data-site="siteName">頌缽音藥・大地靈氣</span>
+      <span class="brand-sub">Singing Bowl &amp; Earth Reiki</span>
+    </span>
+  </a>
+  <button class="nav-toggle" aria-label="開啟選單" aria-expanded="false"><span></span><span></span></button>
+  <nav class="nav-links">
+    <a href="#about">關於老師</a>
+    <a href="#bowl">頌缽音療</a>
+    <a href="#reiki">大地靈氣</a>
+    <a href="#journal">老師隨筆</a>
+    <a href="#courses">課程活動</a>
+    <a href="#stories">療癒分享</a>
+    <a href="#gallery">相簿</a>
+    <a href="#contact" class="nav-cta">預約聯絡</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- 首頁主視覺 -->
+  <section class="hero">
+    <div class="ripples" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="hero-inner">
+      <p class="eyebrow" data-site="heroEyebrow">Singing Bowl ・ Earth Reiki</p>
+      <h1 data-site="heroTitle">讓聲音帶你<br>回到身體裡的寧靜</h1>
+      <p class="hero-sub" data-site="heroSubtitle">頌缽音藥 ・ 大地靈氣</p>
+      <div class="hero-actions">
+        <a href="#courses" class="btn btn-primary">查看近期課程</a>
+        <a href="#contact" class="btn btn-ghost">預約個案</a>
+      </div>
+    </div>
+    <a href="#about" class="scroll-hint" aria-label="往下捲動"><span></span></a>
+  </section>
+
+  <!-- 關於老師 -->
+  <section id="about" class="section about">
+    <div class="container about-grid">
+      <figure class="about-photo reveal">
+        <img data-site-img="teacherPhoto" alt="汪沁霏老師" hidden>
+        <div class="photo-placeholder" aria-hidden="true"><span>汪</span></div>
+      </figure>
+      <div class="about-text reveal">
+        <p class="eyebrow">About</p>
+        <h2 class="section-title">關於 <span data-site="name">汪沁霏</span> 老師</h2>
+        <div class="prose" data-site-md="about"></div>
+        <ul class="tags" data-site-list="credentials"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 頌缽 -->
+  <section id="bowl" class="section intro intro-bowl">
+    <div class="container intro-grid">
+      <div class="intro-head reveal">
+        <p class="eyebrow">Singing Bowl</p>
+        <h2 class="section-title">頌缽音療</h2>
+        <p class="lead">頌缽的聲音與振動，像一陣溫柔的水波，穿過身體每一個角落。</p>
+      </div>
+      <div class="intro-body reveal">
+        <div class="prose" data-site-md="bowlIntro"></div>
+        <div class="benefits" data-site-benefits="bowlBenefits"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 大地靈氣 -->
+  <section id="reiki" class="section intro intro-reiki">
+    <div class="container intro-grid reverse">
+      <div class="intro-head reveal">
+        <p class="eyebrow">Earth Reiki</p>
+        <h2 class="section-title">大地靈氣</h2>
+        <p class="lead">與大地連結，讓穩定、溫暖的能量重新流回生命裡。</p>
+      </div>
+      <div class="intro-body reveal">
+        <div class="prose" data-site-md="reikiIntro"></div>
+        <div class="benefits" data-site-benefits="reikiBenefits"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 老師隨筆 -->
+  <section id="journal" class="section posts">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Journal</p>
+        <h2 class="section-title">老師隨筆</h2>
+        <p class="section-sub">霏霏老師想和你分享的話</p>
+      </div>
+      <div class="post-grid" id="post-grid"></div>
+      <p class="empty" id="post-empty" hidden>老師的文章即將上線，敬請期待。</p>
+      <div class="more-wrap"><a class="btn btn-ghost" href="https://www.facebook.com/rekibowl988" target="_blank" rel="noopener">到粉絲專頁看更多文章</a></div>
+    </div>
+  </section>
+
+  <!-- 課程 -->
+  <section id="courses" class="section courses">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Courses & Events</p>
+        <h2 class="section-title">課程與活動</h2>
+      </div>
+      <div class="filters" role="tablist" data-filter-group="courses">
+        <button class="chip is-active" data-filter="all">全部</button>
+        <button class="chip" data-filter="頌缽">頌缽</button>
+        <button class="chip" data-filter="大地靈氣">大地靈氣</button>
+        <button class="chip" data-filter="個案">個案療癒</button>
+        <button class="chip" data-filter="其他">其他</button>
+      </div>
+      <div class="course-list" id="course-list"></div>
+      <p class="empty" id="course-empty" hidden>目前沒有這個分類的課程，歡迎追蹤粉絲專頁掌握最新消息。</p>
+    </div>
+  </section>
+
+  <!-- 療癒分享（學員心得） -->
+  <section id="stories" class="section stories">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Stories</p>
+        <h2 class="section-title">療癒分享</h2>
+        <p class="section-sub">來自學員的真實體驗</p>
+      </div>
+      <div class="story-grid" id="story-grid"></div>
+      <div class="more-wrap"><button class="btn btn-ghost" id="story-more" hidden>看更多分享</button></div>
+    </div>
+  </section>
+
+  <!-- 相簿 -->
+  <section id="gallery" class="section gallery">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Gallery</p>
+        <h2 class="section-title">活動相簿</h2>
+      </div>
+      <div class="filters" id="gallery-filters" data-filter-group="gallery"></div>
+      <div class="masonry" id="gallery-grid"></div>
+      <p class="empty" id="gallery-empty" hidden>相片即將上傳，敬請期待。</p>
+    </div>
+  </section>
+
+  <!-- 聯絡 -->
+  <section id="contact" class="section contact">
+    <div class="container contact-grid">
+      <div class="reveal">
+        <p class="eyebrow">Contact</p>
+        <h2 class="section-title">預約與聯絡</h2>
+        <p class="lead" data-site="contactNote">課程報名、個案預約或團體邀課，歡迎透過以下方式與我聯繫。</p>
+        <div class="qr-list" id="qr-list"></div>
+      </div>
+      <ul class="contact-list reveal" id="contact-list"></ul>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>© <span id="year"></span> <span data-site="siteName">頌缽音藥・大地靈氣</span></p>
+  <p class="footer-note">頌缽與靈氣為身心放鬆之輔助，不能取代醫療診斷與治療。</p>
+</footer>
+
+<!-- 分享內文 -->
+<dialog class="modal" id="post-modal">
+  <button class="modal-close" aria-label="關閉">×</button>
+  <article class="modal-body" id="post-modal-body"></article>
+</dialog>
+
+<!-- 看大圖 -->
+<dialog class="lightbox" id="lightbox">
+  <button class="modal-close" aria-label="關閉">×</button>
+  <button class="lb-nav lb-prev" aria-label="上一張">‹</button>
+  <figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+  <button class="lb-nav lb-next" aria-label="下一張">›</button>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script>if (location.protocol === 'file:') document.write('<script src="content/local-data.js"><\/script>');</script>
+<script src="js/main.js"></script>
+</body>
+</html>

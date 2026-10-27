@@ -1,0 +1,57 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+<defs>
+  <linearGradient id="air" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#f2f1e0"/><stop offset=".45" stop-color="#c9d1b2"/><stop offset=".8" stop-color="#7f8f68"/><stop offset="1" stop-color="#4c5a3e"/>
+  </linearGradient>
+  <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fffbe8" stop-opacity=".7"/><stop offset="1" stop-color="#fffbe8" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#5d6e44"/><stop offset="1" stop-color="#2b3522"/>
+  </linearGradient>
+  <filter id="blur"><feGaussianBlur stdDeviation="10"/></filter>
+  <filter id="far"><feGaussianBlur stdDeviation="4"/></filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 .2  0 0 0 0 .25  0 0 0 0 .15  0 0 0 .07 0"/></filter>
+</defs>
+
+<rect width="800" height="1000" fill="url(#air)"/>
+<circle cx="560" cy="120" r="180" fill="#fffbea" opacity=".7" filter="url(#blur)"/>
+
+<!-- 遠方樹林 -->
+<g fill="#a5ae8e" filter="url(#far)">
+  <rect x="40" y="0" width="22" height="760"/><rect x="150" y="0" width="16" height="760"/><rect x="250" y="0" width="26" height="760"/>
+  <rect x="380" y="0" width="18" height="760"/><rect x="470" y="0" width="14" height="760"/><rect x="620" y="0" width="24" height="760"/><rect x="730" y="0" width="18" height="760"/>
+</g>
+<!-- 中景樹 -->
+<g fill="#6c7856">
+  <rect x="95" y="0" width="34" height="800"/><rect x="320" y="0" width="28" height="800"/><rect x="540" y="0" width="38" height="800"/><rect x="690" y="0" width="30" height="800"/>
+</g>
+
+<!-- 光束 -->
+<g filter="url(#blur)">
+  <polygon points="520,0 600,0 380,1000 200,1000" fill="url(#ray)" opacity=".55"/>
+  <polygon points="620,0 660,0 600,1000 500,1000" fill="url(#ray)" opacity=".4"/>
+  <polygon points="440,0 480,0 140,1000 60,1000" fill="url(#ray)" opacity=".3"/>
+</g>
+
+<!-- 近景樹 -->
+<g fill="#323b28">
+  <path d="M0 0 H70 V1000 H0Z"/><path d="M730 0 H800 V1000 H730Z" opacity=".9"/>
+  <path d="M225 0 h48 v860 q-24 20 -48 0Z"/>
+</g>
+
+<!-- 草地 -->
+<path d="M0 850 Q200 800 400 830 Q600 860 800 820 V1000 H0Z" fill="url(#ground)"/>
+<g stroke="#2b3522" stroke-width="2.2" stroke-linecap="round" fill="none">
+  <path d="M30 1000 q4 -50 -8 -86"/><path d="M44 1000 q2 -60 16 -100"/><path d="M58 1000 q-4 -40 -20 -64"/>
+  <path d="M360 1000 q2 -40 -8 -70"/><path d="M372 1000 q4 -56 14 -86"/><path d="M384 1000 q-2 -30 -14 -52"/>
+  <path d="M740 1000 q4 -44 -8 -76"/><path d="M752 1000 q2 -58 16 -92"/><path d="M766 1000 q-4 -34 -18 -56"/>
+</g>
+<!-- 光塵 -->
+<g fill="#fffbe8">
+  <circle cx="430" cy="380" r="2" opacity=".8"/><circle cx="470" cy="300" r="1.4" opacity=".7"/><circle cx="380" cy="520" r="1.8" opacity=".6"/>
+  <circle cx="320" cy="640" r="1.5" opacity=".6"/><circle cx="510" cy="460" r="1.2" opacity=".7"/><circle cx="420" cy="700" r="2" opacity=".5"/>
+</g>
+<rect width="800" height="1000" filter="url(#grain)"/>
+</svg>

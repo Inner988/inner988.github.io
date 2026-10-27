@@ -1,0 +1,70 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 600">
+<defs>
+  <radialGradient id="linen" cx="35%" cy="30%" r="90%">
+    <stop offset="0" stop-color="#f6efe4"/><stop offset="1" stop-color="#ddcdb6"/>
+  </radialGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f3d595"/><stop offset=".3" stop-color="#b4823f"/><stop offset=".55" stop-color="#6e4a20"/>
+    <stop offset=".8" stop-color="#c4944c"/><stop offset="1" stop-color="#5a3a18"/>
+  </linearGradient>
+  <radialGradient id="water" cx="45%" cy="40%" r="65%">
+    <stop offset="0" stop-color="#a9c2bb"/><stop offset=".6" stop-color="#6c8d86"/><stop offset="1" stop-color="#3c5652"/>
+  </radialGradient>
+  <radialGradient id="petal" cx="30%" cy="30%" r="90%">
+    <stop offset="0" stop-color="#fde7df"/><stop offset=".6" stop-color="#f2b4a2"/><stop offset="1" stop-color="#d98a76"/>
+  </radialGradient>
+  <ellipse id="p" cx="0" cy="0" rx="24" ry="11" fill="url(#petal)"/>
+  <filter id="blur"><feGaussianBlur stdDeviation="12"/></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="2"/></filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 .4  0 0 0 0 .3  0 0 0 0 .2  0 0 0 .1 0"/></filter>
+</defs>
+
+<rect width="800" height="600" fill="url(#linen)"/>
+<!-- 布紋 -->
+<g stroke="#b9a383" stroke-opacity=".12">
+  <path d="M0 120 H800M0 240 H800M0 360 H800M0 480 H800"/><path d="M160 0 V600M320 0 V600M480 0 V600M640 0 V600"/>
+</g>
+
+<!-- 俯視頌缽 -->
+<circle cx="415" cy="315" r="215" fill="#3a2410" opacity=".35" filter="url(#blur)"/>
+<circle cx="400" cy="300" r="210" fill="url(#metal)"/>
+<circle cx="400" cy="300" r="196" fill="#4a3216"/>
+<circle cx="400" cy="300" r="190" fill="url(#water)"/>
+<g fill="none" stroke="#e8f3ef">
+  <circle cx="400" cy="300" r="40" stroke-opacity=".5"/><circle cx="400" cy="300" r="78" stroke-opacity=".35"/>
+  <circle cx="400" cy="300" r="118" stroke-opacity=".22"/><circle cx="400" cy="300" r="158" stroke-opacity=".12"/>
+</g>
+<ellipse cx="330" cy="215" rx="70" ry="22" fill="#fff" opacity=".18" filter="url(#soft)" transform="rotate(-35 330 215)"/>
+
+<!-- 中央的花 -->
+<g transform="translate(400 300)">
+  <use href="#p" xlink:href="#p" transform="rotate(0) translate(22 0)"/>
+  <use href="#p" xlink:href="#p" transform="rotate(45) translate(22 0)"/>
+  <use href="#p" xlink:href="#p" transform="rotate(90) translate(22 0)"/>
+  <use href="#p" xlink:href="#p" transform="rotate(135) translate(22 0)"/>
+  <use href="#p" xlink:href="#p" transform="rotate(180) translate(22 0)"/>
+  <use href="#p" xlink:href="#p" transform="rotate(225) translate(22 0)"/>
+  <use href="#p" xlink:href="#p" transform="rotate(270) translate(22 0)"/>
+  <use href="#p" xlink:href="#p" transform="rotate(315) translate(22 0)"/>
+  <circle r="10" fill="#e8b85a"/><circle r="5" fill="#c98f34"/>
+</g>
+
+<!-- 漂浮花瓣 -->
+<use href="#p" xlink:href="#p" transform="translate(300 380) rotate(30) scale(.7)"/>
+<use href="#p" xlink:href="#p" transform="translate(500 210) rotate(-40) scale(.6)"/>
+<use href="#p" xlink:href="#p" transform="translate(470 420) rotate(80) scale(.65)"/>
+<use href="#p" xlink:href="#p" transform="translate(330 230) rotate(110) scale(.55)"/>
+<!-- 散落桌面 -->
+<use href="#p" xlink:href="#p" transform="translate(110 470) rotate(20) scale(.8)"/>
+<use href="#p" xlink:href="#p" transform="translate(150 500) rotate(-50) scale(.7)"/>
+<use href="#p" xlink:href="#p" transform="translate(690 110) rotate(60) scale(.75)"/>
+
+<!-- 缽棒 -->
+<g transform="rotate(-35 680 470)">
+  <rect x="560" y="462" width="240" height="18" rx="9" fill="#8a5a2e"/>
+  <rect x="560" y="462" width="240" height="6" rx="3" fill="#d6a874" opacity=".7"/>
+  <rect x="560" y="460" width="62" height="22" rx="10" fill="#4a3a30"/>
+</g>
+<rect width="800" height="600" filter="url(#grain)"/>
+</svg>
