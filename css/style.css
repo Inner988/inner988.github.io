@@ -467,7 +467,11 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 }
 .intro-reiki .motes { z-index: 0; }
 .intro-reiki > .container { position: relative; z-index: 1; }
-.intro-reiki .motes i { background: radial-gradient(circle, rgba(255, 246, 214, .95), rgba(176, 196, 140, .35) 55%, transparent 70%); }
+/* 大地靈氣區塊的光點：背景偏亮，所以用較飽和的金色加上光暈，才看得出來 */
+.intro-reiki .motes i {
+  background: radial-gradient(circle, #fff6d8 0%, rgba(236, 184, 80, .95) 35%, rgba(236, 184, 80, 0) 72%);
+  box-shadow: 0 0 10px 3px rgba(240, 196, 100, .45);
+}
 
 /* 區塊標題下的金線：進入畫面時由中間畫開 */
 .section-head .section-title::after { transform: scaleX(0); transition: transform 1s cubic-bezier(.6, .1, .2, 1) .35s; }
@@ -476,15 +480,24 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 /* 卡片類的淡入：依序一張接一張（延遲由程式設定） */
 .reveal { transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1); }
 
-/* 頌缽區塊：標題旁邊一圈圈慢慢擴散的聲波 */
+/* 頌缽區塊：以「頌缽音療」標題為中心，一圈圈向外擴散的聲波 */
+.intro-bowl { overflow-x: clip; }
 .intro-bowl .intro-head { isolation: isolate; }
-.intro-bowl .intro-head::before, .intro-bowl .intro-head::after {
-  content: ""; position: absolute; left: -40px; top: -40px; width: 180px; height: 180px; z-index: -1;
-  border: 1px solid rgba(160, 122, 69, .35); border-radius: 50%;
-  animation: bowlRing 6s ease-out infinite; pointer-events: none;
+.bowl-rings { position: absolute; left: 100px; top: 58px; width: 0; height: 0; z-index: -1; pointer-events: none; }
+.bowl-rings::before { /* 中心一團柔和的金光 */
+  content: ""; position: absolute; left: -90px; top: -90px; width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 190, 110, .35), transparent 70%);
+  animation: bowlGlow 5s ease-in-out infinite;
 }
-.intro-bowl .intro-head::after { animation-delay: 3s; }
-@keyframes bowlRing { 0% { transform: scale(.4); opacity: 0; } 20% { opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
+.bowl-rings i {
+  position: absolute; left: -70px; top: -70px; width: 140px; height: 140px; border-radius: 50%;
+  border: 1.5px solid rgba(160, 122, 69, .7);
+  animation: bowlRing 7.5s cubic-bezier(.2, .6, .3, 1) infinite; opacity: 0;
+}
+.bowl-rings i:nth-child(2) { animation-delay: 2.5s; }
+.bowl-rings i:nth-child(3) { animation-delay: 5s; }
+@keyframes bowlRing { 0% { transform: scale(.25); opacity: 0; } 15% { opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
+@keyframes bowlGlow { 0%, 100% { transform: scale(.9); opacity: .7; } 50% { transform: scale(1.15); opacity: 1; } }
 
 /* 導覽列：滑過時底下出現一條細金線 */
 .nav-links > a:not(.nav-cta), .nav-drop-top { position: relative; }
@@ -527,8 +540,8 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 @media (prefers-reduced-motion: reduce) {
   .hero-inner > * { animation: none; opacity: 1; }
   .motes, .scroll-progress { display: none; }
-  .intro-bowl .intro-head::before, .intro-bowl .intro-head::after, .about-photo::before { animation: none; }
-  .intro-bowl .intro-head::before, .intro-bowl .intro-head::after { display: none; }
+  .about-photo::before { animation: none; }
+  .bowl-rings { display: none; }
   .section-head .section-title::after { transform: none; transition: none; }
 }
 
