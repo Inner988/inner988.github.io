@@ -190,8 +190,8 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .prose { color: #4a433b; }
 .prose p { margin: 0 0 1.1em; }
 .prose ul { margin: 0 0 1.1em; padding-left: 1.3em; }
-.prose strong { color: var(--bronze-deep); font-weight: 500; }
-.intro-reiki .prose strong { color: var(--earth); }
+/* 內文裡用「粗體」標出的重點字：改成琥珀金色，跟一般文字明顯區隔 */
+.prose strong { color: #9a6b2f; font-weight: 500; }
 .prose img { border-radius: 12px; margin: 1.2em 0; }
 .prose h2, .prose h3 { margin: 1.6em 0 .6em; font-size: 1.25rem; }
 .prose blockquote { margin: 1.4em 0; padding: 4px 0 4px 20px; border-left: 2px solid var(--gold); color: var(--muted); font-family: var(--serif); }
