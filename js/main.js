@@ -118,10 +118,19 @@
 
     const byId = new Map(products.map((p, i) => [String(i), p]));
     const unitPrice = (p) => Number(p.salePrice || p.price || 0);
-    let cart = readCart().filter((c) => byId.has(c.id) && byId.get(c.id).name === c.name);
+    let cart = readCart().filter((c) => byId.has(c.id) && byId.get(c.id).name === c.name && Number(byId.get(c.id).price) > 0);
+
+    // 沒填售價（或填 0）的商品不能直接下單，改成「價格請洽詢」並導向私訊
+    const askUrl = settings.messengerUrl || 'https://m.me/rekibowl988';
+    const noPrice = (p) => !(Number(p.price) > 0);
+    const priceTag = (p) => (noPrice(p) ? '<span class="price-now">價格請洽詢</span>'
+      : p.salePrice ? `<span class="price-now">${money(p.salePrice)}</span><s>${money(p.price)}</s>` : `<span class="price-now">${money(p.price)}</span>`);
 
     $('#product-grid').innerHTML = products.map((p, i) => {
       const soldOut = p.status === '售完';
+      const buyBtn = noPrice(p) && !soldOut
+        ? `<a class="btn btn-primary btn-small" href="${esc(askUrl)}" target="_blank" rel="noopener">私訊詢問</a>`
+        : `<button class="btn btn-primary btn-small" data-add="${i}" ${soldOut ? 'disabled' : ''}>${soldOut ? '已售完' : '加入購物車'}</button>`;
       return `<article class="product-card reveal" data-id="${i}">
         <button class="product-img" data-view="${i}" aria-label="查看 ${esc(p.name)}">
           ${p.image ? `<img src="${esc(img(p.image))}" alt="${esc(p.name)}" loading="lazy">` : ''}
@@ -130,12 +139,10 @@
         <div class="product-body">
           <h3>${esc(p.name)}</h3>
           ${p.summary ? `<p class="product-summary">${esc(p.summary)}</p>` : ''}
-          <div class="product-price">
-            ${p.salePrice ? `<span class="price-now">${money(p.salePrice)}</span><s>${money(p.price)}</s>` : `<span class="price-now">${money(p.price)}</span>`}
-          </div>
+          <div class="product-price">${priceTag(p)}</div>
           <div class="product-actions">
             <button class="btn btn-ghost btn-small" data-view="${i}">商品介紹</button>
-            <button class="btn btn-primary btn-small" data-add="${i}" ${soldOut ? 'disabled' : ''}>${soldOut ? '已售完' : '加入購物車'}</button>
+            ${buyBtn}
           </div>
         </div>
       </article>`;
@@ -164,9 +171,11 @@
         ${pics.length ? `<div class="product-gallery">${pics.map((src) => `<img src="${esc(img(src))}" alt="">`).join('')}</div>` : ''}
         ${p.status ? `<span class="post-date">${esc(p.status)}</span>` : ''}
         <h2>${esc(p.name)}</h2>
-        <div class="product-price">${p.salePrice ? `<span class="price-now">${money(p.salePrice)}</span><s>${money(p.price)}</s>` : `<span class="price-now">${money(p.price)}</span>`}</div>
+        <div class="product-price">${priceTag(p)}</div>
         <div class="prose">${md(p.description || p.summary)}</div>
-        ${p.status === '售完' ? '' : `<p><button class="btn btn-primary" data-add-modal="${id}">加入購物車</button></p>`}`);
+        ${p.status === '售完' ? '' : noPrice(p)
+          ? `<p><a class="btn btn-primary" href="${esc(askUrl)}" target="_blank" rel="noopener">私訊詢問</a></p>`
+          : `<p><button class="btn btn-primary" data-add-modal="${id}">加入購物車</button></p>`}`);
     };
     $('#product-grid').addEventListener('click', (e) => {
       const a = e.target.closest('[data-add]');
