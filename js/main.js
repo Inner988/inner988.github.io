@@ -36,7 +36,7 @@
     });
     $$('[data-site-benefits]').forEach((el) => {
       el.innerHTML = (site[el.dataset.siteBenefits] || [])
-        .map((b) => `<div class="benefit"><h3>${esc(b.title)}</h3><p>${esc(b.text)}</p></div>`).join('');
+        .map((b) => `<div class="benefit reveal"><h3>${esc(b.title)}</h3><p>${esc(b.text)}</p></div>`).join('');
     });
     if (site.heroImage) {
       const hero = $('.hero');
@@ -418,7 +418,7 @@
     const caseLink = $('.nav-links a[href="#stories"]');
     if (caseLink) caseLink.hidden = cases.length === 0;
     const grid = $('#story-grid');
-    grid.innerHTML = cases.map((s, i) => storyCard(s, i, 'reveal is-visible')).join('');
+    grid.innerHTML = cases.map((s, i) => storyCard(s, i, 'reveal')).join('');
     bindStoryModal(grid, cases);
   }
 
@@ -470,7 +470,7 @@
     const grid = $('#post-grid');
     $('#post-empty').hidden = items.length > 0;
     grid.innerHTML = items.map((p, i) => `
-      <button class="post-card reveal is-visible" data-i="${i}">
+      <button class="post-card reveal" data-i="${i}">
         <div class="post-cover">${p.cover ? `<img src="${esc(img(p.cover))}" alt="" loading="lazy">` : ''}</div>
         <div class="post-info"><span class="post-date">${formatDate(p.date)}</span>
           <h3>${esc(p.title)}</h3><p>${esc(p.summary)}</p></div>
@@ -586,14 +586,68 @@
 
   function observeReveal() {
     const els = $$('.reveal:not(.is-visible)');
+    // 同一排的卡片一張接一張淡入（最多延遲 0.45 秒）
+    els.forEach((el) => {
+      const sibs = [...el.parentElement.children].filter((c) => c.classList.contains('reveal'));
+      if (sibs.length > 1) el.style.transitionDelay = `${Math.min(sibs.indexOf(el) * 0.09, 0.45)}s`;
+    });
     if (!('IntersectionObserver' in window)) { els.forEach((el) => el.classList.add('is-visible')); return; }
     const io = new IntersectionObserver((entries) => {
       entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); } });
     }, { rootMargin: '0px 0px -8% 0px' });
     els.forEach((el) => io.observe(el));
+
+    // 粗體重點字：進到畫面中間時，螢光筆依序畫過去（同一段裡的字一個接一個）
+    const marks = $$('.prose strong');
+    if (!('IntersectionObserver' in window)) { marks.forEach((m) => m.classList.add('is-lit')); return; }
+    const io2 = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const siblings = $$('strong', en.target.closest('.prose'));
+        en.target.style.transitionDelay = `${0.3 + siblings.indexOf(en.target) * 0.35}s`;
+        en.target.classList.add('is-lit');
+        io2.unobserve(en.target);
+      });
+    }, { rootMargin: '0px 0px -25% 0px' });
+    marks.forEach((m) => io2.observe(m));
+  }
+
+  /* ---------- 小動態：飄起的光點、捲動進度條 ---------- */
+  function setupMotion() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // 光點：首頁 16 顆、大地靈氣區塊 10 顆，大小、速度、位置都隨機
+    [['.hero', 16], ['#reiki', 10]].forEach(([sel, n]) => {
+      const host = $(sel);
+      if (!host) return;
+      const box = document.createElement('div');
+      box.className = 'motes';
+      box.setAttribute('aria-hidden', 'true');
+      for (let i = 0; i < n; i++) {
+        const m = document.createElement('i');
+        const size = 3 + Math.random() * 7;
+        m.style.cssText = `left:${Math.random() * 100}%;width:${size}px;height:${size}px;`
+          + `animation-duration:${14 + Math.random() * 16}s;animation-delay:${-Math.random() * 30}s;`
+          + `--drift:${(Math.random() * 80 - 40).toFixed(0)}px`;
+        box.appendChild(m);
+      }
+      host.prepend(box);
+    });
+    // 進度條
+    const bar = document.createElement('div');
+    bar.className = 'scroll-progress';
+    document.body.appendChild(bar);
+    let ticking = false;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+      ticking = false;
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
   }
 
   setupUI();
+  setupMotion();
   Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery]) => {
     renderSite(site);
     renderEvents(events);
