@@ -30,8 +30,22 @@
     <a href="#bowl">頌缽音療</a>
     <a href="#reiki">大地靈氣</a>
     <a href="#journal">老師隨筆</a>
-    <a href="#courses">課程活動</a>
-    <a href="#stories">療癒分享</a>
+    <div class="nav-drop">
+      <a href="#courses" class="nav-drop-top">課程活動<span class="caret" aria-hidden="true"></span></a>
+      <div class="nav-drop-menu">
+        <a href="#courses" data-jump="courses" data-cat="頌缽">頌缽</a>
+        <a href="#courses" data-jump="courses" data-cat="大地靈氣">大地靈氣</a>
+        <a href="#courses" data-jump="courses" data-cat="個案">個案療癒</a>
+      </div>
+    </div>
+    <div class="nav-drop">
+      <a href="#stories" class="nav-drop-top">療癒分享<span class="caret" aria-hidden="true"></span></a>
+      <div class="nav-drop-menu">
+        <a href="#stories" data-jump="stories" data-cat="頌缽">頌缽</a>
+        <a href="#stories" data-jump="stories" data-cat="大地靈氣">大地靈氣</a>
+        <a href="#stories" data-jump="stories" data-cat="個案">個案療癒</a>
+      </div>
+    </div>
     <a href="#gallery">相簿</a>
     <a href="#contact" class="nav-cta">預約聯絡</a>
   </nav>
@@ -141,8 +155,15 @@
         <h2 class="section-title">療癒分享</h2>
         <p class="section-sub">來自學員的真實體驗</p>
       </div>
+      <div class="filters" role="tablist" data-filter-group="stories">
+        <button class="chip is-active" data-filter="all">全部</button>
+        <button class="chip" data-filter="頌缽">頌缽</button>
+        <button class="chip" data-filter="大地靈氣">大地靈氣</button>
+        <button class="chip" data-filter="個案">個案療癒</button>
+      </div>
       <div class="story-grid" id="story-grid"></div>
-      <div class="more-wrap"><button class="btn btn-ghost" id="story-more" hidden>看更多分享</button></div>
+      <p class="empty" id="story-empty" hidden>這個分類的分享整理中，歡迎到粉絲專頁看更多學員的心得。</p>
+      <div class="more-wrap"><a class="btn btn-ghost" href="https://www.facebook.com/rekibowl988" target="_blank" rel="noopener">到粉絲專頁看更多分享</a></div>
     </div>
   </section>
 
