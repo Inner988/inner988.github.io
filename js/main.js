@@ -616,7 +616,7 @@
   function setupMotion() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     // 光點：首頁 16 顆、大地靈氣區塊 10 顆，大小、速度、位置都隨機
-    [['.hero', 16], ['#reiki', 10]].forEach(([sel, n]) => {
+    [['.hero', 16], ['#reiki', 22]].forEach(([sel, n]) => {
       const host = $(sel);
       if (!host) return;
       const box = document.createElement('div');
@@ -624,7 +624,7 @@
       box.setAttribute('aria-hidden', 'true');
       for (let i = 0; i < n; i++) {
         const m = document.createElement('i');
-        const size = 3 + Math.random() * 7;
+        const size = sel === '#reiki' ? 6 + Math.random() * 9 : 3 + Math.random() * 7;
         m.style.cssText = `left:${Math.random() * 100}%;width:${size}px;height:${size}px;`
           + `animation-duration:${14 + Math.random() * 16}s;animation-delay:${-Math.random() * 30}s;`
           + `--drift:${(Math.random() * 80 - 40).toFixed(0)}px`;
