@@ -434,6 +434,104 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .lb-prev { left: 16px; }
 .lb-next { right: 16px; }
 
+/* ========== 活潑細節（都很輕、很慢，保持優雅） ========== */
+
+/* 頁面最上方的捲動進度條 */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; z-index: 60; height: 2px; width: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--bronze), var(--earth));
+  transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
+}
+
+/* 首頁：標題一行一行浮現 */
+.hero-inner > * { opacity: 0; animation: heroIn 1.2s cubic-bezier(.2, .7, .2, 1) forwards; }
+.hero-inner > :nth-child(1) { animation-delay: .2s; }
+.hero-inner > :nth-child(2) { animation-delay: .45s; }
+.hero-inner > :nth-child(3) { animation-delay: .8s; }
+.hero-inner > :nth-child(4) { animation-delay: 1.05s; }
+@keyframes heroIn { from { opacity: 0; transform: translateY(22px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+
+/* 首頁與大地靈氣區塊：緩緩飄起的金色光點 */
+.motes { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+.motes i {
+  position: absolute; bottom: -10px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 236, 190, .95), rgba(232, 190, 110, .35) 55%, transparent 70%);
+  animation: moteUp linear infinite; opacity: 0;
+}
+@keyframes moteUp {
+  0% { transform: translate(0, 0); opacity: 0; }
+  12% { opacity: .9; }
+  50% { transform: translate(var(--drift, 20px), -45vh); }
+  88% { opacity: .7; }
+  100% { transform: translate(calc(var(--drift, 20px) * -.5), -95vh); opacity: 0; }
+}
+.intro-reiki .motes { z-index: 0; }
+.intro-reiki > .container { position: relative; z-index: 1; }
+.intro-reiki .motes i { background: radial-gradient(circle, rgba(255, 246, 214, .95), rgba(176, 196, 140, .35) 55%, transparent 70%); }
+
+/* 區塊標題下的金線：進入畫面時由中間畫開 */
+.section-head .section-title::after { transform: scaleX(0); transition: transform 1s cubic-bezier(.6, .1, .2, 1) .35s; }
+.section-head.is-visible .section-title::after { transform: scaleX(1); }
+
+/* 卡片類的淡入：依序一張接一張（延遲由程式設定） */
+.reveal { transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1); }
+
+/* 頌缽區塊：標題旁邊一圈圈慢慢擴散的聲波 */
+.intro-bowl .intro-head { isolation: isolate; }
+.intro-bowl .intro-head::before, .intro-bowl .intro-head::after {
+  content: ""; position: absolute; left: -40px; top: -40px; width: 180px; height: 180px; z-index: -1;
+  border: 1px solid rgba(160, 122, 69, .35); border-radius: 50%;
+  animation: bowlRing 6s ease-out infinite; pointer-events: none;
+}
+.intro-bowl .intro-head::after { animation-delay: 3s; }
+@keyframes bowlRing { 0% { transform: scale(.4); opacity: 0; } 20% { opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
+
+/* 導覽列：滑過時底下出現一條細金線 */
+.nav-links > a:not(.nav-cta), .nav-drop-top { position: relative; }
+.nav-links > a:not(.nav-cta)::after, .nav-drop-top::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: currentColor;
+  transform: scaleX(0); transition: transform .35s ease;
+}
+.nav-links > a:not(.nav-cta):hover::after, .nav-drop:hover .nav-drop-top::after { transform: scaleX(1); }
+
+/* 主要按鈕：滑過時有一道光掃過 */
+.btn-primary { position: relative; overflow: hidden; }
+.btn-primary::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .35), transparent);
+  transform: skewX(-20deg); transition: left .7s ease;
+}
+.btn-primary:hover::after { left: 120%; }
+
+/* 說明小卡片：滑過時輕輕浮起，上緣出現金色細線 */
+.benefit { position: relative; overflow: hidden; transition: transform .4s ease, box-shadow .4s ease, background .4s; }
+.benefit::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); transform: scaleX(0); transform-origin: 0 50%; transition: transform .5s ease; }
+.benefit:hover { transform: translateY(-4px); box-shadow: 0 14px 30px -18px rgba(60, 40, 15, .45); background: rgba(255, 255, 255, .9); }
+.benefit:hover::before { transform: scaleX(1); }
+
+/* 課程、活動、商品相片：滑過時慢慢放大 */
+.course-media, .event-poster, .product-img { overflow: hidden; }
+.course-media img, .product-img img { transition: transform 1.2s ease; }
+.course:hover .course-media img, .product-card:hover .product-img img { transform: scale(1.06); }
+.course { transition: transform .4s ease, box-shadow .4s ease; }
+.course:hover { transform: translateY(-3px); box-shadow: 0 24px 50px -26px rgba(60, 40, 15, .45); }
+
+/* 關於老師：照片外框的金線慢慢呼吸 */
+.about-photo::before { animation: breathe 7s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: translate(0, 0); opacity: .9; } 50% { transform: translate(-6px, -6px); opacity: .55; } }
+
+/* 相簿：相片淡入時帶一點點放大 */
+.masonry figure.reveal { transform: translateY(24px) scale(.97); }
+.masonry figure.reveal.is-visible { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-inner > * { animation: none; opacity: 1; }
+  .motes, .scroll-progress { display: none; }
+  .intro-bowl .intro-head::before, .intro-bowl .intro-head::after, .about-photo::before { animation: none; }
+  .intro-bowl .intro-head::before, .intro-bowl .intro-head::after { display: none; }
+  .section-head .section-title::after { transform: none; transition: none; }
+}
+
 /* ========== 最新活動 ========== */
 .events { background: var(--cream); }
 .event-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 26px; }
@@ -527,6 +625,7 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
   .course-media { min-height: 200px; aspect-ratio: 16 / 9; }
   .course-body { padding: 22px; }
   .intro-reiki { background-size: cover; background-position: 22% center; }
+  .intro-bowl .intro-head { position: relative; }
   .event-list { grid-template-columns: 1fr; }
   .event-list.is-single .event-card { flex-direction: column; }
   .event-list.is-single .event-body { padding: 24px 22px 26px; }
