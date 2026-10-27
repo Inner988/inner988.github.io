@@ -178,6 +178,7 @@ window.LOCAL_CONTENT = {
     {
       "title": "線上課也能這麼有感：腰不痛了，連續好幾天都睡得很好",
       "student": "大地靈氣初階學員",
+      "category": "大地靈氣",
       "course": "大地靈氣初階（線上一對一）",
       "date": "2026-10-26",
       "photo": "",
@@ -189,6 +190,7 @@ window.LOCAL_CONTENT = {
     {
       "title": "不是有感覺才堅持練習，而是堅持練習後，才慢慢有感覺",
       "student": "大地靈氣初階／進階學員",
+      "category": "大地靈氣",
       "course": "大地靈氣初階復訓・進階",
       "date": "2026-10-18",
       "photo": "",
@@ -200,6 +202,7 @@ window.LOCAL_CONTENT = {
     {
       "title": "溫柔而有陪伴感的教學",
       "student": "大地靈氣學員",
+      "category": "大地靈氣",
       "course": "大地靈氣課程",
       "date": "2026-10-16",
       "photo": "",
@@ -211,6 +214,7 @@ window.LOCAL_CONTENT = {
     {
       "title": "學了五年，原來「放鬆」是可以被學會的",
       "student": "大地靈氣・頌缽學員",
+      "category": "大地靈氣",
       "course": "大地靈氣・頌缽（學習五年）",
       "date": "2026-10-10",
       "photo": "",
@@ -222,6 +226,7 @@ window.LOCAL_CONTENT = {
     {
       "title": "一位護理師的頌缽初體驗：心口憋了很久的氣，散了",
       "student": "護理師・頌缽初階學員",
+      "category": "頌缽",
       "course": "頌缽音療師初階",
       "date": "2026-07-20",
       "photo": "",
