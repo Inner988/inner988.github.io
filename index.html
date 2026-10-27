@@ -46,12 +46,11 @@
       </div>
     </div>
     <div class="nav-drop">
-      <a href="#stories" class="nav-drop-top">療癒分享<span class="caret" aria-hidden="true"></span></a>
+      <a href="#bowl-stories" class="nav-drop-top">療癒分享<span class="caret" aria-hidden="true"></span></a>
       <div class="nav-drop-menu">
-        <a href="#stories" data-jump="stories" data-cat="all">全部分享</a>
-        <a href="#stories" data-jump="stories" data-cat="頌缽">頌缽</a>
-        <a href="#stories" data-jump="stories" data-cat="大地靈氣">大地靈氣</a>
-        <a href="#stories" data-jump="stories" data-cat="個案">個案療癒</a>
+        <a href="#bowl-stories">頌缽學員分享</a>
+        <a href="#reiki-stories">大地靈氣學員分享</a>
+        <a href="#stories">個案療癒分享</a>
       </div>
     </div>
     <a href="#shop" id="nav-shop" hidden>購物商城</a>
@@ -115,6 +114,7 @@
       <div class="intro-body reveal">
         <div class="prose" data-site-md="bowlIntro"></div>
         <div class="benefits" data-site-benefits="bowlBenefits"></div>
+        <div class="story-slider" id="bowl-stories" data-story-slider="頌缽" hidden></div>
       </div>
     </div>
   </section>
@@ -130,6 +130,7 @@
       <div class="intro-body reveal">
         <div class="prose" data-site-md="reikiIntro"></div>
         <div class="benefits" data-site-benefits="reikiBenefits"></div>
+        <div class="story-slider" id="reiki-stories" data-story-slider="大地靈氣" hidden></div>
       </div>
     </div>
   </section>
@@ -180,22 +181,16 @@
     </div>
   </section>
 
-  <!-- 療癒分享（學員心得） -->
-  <section id="stories" class="section stories">
+  <!-- 療癒分享：只放「個案療癒」的心得；沒有任何一篇時整個區塊隱藏
+       （頌缽、大地靈氣的學員分享放在各自的介紹區塊裡輪播） -->
+  <section id="stories" class="section stories" hidden>
     <div class="container">
       <div class="section-head reveal">
         <p class="eyebrow">Stories</p>
         <h2 class="section-title">療癒分享</h2>
-        <p class="section-sub">來自學員的真實體驗</p>
-      </div>
-      <div class="filters" role="tablist" data-filter-group="stories">
-        <button class="chip is-active" data-filter="all">全部</button>
-        <button class="chip" data-filter="頌缽">頌缽</button>
-        <button class="chip" data-filter="大地靈氣">大地靈氣</button>
-        <button class="chip" data-filter="個案">個案療癒</button>
+        <p class="section-sub">個案療癒的真實體驗</p>
       </div>
       <div class="story-grid" id="story-grid"></div>
-      <p class="empty" id="story-empty" hidden>這個分類的分享整理中，歡迎到粉絲專頁看更多學員的心得。</p>
       <div class="more-wrap"><a class="btn btn-ghost" href="https://www.facebook.com/rekibowl988" target="_blank" rel="noopener">到粉絲專頁看更多分享</a></div>
     </div>
   </section>
