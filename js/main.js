@@ -45,6 +45,7 @@
       // 轉成完整網址，否則 CSS 會以 css/ 資料夾為基準去找圖片
       hero.style.setProperty('--hero-img', `url("${new URL(img(site.heroImage), location.href).href}")`);
     }
+    if (site.reikiBg) $('#reiki').style.setProperty('--reiki-bg', `url("${new URL(img(site.reikiBg), location.href).href}")`);
     if (site.siteName) document.title = site.siteName;
     // Logo：後台有上傳就換掉導覽列與瀏覽器分頁的小圖示
     if (site.logo) {
