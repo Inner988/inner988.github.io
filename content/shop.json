@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "name": "手工錘揍頌缽（範例商品）",
+      "status": "現貨",
+      "image": "/images/uploads/bowl-candle.jpg",
+      "images": [],
+      "price": 3800,
+      "salePrice": 3400,
+      "summary": "尼泊爾手工錘揍，聲音綿長溫潤，附缽墊與缽棒。",
+      "description": "（這是範例商品，請到後台修改或刪除。）\n\n- 尺寸：約 14 公分\n- 內容：頌缽、缽墊、缽棒\n- 每一顆頌缽皆為手工製作，聲音與紋路略有不同",
+      "show": true
+    },
+    {
+      "name": "頌缽缽墊（範例商品）",
+      "status": "現貨",
+      "image": "/images/uploads/bowl-plants.jpg",
+      "images": [],
+      "price": 600,
+      "salePrice": null,
+      "summary": "柔軟厚實的手工缽墊，讓頌缽穩定放置、聲音更純淨。",
+      "description": "（這是範例商品，請到後台修改或刪除。）",
+      "show": true
+    },
+    {
+      "name": "大地靈氣引導音檔（範例商品）",
+      "status": "預購",
+      "image": "/images/uploads/sample-2.svg",
+      "images": [],
+      "price": 500,
+      "salePrice": null,
+      "summary": "沁霏老師親自錄製的大地靈氣自我療癒引導。",
+      "description": "（這是範例商品，請到後台修改或刪除。）",
+      "show": true
+    }
+  ]
+}
