@@ -60,6 +60,22 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .nav-links a { text-decoration: none; font-size: .92rem; color: var(--ink); opacity: .85; transition: opacity .2s, color .2s; }
 .nav-links a:hover { opacity: 1; color: var(--bronze-deep); }
 .nav-cta { border: 1px solid var(--bronze); padding: 6px 16px; border-radius: 99px; color: var(--bronze-deep) !important; }
+
+/* 下拉選單（課程活動、療癒分享） */
+.nav-drop { position: relative; }
+.nav-drop-top { display: inline-flex; align-items: center; gap: 6px; }
+.caret { width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); opacity: .7; }
+.nav-drop-menu {
+  position: absolute; top: 100%; left: 50%; min-width: 132px; padding: 8px;
+  transform: translate(-50%, 6px); margin-top: 10px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow);
+  display: flex; flex-direction: column;
+  opacity: 0; visibility: hidden; transition: opacity .2s, transform .2s, visibility .2s;
+}
+.nav-drop-menu::before { content: ""; position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+.nav-drop:hover .nav-drop-menu, .nav-drop:focus-within .nav-drop-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.nav .nav-drop-menu a { color: var(--ink) !important; padding: 8px 14px; border-radius: 8px; text-align: center; white-space: nowrap; }
+.nav .nav-drop-menu a:hover { background: var(--sand); color: var(--bronze-deep) !important; }
 .nav-toggle { display: none; background: none; border: 0; width: 40px; height: 40px; cursor: pointer; position: relative; }
 .nav-toggle span { position: absolute; left: 9px; right: 9px; height: 1.5px; background: var(--ink); transition: transform .3s; }
 .nav-toggle span:first-child { top: 15px; }
@@ -82,8 +98,21 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
     background: var(--paper);
     opacity: 0; pointer-events: none; transition: opacity .3s;
   }
+  .nav-links { gap: 18px; overflow-y: auto; padding: 80px 16px 32px; justify-content: flex-start; }
+  .nav-links > :first-child { margin-top: auto; }
+  .nav-links > :last-child { margin-bottom: auto; }
   .nav-links a { font-size: 1.15rem; font-family: var(--serif); }
   .nav.is-open .nav-links { opacity: 1; pointer-events: auto; }
+  /* 手機版：子選單直接展開成一排小標籤 */
+  .nav-drop { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .nav-drop .caret { display: none; }
+  .nav-drop-menu {
+    position: static; transform: none; margin: 0; padding: 0; min-width: 0;
+    flex-direction: row; gap: 6px; background: none; border: 0; box-shadow: none;
+    opacity: 1; visibility: visible;
+  }
+  .nav-drop-menu::before { display: none; }
+  .nav .nav-drop-menu a { font-family: var(--sans); font-size: .82rem; padding: 3px 12px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted) !important; }
 }
 
 /* ========== 主視覺 ========== */
@@ -256,6 +285,13 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .course-desc p { margin: 0 0 .6em; }
 .course-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .course-price { font-family: var(--serif); font-size: 1.2rem; color: var(--bronze-deep); font-weight: 600; }
+.course-price.has-early { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.course-price small { font-family: var(--sans); font-size: .72rem; font-weight: 500; letter-spacing: .08em; margin-right: 6px; }
+.price-early small { background: #9b4a3c; color: #fff; padding: 2px 8px; border-radius: 99px; vertical-align: 2px; }
+.price-early { font-size: 1.3rem; color: #9b4a3c; }
+.price-original { font-size: .95rem; color: var(--muted); font-weight: 400; }
+.price-original s { text-decoration-color: rgba(122, 112, 100, .7); }
+.price-deadline { flex-basis: 100%; font-family: var(--sans); font-size: .8rem; font-weight: 400; color: var(--muted); }
 .course.is-ended { opacity: .65; }
 
 /* ========== 分享 ========== */
