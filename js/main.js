@@ -252,8 +252,18 @@
       const open = nav.classList.toggle('is-open');
       toggle.setAttribute('aria-expanded', open);
     });
-    $$('.nav-links a').forEach((a) => a.addEventListener('click', () => {
+    const isMobileMenu = () => window.matchMedia('(max-width: 1000px)').matches;
+    $$('.nav-links a').forEach((a) => a.addEventListener('click', (e) => {
+      // 手機版：點「課程活動」「療癒分享」只展開／收合子選單，不跳頁
+      if (a.classList.contains('nav-drop-top') && isMobileMenu()) {
+        e.preventDefault();
+        const drop = a.parentElement;
+        const open = !drop.classList.contains('is-open');
+        $$('.nav-drop').forEach((d) => d.classList.toggle('is-open', d === drop && open));
+        return;
+      }
       nav.classList.remove('is-open');
+      $$('.nav-drop').forEach((d) => d.classList.remove('is-open'));
       a.blur(); // 收起桌機版的下拉選單
       // 下拉選單的分類：跳到該區塊並套用同名的分類篩選
       if (a.dataset.jump) {
