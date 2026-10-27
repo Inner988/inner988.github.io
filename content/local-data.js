@@ -2,6 +2,7 @@
 window.LOCAL_CONTENT = {
   "site": {
   "siteName": "頌缽音藥・大地靈氣",
+  "logo": "",
   "name": "汪沁霏",
   "heroEyebrow": "Singing Bowl ・ Earth Reiki",
   "heroTitle": "讓聲音帶你\n回到身體裡的寧靜",
@@ -27,6 +28,34 @@ window.LOCAL_CONTENT = {
     { "type": "facebook", "label": "Facebook 粉絲專頁", "value": "汪沁霏。頌缽音藥。大地靈氣", "url": "https://www.facebook.com/rekibowl988" },
     { "type": "line", "label": "LINE 官方帳號", "value": "點此或掃描 QR Code 加入好友", "url": "https://rink.cc/m1yy4", "qr": "/images/uploads/qr-line.png" },
     { "type": "address", "label": "上課地點", "value": "新北市（詳細地址請洽詢）", "url": "" }
+  ]
+},
+  "events": {
+  "items": [
+    {
+      "title": "大地靈氣療癒師・初階線上培訓",
+      "tag": "招生中",
+      "image": "/images/uploads/reiki-art.jpg",
+      "date": "2026/11/7（六）、12/5（六）",
+      "time": "",
+      "location": "線上課程",
+      "description": "經由沁霏老師點化、打開你的開關，學會用自己溫暖的雙手為自己做療癒。線上與實體效果一樣，老師會照顧到每位同學的狀況。",
+      "link": "https://m.me/rekibowl988",
+      "linkText": "私訊報名",
+      "show": true
+    },
+    {
+      "title": "頌缽音療師培訓・入門一日班",
+      "tag": "台北・精緻小班",
+      "image": "/images/uploads/bowl-candle.jpg",
+      "date": "2026/11/8（日）、12/6（日）",
+      "time": "",
+      "location": "台北（實體課程，2～4 人）",
+      "description": "7.5 小時帶你認識頌缽，學會用頌缽為自己自我療癒，以及簡易療癒他人的方法。",
+      "link": "https://m.me/rekibowl988",
+      "linkText": "私訊報名",
+      "show": true
+    }
   ]
 },
   "courses": {
@@ -172,6 +201,60 @@ window.LOCAL_CONTENT = {
       "show": true
     }
   ]
+},
+  "shop": {
+  "items": [
+    {
+      "name": "手工錘揍頌缽（範例商品）",
+      "status": "現貨",
+      "image": "/images/uploads/bowl-candle.jpg",
+      "images": [],
+      "price": 3800,
+      "salePrice": 3400,
+      "summary": "尼泊爾手工錘揍，聲音綿長溫潤，附缽墊與缽棒。",
+      "description": "（這是範例商品，請到後台修改或刪除。）\n\n- 尺寸：約 14 公分\n- 內容：頌缽、缽墊、缽棒\n- 每一顆頌缽皆為手工製作，聲音與紋路略有不同",
+      "show": true
+    },
+    {
+      "name": "頌缽缽墊（範例商品）",
+      "status": "現貨",
+      "image": "/images/uploads/bowl-plants.jpg",
+      "images": [],
+      "price": 600,
+      "salePrice": null,
+      "summary": "柔軟厚實的手工缽墊，讓頌缽穩定放置、聲音更純淨。",
+      "description": "（這是範例商品，請到後台修改或刪除。）",
+      "show": true
+    },
+    {
+      "name": "大地靈氣引導音檔（範例商品）",
+      "status": "預購",
+      "image": "/images/uploads/sample-2.svg",
+      "images": [],
+      "price": 500,
+      "salePrice": null,
+      "summary": "沁霏老師親自錄製的大地靈氣自我療癒引導。",
+      "description": "（這是範例商品，請到後台修改或刪除。）",
+      "show": true
+    }
+  ]
+},
+  "shop-settings": {
+  "intro": "老師親自挑選、使用的療癒好物",
+  "bankName": "",
+  "bankCode": "",
+  "bankBranch": "",
+  "accountName": "",
+  "accountNumber": "",
+  "payDays": "3",
+  "shippingFee": 100,
+  "freeShippingOver": 3000,
+  "allowPickup": true,
+  "pickupNote": "台北／新北，時間地點再與老師約",
+  "lineUrl": "https://rink.cc/m1yy4",
+  "messengerUrl": "https://m.me/rekibowl988",
+  "email": "",
+  "orderNote": ""
 },
   "stories": {
   "items": [
