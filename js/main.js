@@ -380,34 +380,76 @@
     $('#post-modal').scrollTop = 0;
   };
 
-  /* ---------- 療癒分享（學員心得） ---------- */
-  // 網站只放（目前分類中）最新 5 篇，其他引導到臉書粉專
+  /* ---------- 學員分享 ---------- */
+  // 頌缽、大地靈氣的心得：各放最新 3 篇，在介紹區塊裡自動輪播
+  // 個案療癒的心得：放在「療癒分享」區塊，最多 5 篇；沒有時整個區塊隱藏
+  const FB_PAGE = 'https://www.facebook.com/rekibowl988';
+  const storyCard = (s, i, extra = '') => `
+    <button class="story-card ${extra}" data-i="${i}">
+      ${s.photo ? `<div class="story-photo"><img src="${esc(img(s.photo))}" alt="" loading="lazy"></div>` : ''}
+      <span class="story-course">${esc(s.course)}</span>
+      <blockquote>${esc(s.quote || s.title)}</blockquote>
+      <p>${esc(s.summary)}</p>
+      <span class="story-who">— ${esc(s.student || '學員')}</span>
+    </button>`;
+
   function renderStories(data) {
     const all = (data.items || []).slice().sort(byDateDesc);
-    const grid = $('#story-grid');
-    const group = $('[data-filter-group="stories"]');
-    const SHOW = 5;
-    let items = [];
-    const draw = (cat) => {
-      items = all.filter((s) => cat === 'all' || s.category === cat).slice(0, SHOW);
-      grid.innerHTML = items.map((s, i) => `
-        <button class="story-card reveal is-visible" data-i="${i}">
-          ${s.photo ? `<div class="story-photo"><img src="${esc(img(s.photo))}" alt="" loading="lazy"></div>` : ''}
-          <span class="story-course">${esc(s.course)}</span>
-          <blockquote>${esc(s.quote || s.title)}</blockquote>
-          <p>${esc(s.summary)}</p>
-          <span class="story-who">— ${esc(s.student || '學員')}</span>
-        </button>`).join('');
-      $('#story-empty').hidden = items.length > 0;
-    };
-    draw('all');
-    group.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-filter]');
-      if (!btn) return;
-      $$('.chip', group).forEach((c) => c.classList.toggle('is-active', c === btn));
-      draw(btn.dataset.filter);
+
+    $$('[data-story-slider]').forEach((box) => {
+      const items = all.filter((s) => s.category === box.dataset.storySlider).slice(0, 3);
+      box.hidden = items.length === 0;
+      const navLink = $(`.nav-links a[href="#${box.id}"]`);
+      if (navLink) navLink.hidden = items.length === 0;
+      if (!items.length) return;
+      box.innerHTML = `
+        <div class="slider-head"><span class="eyebrow">Student Stories</span><h3>學員分享</h3></div>
+        <div class="slides">${items.map((s, i) => storyCard(s, i, i === 0 ? 'is-active' : '')).join('')}</div>
+        <div class="slider-foot">
+          ${items.length > 1 ? `<div class="slider-dots">${items.map((_, i) => `<button class="${i === 0 ? 'is-active' : ''}" data-go="${i}" aria-label="第 ${i + 1} 篇"></button>`).join('')}</div>` : '<span></span>'}
+          <a class="more-link" href="${FB_PAGE}" target="_blank" rel="noopener">到粉絲專頁看更多分享 →</a>
+        </div>`;
+      bindStoryModal(box, items);
+      if (items.length > 1) startSlider(box, items.length);
     });
-    grid.addEventListener('click', (e) => {
+
+    const cases = all.filter((s) => s.category === '個案').slice(0, 5);
+    $('#stories').hidden = cases.length === 0;
+    const caseLink = $('.nav-links a[href="#stories"]');
+    if (caseLink) caseLink.hidden = cases.length === 0;
+    const grid = $('#story-grid');
+    grid.innerHTML = cases.map((s, i) => storyCard(s, i, 'reveal is-visible')).join('');
+    bindStoryModal(grid, cases);
+  }
+
+  // 自動輪播：6 秒換一篇；滑鼠移上去或手指按住時暫停；手機可左右滑動
+  function startSlider(box, count) {
+    const cards = $$('.story-card', box);
+    const dots = $$('.slider-dots button', box);
+    let cur = 0, timer = null, paused = false;
+    const go = (n) => {
+      cur = (n + count) % count;
+      cards.forEach((c, i) => c.classList.toggle('is-active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === cur));
+    };
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tick = () => { if (!paused && !document.hidden) go(cur + 1); };
+    if (!reduce) timer = setInterval(tick, 6000);
+    box.addEventListener('mouseenter', () => { paused = true; });
+    box.addEventListener('mouseleave', () => { paused = false; });
+    dots.forEach((d) => d.addEventListener('click', () => go(+d.dataset.go)));
+    let x0 = null;
+    box.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; paused = true; }, { passive: true });
+    box.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
+      paused = false; x0 = null;
+    });
+    return timer;
+  }
+
+  function bindStoryModal(root, items) {
+    root.addEventListener('click', (e) => {
       const card = e.target.closest('.story-card');
       if (!card) return;
       const s = items[+card.dataset.i];
