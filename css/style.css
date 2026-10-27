@@ -253,7 +253,9 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 /* 大地靈氣：背景照片淡化成柔和的底圖（後台可在「網站基本資料」更換） */
 .intro-reiki {
   position: relative; isolation: isolate;
-  background: var(--reiki-bg, url("../images/uploads/reiki-bg.jpg")) center bottom / cover no-repeat;
+  /* 放大並靠下對齊，只露出圖片下半部，避開海報上方印好的標題字 */
+  background: var(--reiki-bg, url("../images/uploads/reiki-bg.jpg")) 20% bottom / 160% auto no-repeat;
+  background-color: var(--cream);
 }
 .intro-reiki::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
@@ -331,6 +333,28 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .story-card p { margin: 0 0 16px; font-size: .92rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .story-who { display: block; font-family: var(--serif); font-size: .9rem; color: var(--bronze-deep); text-align: right; letter-spacing: .08em; }
 .modal-body .story-who { margin-top: 24px; }
+
+/* 頌缽／大地靈氣區塊裡的學員分享輪播 */
+.story-slider { margin-top: 40px; }
+.slider-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; }
+.slider-head h3 { font-size: 1.2rem; }
+.slides { display: grid; }
+.slides .story-card {
+  grid-area: 1 / 1; width: 100%; opacity: 0; visibility: hidden; transform: translateX(18px);
+  transition: opacity .7s ease, transform .7s ease, visibility .7s;
+}
+.slides .story-card.is-active { opacity: 1; visibility: visible; transform: none; }
+.slides .story-card:hover { transform: none; }
+.slides .story-card p { -webkit-line-clamp: 3; }
+.intro-reiki .slides .story-card { background: rgba(255, 255, 255, .8); backdrop-filter: blur(6px); }
+.slider-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+.slider-dots { display: flex; gap: 8px; }
+.slider-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 99px; background: rgba(122, 90, 46, .25); cursor: pointer; transition: width .3s, background .3s; }
+.slider-dots button.is-active { width: 24px; background: var(--bronze); }
+.intro-reiki .slider-dots button.is-active { background: var(--earth); }
+.more-link { font-size: .9rem; color: var(--bronze-deep); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+.intro-reiki .more-link { color: var(--earth); }
+@media (prefers-reduced-motion: reduce) { .slides .story-card { transition: none; } }
 .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; }
 .post-card {
   background: #fff; border-radius: var(--radius); overflow: hidden; cursor: pointer;
@@ -494,7 +518,7 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
   .course { grid-template-columns: 1fr; }
   .course-media { min-height: 200px; aspect-ratio: 16 / 9; }
   .course-body { padding: 22px; }
-  .intro-reiki { background-position: 28% center; }
+  .intro-reiki { background-size: cover; background-position: 22% center; }
   .event-list { grid-template-columns: 1fr; }
   .event-list.is-single .event-card { flex-direction: column; }
   .event-list.is-single .event-body { padding: 24px 22px 26px; }
