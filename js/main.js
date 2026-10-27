@@ -46,6 +46,11 @@
       hero.style.setProperty('--hero-img', `url("${new URL(img(site.heroImage), location.href).href}")`);
     }
     if (site.siteName) document.title = site.siteName;
+    // Logo：後台有上傳就換掉導覽列與瀏覽器分頁的小圖示
+    if (site.logo) {
+      $('.brand-mark').src = img(site.logo);
+      $$('link[rel="icon"], link[rel="apple-touch-icon"]').forEach((l) => { l.href = img(site.logo); l.removeAttribute('type'); });
+    }
 
     const icons = { phone: '電話', line: 'LINE', email: 'Mail', facebook: 'FB', instagram: 'IG', address: '地址', other: '…' };
     $('#contact-list').innerHTML = (site.contacts || []).map((c) => {
@@ -69,6 +74,254 @@
       const title = qrTitles[c.type] || c.label;
       return `<figure class="qr-card"><div class="qr-code">${code}</div><figcaption>${esc(title)}</figcaption></figure>`;
     }).join('');
+  }
+
+  /* ---------- 最新活動 ---------- */
+  // 沒有活動（或全部設為不顯示）時，整個區塊和導覽列連結一起隱藏，不留空白
+  function renderEvents(data) {
+    const items = (data.items || []).filter((ev) => ev.show !== false && (ev.title || ev.image));
+    const section = $('#events');
+    section.hidden = items.length === 0;
+    $('#nav-events').hidden = items.length === 0;
+    if (!items.length) return;
+    const list = $('#event-list');
+    list.classList.toggle('is-single', items.length === 1);
+    list.innerHTML = items.map((ev) => {
+      const meta = [['日期', ev.date], ['時間', ev.time], ['地點', ev.location]]
+        .filter(([, v]) => v).map(([k, v]) => `<li data-label="${k}">${esc(v)}</li>`).join('');
+      return `<article class="event-card reveal">
+        ${ev.image ? `<div class="event-poster"><img src="${esc(img(ev.image))}" alt="${esc(ev.title)}" loading="lazy"></div>` : ''}
+        <div class="event-body">
+          ${ev.tag ? `<span class="badge">${esc(ev.tag)}</span>` : ''}
+          <h3>${esc(ev.title)}</h3>
+          ${meta ? `<ul class="course-meta">${meta}</ul>` : ''}
+          ${ev.description ? `<div class="course-desc">${md(ev.description)}</div>` : ''}
+          ${ev.link ? `<a class="btn btn-primary btn-small" href="${esc(ev.link)}" target="_blank" rel="noopener">${esc(ev.linkText || '了解更多')}</a>` : ''}
+        </div>
+      </article>`;
+    }).join('');
+  }
+
+  /* ---------- 購物商城（銀行匯款） ---------- */
+  const money = (n) => `NT$ ${Number(n || 0).toLocaleString('en-US')}`;
+  const CART_KEY = 'bowl-shop-cart';
+  const readCart = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch (e) { return []; } };
+  const writeCart = (c) => { try { localStorage.setItem(CART_KEY, JSON.stringify(c)); } catch (e) { /* 無痕模式等情況存不了，不影響本次購物 */ } };
+
+  function renderShop(data, settings, site) {
+    const products = (data.items || []).filter((p) => p.show !== false && p.name);
+    $('#shop').hidden = products.length === 0;
+    $('#nav-shop').hidden = products.length === 0;
+    if (!products.length) return;
+    if (settings.intro) $('#shop-intro').textContent = settings.intro;
+
+    const byId = new Map(products.map((p, i) => [String(i), p]));
+    const unitPrice = (p) => Number(p.salePrice || p.price || 0);
+    let cart = readCart().filter((c) => byId.has(c.id) && byId.get(c.id).name === c.name);
+
+    $('#product-grid').innerHTML = products.map((p, i) => {
+      const soldOut = p.status === '售完';
+      return `<article class="product-card reveal" data-id="${i}">
+        <button class="product-img" data-view="${i}" aria-label="查看 ${esc(p.name)}">
+          ${p.image ? `<img src="${esc(img(p.image))}" alt="${esc(p.name)}" loading="lazy">` : ''}
+          ${p.status && p.status !== '現貨' ? `<span class="badge ${soldOut ? 'ended' : ''}">${esc(p.status)}</span>` : ''}
+        </button>
+        <div class="product-body">
+          <h3>${esc(p.name)}</h3>
+          ${p.summary ? `<p class="product-summary">${esc(p.summary)}</p>` : ''}
+          <div class="product-price">
+            ${p.salePrice ? `<span class="price-now">${money(p.salePrice)}</span><s>${money(p.price)}</s>` : `<span class="price-now">${money(p.price)}</span>`}
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-ghost btn-small" data-view="${i}">商品介紹</button>
+            <button class="btn btn-primary btn-small" data-add="${i}" ${soldOut ? 'disabled' : ''}>${soldOut ? '已售完' : '加入購物車'}</button>
+          </div>
+        </div>
+      </article>`;
+    }).join('');
+
+    const updateFab = () => {
+      const count = cart.reduce((s, c) => s + c.qty, 0);
+      $('#cart-count').textContent = count;
+      $('#cart-fab').hidden = count === 0;
+      writeCart(cart);
+    };
+    const add = (id) => {
+      const p = byId.get(id);
+      const line = cart.find((c) => c.id === id);
+      if (line) line.qty += 1; else cart.push({ id, name: p.name, qty: 1 });
+      updateFab();
+      const fab = $('#cart-fab');
+      fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump');
+    };
+
+    // 商品介紹（可放多張相片）
+    const view = (id) => {
+      const p = byId.get(id);
+      const pics = [p.image, ...(p.images || [])].filter(Boolean);
+      openModal(`
+        ${pics.length ? `<div class="product-gallery">${pics.map((src) => `<img src="${esc(img(src))}" alt="">`).join('')}</div>` : ''}
+        ${p.status ? `<span class="post-date">${esc(p.status)}</span>` : ''}
+        <h2>${esc(p.name)}</h2>
+        <div class="product-price">${p.salePrice ? `<span class="price-now">${money(p.salePrice)}</span><s>${money(p.price)}</s>` : `<span class="price-now">${money(p.price)}</span>`}</div>
+        <div class="prose">${md(p.description || p.summary)}</div>
+        ${p.status === '售完' ? '' : `<p><button class="btn btn-primary" data-add-modal="${id}">加入購物車</button></p>`}`);
+    };
+    $('#product-grid').addEventListener('click', (e) => {
+      const a = e.target.closest('[data-add]');
+      if (a && !a.disabled) return add(a.dataset.add);
+      const v = e.target.closest('[data-view]');
+      if (v) view(v.dataset.view);
+    });
+    $('#post-modal').addEventListener('click', (e) => {
+      const a = e.target.closest('[data-add-modal]');
+      if (!a) return;
+      add(a.dataset.addModal);
+      a.textContent = '已加入購物車 ✓';
+    });
+
+    // 購物車／結帳
+    const modal = $('#cart-modal');
+    const body = $('#cart-body');
+    const shippingFor = (subtotal, method) => {
+      if (method === 'pickup') return 0;
+      const fee = Number(settings.shippingFee || 0);
+      const free = Number(settings.freeShippingOver || 0);
+      return free && subtotal >= free ? 0 : fee;
+    };
+    const totals = (method) => {
+      const subtotal = cart.reduce((s, c) => s + unitPrice(byId.get(c.id)) * c.qty, 0);
+      const shipping = shippingFor(subtotal, method);
+      return { subtotal, shipping, total: subtotal + shipping };
+    };
+    const pickupOn = settings.allowPickup !== false;
+
+    const showCart = () => {
+      if (!cart.length) {
+        body.innerHTML = `<h2>購物車</h2><p class="empty">購物車是空的。</p>`;
+        return;
+      }
+      const t = totals('delivery');
+      body.innerHTML = `
+        <h2>購物車</h2>
+        <ul class="cart-lines">${cart.map((c) => {
+          const p = byId.get(c.id);
+          return `<li data-id="${c.id}">
+            ${p.image ? `<img src="${esc(img(p.image))}" alt="">` : '<span class="cart-thumb"></span>'}
+            <div class="cart-name">${esc(p.name)}<small>${money(unitPrice(p))}</small></div>
+            <div class="qty"><button data-dec aria-label="減少">−</button><span>${c.qty}</span><button data-inc aria-label="增加">＋</button></div>
+            <div class="cart-sub">${money(unitPrice(p) * c.qty)}</div>
+            <button class="cart-del" data-del aria-label="移除">×</button>
+          </li>`;
+        }).join('')}</ul>
+        <div class="cart-total"><span>商品小計</span><strong>${money(t.subtotal)}</strong></div>
+        ${settings.shippingFee ? `<p class="cart-hint">宅配運費 ${money(settings.shippingFee)}${settings.freeShippingOver ? `，滿 ${money(settings.freeShippingOver)} 免運` : ''}${pickupOn ? '；面交自取免運費' : ''}</p>` : ''}
+        <p><button class="btn btn-primary btn-block" data-checkout>前往結帳</button></p>`;
+    };
+
+    const showForm = () => {
+      body.innerHTML = `
+        <h2>填寫訂購資料</h2>
+        <form class="order-form" novalidate>
+          <label>姓名<input name="name" autocomplete="name" required></label>
+          <label>手機<input name="phone" type="tel" autocomplete="tel" required placeholder="0912345678"></label>
+          <fieldset><legend>取貨方式</legend>
+            <label class="radio"><input type="radio" name="method" value="delivery" checked> 宅配</label>
+            ${pickupOn ? `<label class="radio"><input type="radio" name="method" value="pickup"> 面交自取${settings.pickupNote ? `（${esc(settings.pickupNote)}）` : ''}</label>` : ''}
+          </fieldset>
+          <label class="addr">收件地址<input name="address" autocomplete="street-address"></label>
+          <label>備註（可不填）<textarea name="note" rows="2"></textarea></label>
+          <div class="cart-total" id="form-total"></div>
+          <p class="form-error" id="form-error" hidden></p>
+          <p class="form-btns"><button type="button" class="btn btn-ghost" data-back>回購物車</button><button class="btn btn-primary">送出訂單</button></p>
+        </form>`;
+      const form = $('.order-form', body);
+      const refresh = () => {
+        const method = form.method.value;
+        $('.addr', form).hidden = method === 'pickup';
+        const t = totals(method);
+        $('#form-total').innerHTML = `<span>小計 ${money(t.subtotal)}＋運費 ${money(t.shipping)}</span><strong>合計 ${money(t.total)}</strong>`;
+      };
+      form.addEventListener('change', refresh);
+      form.addEventListener('input', () => { $('#form-error').hidden = true; });
+      refresh();
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const f = Object.fromEntries(new FormData(form));
+        const errs = [];
+        if (!f.name.trim()) errs.push('請填寫姓名');
+        if (!/^0\d{8,9}$/.test(f.phone.replace(/[\s-]/g, ''))) errs.push('請填寫正確的手機號碼');
+        if (f.method === 'delivery' && !f.address.trim()) errs.push('請填寫收件地址');
+        if (errs.length) { $('#form-error').textContent = errs.join('、'); $('#form-error').hidden = false; return; }
+        showDone(f);
+      });
+    };
+
+    const showDone = (f) => {
+      const t = totals(f.method);
+      const now = new Date();
+      const no = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}-${String(Math.floor(Math.random() * 9000) + 1000)}`;
+      const lines = cart.map((c) => { const p = byId.get(c.id); return `・${p.name} × ${c.qty}　${money(unitPrice(p) * c.qty)}`; });
+      const text = [
+        `【網站訂單】編號 ${no}`,
+        `姓名：${f.name}`, `手機：${f.phone}`,
+        `取貨：${f.method === 'pickup' ? '面交自取' : `宅配　${f.address}`}`,
+        '— 訂購商品 —', ...lines,
+        `運費：${money(t.shipping)}`, `合計：${money(t.total)}`,
+        f.note ? `備註：${f.note}` : '',
+        '匯款帳號末五碼：（匯款後請填寫）',
+      ].filter(Boolean).join('\n');
+      const bank = [['銀行', [settings.bankName, settings.bankCode && `(${settings.bankCode})`].filter(Boolean).join(' ')], ['分行', settings.bankBranch], ['戶名', settings.accountName], ['帳號', settings.accountNumber]]
+        .filter(([, v]) => v);
+      const lineUrl = settings.lineUrl || ((site.contacts || []).find((c) => c.type === 'line') || {}).url;
+      const fbUrl = settings.messengerUrl || 'https://m.me/rekibowl988';
+      body.innerHTML = `
+        <h2>訂單已建立</h2>
+        <p class="done-lead">請在 ${esc(settings.payDays || '3')} 天內匯款 <strong>${money(t.total)}</strong>，並把下方訂單內容和<strong>匯款帳號末五碼</strong>傳給老師，確認收款後就會出貨。</p>
+        <div class="bank-box">
+          <h3>匯款資訊</h3>
+          ${bank.length ? `<dl>${bank.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}<dt>金額</dt><dd><strong>${money(t.total)}</strong></dd></dl>`
+            : '<p>匯款帳號請私訊老師索取。</p>'}
+        </div>
+        <h3 class="order-h">訂單內容</h3>
+        <pre class="order-text" id="order-text">${esc(text)}</pre>
+        <div class="order-actions">
+          <button class="btn btn-primary" data-copy>複製訂單內容</button>
+          ${lineUrl ? `<a class="btn btn-ghost" href="${esc(lineUrl)}" target="_blank" rel="noopener">開啟 LINE 傳給老師</a>` : ''}
+          <a class="btn btn-ghost" href="${esc(fbUrl)}" target="_blank" rel="noopener">開啟 Messenger 傳給老師</a>
+          ${settings.email ? `<a class="btn btn-ghost" href="mailto:${esc(settings.email)}?subject=${encodeURIComponent(`網站訂單 ${no}`)}&body=${encodeURIComponent(text)}">用 Email 寄給老師</a>` : ''}
+        </div>
+        <p class="cart-hint">先按「複製訂單內容」，再開啟 LINE 或 Messenger 貼上傳送即可。${settings.orderNote ? esc(settings.orderNote) : ''}</p>`;
+      cart = [];
+      updateFab();
+    };
+
+    body.addEventListener('click', (e) => {
+      const li = e.target.closest('.cart-lines li');
+      if (li) {
+        const line = cart.find((c) => c.id === li.dataset.id);
+        if (e.target.closest('[data-inc]')) line.qty += 1;
+        else if (e.target.closest('[data-dec]')) line.qty = Math.max(1, line.qty - 1);
+        else if (e.target.closest('[data-del]')) cart = cart.filter((c) => c !== line);
+        else return;
+        updateFab();
+        return showCart();
+      }
+      if (e.target.closest('[data-checkout]')) return showForm();
+      if (e.target.closest('[data-back]')) return showCart();
+      if (e.target.closest('[data-copy]')) {
+        const text = $('#order-text').textContent;
+        const done = () => { e.target.textContent = '已複製 ✓'; };
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => selectText());
+        else selectText();
+      }
+    });
+    const selectText = () => {
+      const r = document.createRange(); r.selectNodeContents($('#order-text'));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    };
+    $('#cart-fab').addEventListener('click', () => { showCart(); modal.showModal(); modal.scrollTop = 0; });
+    updateFab();
   }
 
   /* ---------- 課程 ---------- */
@@ -252,7 +505,7 @@
       const open = nav.classList.toggle('is-open');
       toggle.setAttribute('aria-expanded', open);
     });
-    const isMobileMenu = () => window.matchMedia('(max-width: 1000px)').matches;
+    const isMobileMenu = () => window.matchMedia('(max-width: 1180px)').matches;
     $$('.nav-links a').forEach((a) => a.addEventListener('click', (e) => {
       // 手機版：點「課程活動」「療癒分享」只展開／收合子選單，不跳頁
       if (a.classList.contains('nav-drop-top') && isMobileMenu()) {
@@ -289,8 +542,10 @@
   }
 
   setupUI();
-  Promise.all(['site', 'courses', 'stories', 'posts', 'gallery'].map(loadJSON)).then(([site, courses, stories, posts, gallery]) => {
+  Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery]) => {
     renderSite(site);
+    renderEvents(events);
+    renderShop(shop, shopSettings, site);
     renderCourses(courses);
     renderStories(stories);
     renderPosts(posts);
