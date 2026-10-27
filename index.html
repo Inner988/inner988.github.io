@@ -26,9 +26,15 @@
   </a>
   <button class="nav-toggle" aria-label="開啟選單" aria-expanded="false"><span></span><span></span></button>
   <nav class="nav-links">
+    <a href="#events" id="nav-events" hidden>最新活動</a>
     <a href="#about">關於老師</a>
-    <a href="#bowl">頌缽音療</a>
-    <a href="#reiki">大地靈氣</a>
+    <div class="nav-drop">
+      <a href="#bowl" class="nav-drop-top">療癒介紹<span class="caret" aria-hidden="true"></span></a>
+      <div class="nav-drop-menu">
+        <a href="#bowl">頌缽音療</a>
+        <a href="#reiki">大地靈氣</a>
+      </div>
+    </div>
     <a href="#journal">老師隨筆</a>
     <div class="nav-drop">
       <a href="#courses" class="nav-drop-top">課程活動<span class="caret" aria-hidden="true"></span></a>
@@ -48,6 +54,7 @@
         <a href="#stories" data-jump="stories" data-cat="個案">個案療癒</a>
       </div>
     </div>
+    <a href="#shop" id="nav-shop" hidden>購物商城</a>
     <a href="#gallery">相簿</a>
     <a href="#contact" class="nav-cta">預約聯絡</a>
   </nav>
@@ -68,6 +75,17 @@
       </div>
     </div>
     <a href="#about" class="scroll-hint" aria-label="往下捲動"><span></span></a>
+  </section>
+
+  <!-- 最新活動：後台沒有任何活動時，整個區塊會自動隱藏 -->
+  <section id="events" class="section events" hidden>
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Latest Events</p>
+        <h2 class="section-title">最新活動</h2>
+      </div>
+      <div class="event-list" id="event-list"></div>
+    </div>
   </section>
 
   <!-- 關於老師 -->
@@ -149,6 +167,19 @@
     </div>
   </section>
 
+  <!-- 購物商城：後台沒有上架商品時，整個區塊會自動隱藏 -->
+  <section id="shop" class="section shop" hidden>
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Shop</p>
+        <h2 class="section-title">購物商城</h2>
+        <p class="section-sub" id="shop-intro"></p>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+      <p class="shop-pay-note">付款方式：銀行匯款／ATM 轉帳，完成下單後會顯示匯款帳號</p>
+    </div>
+  </section>
+
   <!-- 療癒分享（學員心得） -->
   <section id="stories" class="section stories">
     <div class="container">
@@ -205,6 +236,18 @@
 <dialog class="modal" id="post-modal">
   <button class="modal-close" aria-label="關閉">×</button>
   <article class="modal-body" id="post-modal-body"></article>
+</dialog>
+
+<!-- 購物車按鈕（購物車有東西時才出現） -->
+<button class="cart-fab" id="cart-fab" hidden aria-label="開啟購物車">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="20" r="1.3" fill="currentColor"/><circle cx="17" cy="20" r="1.3" fill="currentColor"/></svg>
+  <span class="cart-count" id="cart-count">0</span>
+</button>
+
+<!-- 購物車／結帳 -->
+<dialog class="modal cart-modal" id="cart-modal">
+  <button class="modal-close" aria-label="關閉">×</button>
+  <div class="modal-body" id="cart-body"></div>
 </dialog>
 
 <!-- 看大圖 -->
