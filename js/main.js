@@ -381,7 +381,7 @@
   };
 
   /* ---------- 學員分享 ---------- */
-  // 頌缽、大地靈氣的心得：各放最新 3 篇，在介紹區塊裡自動輪播
+  // 頌缽、大地靈氣的心得：各放最新 5 篇，在介紹區塊裡自動輪播
   // 個案療癒的心得：放在「療癒分享」區塊，最多 5 篇；沒有時整個區塊隱藏
   const FB_PAGE = 'https://www.facebook.com/rekibowl988';
   const storyCard = (s, i, extra = '') => `
@@ -397,7 +397,7 @@
     const all = (data.items || []).slice().sort(byDateDesc);
 
     $$('[data-story-slider]').forEach((box) => {
-      const items = all.filter((s) => s.category === box.dataset.storySlider).slice(0, 3);
+      const items = all.filter((s) => s.category === box.dataset.storySlider).slice(0, 5);
       box.hidden = items.length === 0;
       const navLink = $(`.nav-links a[href="#${box.id}"]`);
       if (navLink) navLink.hidden = items.length === 0;
