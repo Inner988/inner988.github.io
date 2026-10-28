@@ -201,6 +201,7 @@ collections:
                 options:
                   - { label: 頌缽, value: 頌缽 }
                   - { label: 大地靈氣, value: 大地靈氣 }
+                  - { label: 靈魂藍圖, value: 靈魂藍圖 }
                   - { label: 個案療癒, value: 個案 }
                 default: 頌缽
               - { name: course, label: 上過的課程, widget: string, required: false }
