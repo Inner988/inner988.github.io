@@ -77,6 +77,55 @@
     }).join('');
   }
 
+  /* ---------- 靈魂藍圖 ---------- */
+  // 預覽模式：在自己電腦上，或網址加上 ?preview=1 時（例如給夥伴看的連結）
+  // 這時就算後台把靈魂藍圖設成「不顯示」，也會顯示出來，並附上風格切換按鈕
+  const isPreview = location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname)
+    || new URLSearchParams(location.search).has('preview');
+
+  function renderSoul(d) {
+    const on = (d.show !== false || isPreview) && !!d.title;
+    $('#soul').hidden = !on;
+    $('#nav-soul').hidden = !on;
+    if (!on) return;
+    $('#soul-title').textContent = d.title;
+    $('#soul-sub').textContent = d.subtitle || '';
+    $('#soul-intro').innerHTML = md(d.intro);
+    const pic = $('#soul-img');
+    if (!d.image) pic.closest('figure').hidden = true;
+
+    // 風格：site 統一風格（預設，和頌缽、大地靈氣同色系）／warm 溫暖淡雅／dreamy 夢幻星空／mystic 神秘高雅／fresh 清新自然
+    // 深色風格會改用夜空版的配圖（有設定 imageDark 時）
+    const THEMES = { site: '統一風格', warm: '溫暖淡雅', dreamy: '夢幻星空', mystic: '神秘高雅', fresh: '清新自然' };
+    const section = $('#soul');
+    const applyTheme = (t) => {
+      if (!THEMES[t]) t = 'site';
+      Object.keys(THEMES).forEach((k) => section.classList.toggle(`theme-${k}`, k === t && k !== 'warm'));
+      const dark = t === 'dreamy' || t === 'mystic';
+      if (d.image) pic.src = img(dark && d.imageDark ? d.imageDark : d.image);
+      $$('.soul-switch button', section).forEach((b) => b.classList.toggle('is-active', b.dataset.theme === t));
+    };
+    // 只有預覽模式才顯示切換按鈕方便比較；一般訪客照後台設定的風格顯示
+    if (isPreview && !$('.soul-switch', section)) {
+      const bar = document.createElement('div');
+      bar.className = 'soul-switch';
+      bar.innerHTML = '<span>預覽風格（一般訪客看不到這排按鈕）：</span>'
+        + Object.entries(THEMES).map(([k, v]) => `<button type="button" data-theme="${k}">${v}</button>`).join('');
+      bar.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) applyTheme(b.dataset.theme); });
+      $('.container', section).prepend(bar);
+    }
+    applyTheme(d.theme);
+    $('#soul-aspects').innerHTML = (d.aspects || []).map((a) => `<li><strong>${esc(a.title)}</strong><span>${esc(a.text)}</span></li>`).join('');
+    $('#soul-suitable').innerHTML = (d.suitable || []).map((t) => `<li>${esc(t)}</li>`).join('');
+    $('#soul-steps').innerHTML = (d.steps || []).map((s) => `<li><strong>${esc(s.title)}</strong><span>${esc(s.text)}</span></li>`).join('');
+    $('#soul-combo').innerHTML = d.combo ? md(d.combo) : '';
+    const btn = $('#soul-btn');
+    btn.hidden = !d.ctaLink;
+    btn.href = d.ctaLink || '#';
+    btn.textContent = d.ctaText || '私訊預約';
+    $('#soul-note').textContent = d.note || '';
+  }
+
   /* ---------- 最新活動 ---------- */
   // 沒有活動（或全部設為不顯示）時，整個區塊和導覽列連結一起隱藏，不留空白
   function renderEvents(data) {
@@ -648,8 +697,9 @@
 
   setupUI();
   setupMotion();
-  Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery]) => {
+  Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery', 'soul'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery, soul]) => {
     renderSite(site);
+    renderSoul(soul);
     renderEvents(events);
     renderShop(shop, shopSettings, site);
     renderCourses(courses);
