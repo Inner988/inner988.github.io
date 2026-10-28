@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#fbf6ee"/><stop offset=".55" stop-color="#f5efe3"/><stop offset="1" stop-color="#ece9dc"/>
+  </linearGradient>
+  <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+    <stop offset="0" stop-color="#fff3d2" stop-opacity=".95"/><stop offset=".45" stop-color="#f2d9a4" stop-opacity=".45"/><stop offset="1" stop-color="#f2d9a4" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="lav" cx="50%" cy="50%" r="50%">
+    <stop offset="0" stop-color="#c3cfae" stop-opacity=".55"/><stop offset="1" stop-color="#c3cfae" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#c99a4e"/><stop offset=".5" stop-color="#a77b3a"/><stop offset="1" stop-color="#8a6230"/>
+  </linearGradient>
+  <filter id="soft"><feGaussianBlur stdDeviation="30"/></filter>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 .4  0 0 0 0 .3  0 0 0 0 .25  0 0 0 .05 0"/></filter>
+</defs>
+
+<rect width="1200" height="900" fill="url(#bg)"/>
+<ellipse cx="260" cy="180" rx="320" ry="220" fill="url(#lav)"/>
+<ellipse cx="980" cy="760" rx="340" ry="230" fill="url(#lav)"/>
+<circle cx="600" cy="450" r="360" fill="url(#halo)"/>
+
+<!-- 淡淡的星點 -->
+<g fill="#b4924f">
+  <circle cx="110" cy="120" r="2" opacity=".5"/><circle cx="230" cy="70" r="1.4" opacity=".4"/><circle cx="330" cy="200" r="1.6" opacity=".45"/>
+  <circle cx="140" cy="420" r="1.4" opacity=".35"/><circle cx="90" cy="690" r="2" opacity=".45"/><circle cx="260" cy="800" r="1.4" opacity=".35"/>
+  <circle cx="1080" cy="100" r="2" opacity=".5"/><circle cx="960" cy="60" r="1.4" opacity=".4"/><circle cx="1130" cy="330" r="1.6" opacity=".4"/>
+  <circle cx="1050" cy="520" r="1.4" opacity=".35"/><circle cx="1120" cy="700" r="2" opacity=".45"/><circle cx="900" cy="840" r="1.4" opacity=".35"/>
+</g>
+<g fill="none" stroke="#b4924f" stroke-width="1" opacity=".3">
+  <polyline points="110,120 230,70 330,200"/><polyline points="1080,100 960,60"/><polyline points="90,690 260,800"/><polyline points="1120,700 900,840"/>
+</g>
+
+<!-- 星盤 -->
+<g transform="translate(600 450)" fill="none" stroke="url(#gold)">
+  <circle r="320" stroke-width="1" opacity=".35"/>
+  <circle r="300" stroke-width="1.6" opacity=".8"/>
+  <circle r="240" stroke-width="1.3" opacity=".6"/>
+  <circle r="170" stroke-width="1" opacity=".45" stroke-dasharray="2 6"/>
+  <g stroke-width="1.2" opacity=".7">
+    <line y1="-240" y2="-300"/><line y1="-240" y2="-300" transform="rotate(30)"/><line y1="-240" y2="-300" transform="rotate(60)"/>
+    <line y1="-240" y2="-300" transform="rotate(90)"/><line y1="-240" y2="-300" transform="rotate(120)"/><line y1="-240" y2="-300" transform="rotate(150)"/>
+    <line y1="-240" y2="-300" transform="rotate(180)"/><line y1="-240" y2="-300" transform="rotate(210)"/><line y1="-240" y2="-300" transform="rotate(240)"/>
+    <line y1="-240" y2="-300" transform="rotate(270)"/><line y1="-240" y2="-300" transform="rotate(300)"/><line y1="-240" y2="-300" transform="rotate(330)"/>
+  </g>
+  <g stroke-width="1.3" opacity=".7">
+    <circle r="70"/><circle cx="70" r="70"/><circle cx="-70" r="70"/>
+    <circle cx="35" cy="60.6" r="70"/><circle cx="-35" cy="60.6" r="70"/><circle cx="35" cy="-60.6" r="70"/><circle cx="-35" cy="-60.6" r="70"/>
+  </g>
+  <g stroke="#6f7a5c" stroke-width="1.2" opacity=".55">
+    <polygon points="0,-240 207.8,120 -207.8,120"/>
+    <polygon points="0,240 207.8,-120 -207.8,-120"/>
+  </g>
+</g>
+<g transform="translate(600 450)" filter="url(#glow)">
+  <g fill="#c99a4e">
+    <circle cx="0" cy="-240" r="5"/><circle cx="207.8" cy="120" r="4"/><circle cx="-207.8" cy="120" r="4"/>
+  </g>
+  <g fill="#6f7a5c">
+    <circle cx="0" cy="240" r="4"/><circle cx="207.8" cy="-120" r="3.5"/><circle cx="-207.8" cy="-120" r="3.5"/>
+  </g>
+  <g fill="#b4924f" opacity=".8">
+    <circle cx="0" cy="-270" r="3" transform="rotate(15)"/><circle cx="0" cy="-270" r="2" transform="rotate(45)"/><circle cx="0" cy="-270" r="3" transform="rotate(75)"/>
+    <circle cx="0" cy="-270" r="2" transform="rotate(105)"/><circle cx="0" cy="-270" r="3" transform="rotate(135)"/><circle cx="0" cy="-270" r="2" transform="rotate(165)"/>
+    <circle cx="0" cy="-270" r="3" transform="rotate(195)"/><circle cx="0" cy="-270" r="2" transform="rotate(225)"/><circle cx="0" cy="-270" r="3" transform="rotate(255)"/>
+    <circle cx="0" cy="-270" r="2" transform="rotate(285)"/><circle cx="0" cy="-270" r="3" transform="rotate(315)"/><circle cx="0" cy="-270" r="2" transform="rotate(345)"/>
+  </g>
+  <circle r="70" fill="url(#halo)"/>
+  <path d="M0 -44 C4 -10 10 -4 44 0 C10 4 4 10 0 44 C-4 10 -10 4 -44 0 C-10 -4 -4 -10 0 -44Z" fill="#c99a4e"/>
+  <circle r="6" fill="#fff8e6"/>
+</g>
+
+<!-- 下方蓮花 -->
+<g transform="translate(600 830)" fill="none" stroke="url(#gold)" stroke-width="1.5" opacity=".85">
+  <path d="M0 -40 C14 -22 14 -6 0 8 C-14 -6 -14 -22 0 -40Z"/>
+  <path d="M-6 6 C-26 0 -40 -14 -44 -30 C-26 -26 -12 -14 -6 6Z"/>
+  <path d="M6 6 C26 0 40 -14 44 -30 C26 -26 12 -14 6 6Z"/>
+  <path d="M-58 10 Q0 30 58 10" opacity=".6"/>
+</g>
+<rect width="1200" height="900" filter="url(#grain)"/>
+</svg>

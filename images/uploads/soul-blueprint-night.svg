@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+<defs>
+  <radialGradient id="sky" cx="50%" cy="48%" r="75%">
+    <stop offset="0" stop-color="#3a3156"/><stop offset=".55" stop-color="#211c33"/><stop offset="1" stop-color="#120f1c"/>
+  </radialGradient>
+  <radialGradient id="dawn" cx="50%" cy="100%" r="60%">
+    <stop offset="0" stop-color="#e0b56a" stop-opacity=".35"/><stop offset="1" stop-color="#e0b56a" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="core" cx="50%" cy="50%" r="50%">
+    <stop offset="0" stop-color="#fff4d6"/><stop offset=".25" stop-color="#f3d08a" stop-opacity=".9"/><stop offset="1" stop-color="#e0b56a" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f6dfa4"/><stop offset=".5" stop-color="#d6aa5c"/><stop offset="1" stop-color="#a77b3a"/>
+  </linearGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1200" height="900" fill="url(#sky)"/>
+<rect width="1200" height="900" fill="url(#dawn)"/>
+<g fill="#fff6dc">
+  <circle cx="80" cy="90" r="1.4" opacity=".8"/><circle cx="160" cy="210" r="1" opacity=".6"/><circle cx="240" cy="60" r="1.8" opacity=".9"/>
+  <circle cx="330" cy="150" r="1.1" opacity=".5"/><circle cx="110" cy="380" r="1.5" opacity=".7"/><circle cx="60" cy="560" r="1" opacity=".5"/>
+  <circle cx="190" cy="700" r="1.3" opacity=".6"/><circle cx="90" cy="820" r="1.6" opacity=".7"/><circle cx="300" cy="820" r="1" opacity=".5"/>
+  <circle cx="1120" cy="80" r="1.6" opacity=".8"/><circle cx="1010" cy="170" r="1.1" opacity=".6"/><circle cx="930" cy="60" r="1.3" opacity=".7"/>
+  <circle cx="1150" cy="300" r="1" opacity=".5"/><circle cx="1080" cy="470" r="1.7" opacity=".8"/><circle cx="1160" cy="640" r="1.2" opacity=".6"/>
+  <circle cx="1000" cy="780" r="1.5" opacity=".7"/><circle cx="1110" cy="850" r="1" opacity=".5"/><circle cx="880" cy="860" r="1.2" opacity=".5"/>
+</g>
+<g fill="none" stroke="#e8c98a" stroke-width="1" opacity=".45">
+  <polyline points="120,140 210,110 285,175 260,260 175,300"/><polyline points="940,130 1030,95 1095,160 1060,240"/>
+  <polyline points="130,650 220,610 250,700 330,740"/><polyline points="930,690 1010,640 1085,700 1050,790"/>
+</g>
+<g transform="translate(600 450)">
+  <circle r="330" fill="#e0b56a" opacity=".07" filter="url(#soft)"/>
+  <g fill="none" stroke="url(#gold)">
+    <circle r="320" stroke-width="1" opacity=".35"/><circle r="300" stroke-width="1.4" opacity=".75"/>
+    <circle r="240" stroke-width="1.2" opacity=".6"/><circle r="170" stroke-width="1" opacity=".45" stroke-dasharray="2 6"/>
+  </g>
+  <g stroke="url(#gold)" stroke-width="1.2" opacity=".7">
+    <line y1="-240" y2="-300"/><line y1="-240" y2="-300" transform="rotate(30)"/><line y1="-240" y2="-300" transform="rotate(60)"/>
+    <line y1="-240" y2="-300" transform="rotate(90)"/><line y1="-240" y2="-300" transform="rotate(120)"/><line y1="-240" y2="-300" transform="rotate(150)"/>
+    <line y1="-240" y2="-300" transform="rotate(180)"/><line y1="-240" y2="-300" transform="rotate(210)"/><line y1="-240" y2="-300" transform="rotate(240)"/>
+    <line y1="-240" y2="-300" transform="rotate(270)"/><line y1="-240" y2="-300" transform="rotate(300)"/><line y1="-240" y2="-300" transform="rotate(330)"/>
+  </g>
+  <g fill="none" stroke="url(#gold)" stroke-width="1.3" opacity=".75">
+    <circle r="70"/><circle cx="70" r="70"/><circle cx="-70" r="70"/>
+    <circle cx="35" cy="60.6" r="70"/><circle cx="-35" cy="60.6" r="70"/><circle cx="35" cy="-60.6" r="70"/><circle cx="-35" cy="-60.6" r="70"/>
+  </g>
+  <g fill="none" stroke="#f6dfa4" stroke-width="1.2" opacity=".55">
+    <polygon points="0,-240 207.8,120 -207.8,120"/><polygon points="0,240 207.8,-120 -207.8,-120" opacity=".7"/>
+  </g>
+  <g fill="#fff1cc" filter="url(#glow)">
+    <circle cx="0" cy="-240" r="5"/><circle cx="207.8" cy="120" r="4"/><circle cx="-207.8" cy="120" r="4"/>
+    <circle cx="0" cy="240" r="4"/><circle cx="207.8" cy="-120" r="3.5"/><circle cx="-207.8" cy="-120" r="3.5"/>
+  </g>
+  <circle r="80" fill="url(#core)"/>
+  <path d="M0 -46 C4 -10 10 -4 46 0 C10 4 4 10 0 46 C-4 10 -10 4 -46 0 C-10 -4 -4 -10 0 -46Z" fill="#fff8e4" filter="url(#glow)"/>
+</g>
+<g transform="translate(600 820)" fill="none" stroke="url(#gold)" stroke-width="1.4" opacity=".8">
+  <path d="M0 -40 C14 -22 14 -6 0 8 C-14 -6 -14 -22 0 -40Z"/>
+  <path d="M-6 6 C-26 0 -40 -14 -44 -30 C-26 -26 -12 -14 -6 6Z"/>
+  <path d="M6 6 C26 0 40 -14 44 -30 C26 -26 12 -14 6 6Z"/>
+  <path d="M-58 10 Q0 30 58 10" opacity=".6"/>
+</g>
+</svg>
