@@ -449,7 +449,8 @@
       const items = all.filter((s) => s.category === box.dataset.storySlider).slice(0, 5);
       box.hidden = items.length === 0;
       const navLink = $(`.nav-links a[href="#${box.id}"]`);
-      if (navLink) navLink.hidden = items.length === 0;
+      // 所在的區塊被隱藏時（例如靈魂藍圖還沒開放），選單項目也一起隱藏
+      if (navLink) navLink.hidden = items.length === 0 || box.closest('section').hidden;
       if (!items.length) return;
       box.innerHTML = `
         <div class="slider-head"><span class="eyebrow">Student Stories</span><h3>學員分享</h3></div>
