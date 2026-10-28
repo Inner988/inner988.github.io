@@ -434,6 +434,132 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .lb-prev { left: 16px; }
 .lb-next { right: 16px; }
 
+/* ========== 靈魂藍圖（四種風格，可在後台切換） ========== */
+/* 預設：溫暖淡雅 */
+.soul {
+  --plum: #7a5a8e; --soul-title: var(--ink); --soul-text: #4a433b; --soul-muted: var(--muted);
+  --soul-accent: #7a5a8e; --soul-accent2: #c99a4e; --soul-line: rgba(122, 90, 142, .22);
+  --soul-band: rgba(255, 255, 255, .7); --soul-chip-bg: #f1e8f3; --soul-chip-fg: #5d4470;
+  --soul-strong: #a4462a; --soul-hl: rgba(240, 190, 90, .6); --soul-star: var(--gold); --soul-frame: rgba(122, 90, 142, .3);
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(ellipse 50% 60% at 18% 30%, rgba(242, 217, 164, .45), transparent 70%),
+    radial-gradient(ellipse 45% 55% at 90% 85%, rgba(205, 184, 222, .45), transparent 70%),
+    linear-gradient(160deg, #fdf8ef 0%, #f6eee6 50%, #efe4ee 100%);
+}
+.soul .container { position: relative; }
+.soul .eyebrow { color: var(--soul-accent); }
+.soul .section-title { color: var(--soul-title); }
+.soul .lead { margin: 12px 0 18px; color: var(--soul-muted); }
+.soul .prose { color: var(--soul-text); }
+.soul .prose p:last-child { margin-bottom: 0; }
+.soul .prose strong { color: var(--soul-strong); background-image: linear-gradient(transparent 45%, var(--soul-hl) 45%, var(--soul-hl) 95%, transparent 95%); }
+
+/* 統一風格（預設）：和頌缽、大地靈氣同一套顏色——米白底、古銅金點綴、大地綠輔色 */
+.soul.theme-site {
+  --soul-title: var(--ink); --soul-text: #4a433b; --soul-muted: var(--muted);
+  --soul-accent: var(--bronze); --soul-accent2: var(--gold); --soul-line: var(--line);
+  --soul-band: rgba(255, 255, 255, .7); --soul-chip-bg: var(--sand); --soul-chip-fg: var(--bronze-deep);
+  --soul-strong: #a4462a; --soul-hl: rgba(240, 190, 90, .6); --soul-star: var(--gold); --soul-frame: rgba(201, 164, 106, .55);
+  background:
+    radial-gradient(ellipse 50% 60% at 15% 30%, rgba(242, 217, 164, .4), transparent 70%),
+    radial-gradient(ellipse 45% 55% at 92% 85%, rgba(176, 190, 150, .28), transparent 70%),
+    var(--paper);
+}
+.soul.theme-site .soul-steps li::before { background: linear-gradient(135deg, var(--gold), var(--earth)); }
+.soul.theme-site .soul-h { color: var(--bronze-deep); }
+
+/* 夢幻星空：紫粉色的黃昏星空 */
+.soul.theme-dreamy {
+  --soul-title: #fff5fb; --soul-text: rgba(250, 240, 248, .88); --soul-muted: rgba(240, 226, 240, .72);
+  --soul-accent: #f6c6dc; --soul-accent2: #f3d08a; --soul-line: rgba(246, 198, 220, .28);
+  --soul-band: rgba(255, 255, 255, .08); --soul-chip-bg: rgba(255, 255, 255, .14); --soul-chip-fg: #fff;
+  --soul-strong: #ffe1a6; --soul-hl: rgba(246, 198, 220, .35); --soul-star: #f3d08a; --soul-frame: rgba(246, 198, 220, .45);
+  background:
+    radial-gradient(1.5px 1.5px at 12% 18%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 32% 70%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 72% 22%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 88% 60%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 55% 90%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 8% 82%, #fff 50%, transparent 51%),
+    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(246, 170, 200, .45), transparent 70%),
+    linear-gradient(170deg, #2f2a55 0%, #4d3f74 50%, #7d5f93 100%);
+}
+/* 神秘高雅：深海軍藍配金色 */
+.soul.theme-mystic {
+  --soul-title: #f1d9a4; --soul-text: rgba(233, 228, 216, .86); --soul-muted: rgba(220, 212, 196, .66);
+  --soul-accent: #d9b26a; --soul-accent2: #8a6a3b; --soul-line: rgba(217, 178, 106, .25);
+  --soul-band: rgba(255, 255, 255, .03); --soul-chip-bg: transparent; --soul-chip-fg: #e9d3a3;
+  --soul-strong: #f1d9a4; --soul-hl: rgba(217, 178, 106, .25); --soul-star: #d9b26a; --soul-frame: rgba(217, 178, 106, .5);
+  background:
+    radial-gradient(ellipse 50% 60% at 25% 40%, rgba(217, 178, 106, .12), transparent 70%),
+    linear-gradient(180deg, #0e142c 0%, #161d3d 55%, #0b1024 100%);
+}
+.soul.theme-mystic .soul-check li { border: 1px solid rgba(217, 178, 106, .45); }
+.soul.theme-mystic .section-title { letter-spacing: .2em; }
+/* 清新自然：淺綠與天空藍 */
+.soul.theme-fresh {
+  --soul-title: #24382f; --soul-text: #3b4a43; --soul-muted: #64766d;
+  --soul-accent: #4f8a73; --soul-accent2: #7fb0c9; --soul-line: rgba(79, 138, 115, .22);
+  --soul-band: rgba(255, 255, 255, .75); --soul-chip-bg: #e1f0ea; --soul-chip-fg: #2f5f4c;
+  --soul-strong: #2f7a60; --soul-hl: rgba(127, 200, 170, .45); --soul-star: #7fb0c9; --soul-frame: rgba(79, 138, 115, .3);
+  background:
+    radial-gradient(ellipse 50% 60% at 15% 25%, rgba(190, 228, 210, .6), transparent 70%),
+    radial-gradient(ellipse 45% 55% at 90% 85%, rgba(190, 220, 240, .6), transparent 70%),
+    linear-gradient(160deg, #f6fbf6 0%, #eaf5f1 50%, #e5eff7 100%);
+}
+.soul.theme-fresh .soul-art img { filter: hue-rotate(85deg) saturate(.75) brightness(1.03); }
+
+/* 預覽用的風格切換按鈕（只在自己電腦預覽時出現，正式網站不會顯示） */
+.soul-switch { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 36px; }
+.soul-switch span { font-size: .82rem; color: var(--soul-muted); align-self: center; }
+.soul-switch button { font: 500 .85rem var(--sans); padding: 6px 16px; border-radius: 99px; cursor: pointer; border: 1px dashed var(--soul-accent); background: transparent; color: var(--soul-accent); }
+.soul-switch button.is-active { background: var(--soul-accent); color: #fff; border-style: solid; }
+.theme-dreamy .soul-switch button.is-active, .theme-mystic .soul-switch button.is-active { color: #1b1830; }
+.soul-top { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+.soul-art { margin: 0; position: relative; }
+.soul-art::before { /* 後面一層淡紫色的框，增加層次 */
+  content: ""; position: absolute; inset: 18px -18px -18px 18px; border-radius: 24px;
+  border: 1px solid var(--soul-frame);
+}
+.soul-art img {
+  position: relative; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 24px;
+  box-shadow: 0 26px 60px -30px rgba(90, 60, 110, .45);
+}
+.soul-h { font-size: 1.02rem; color: var(--soul-accent); margin: 26px 0 12px; letter-spacing: .1em; }
+.soul-aspects { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.soul-aspects li { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed var(--soul-line); font-size: .93rem; }
+.soul-aspects strong { font-family: var(--serif); font-weight: 600; color: var(--soul-title); }
+.soul-aspects strong::before { content: "✦"; color: var(--soul-star); margin-right: 8px; }
+.soul-aspects span { color: var(--soul-muted); }
+.soul-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 26px; }
+.soul-combo { font-size: .86rem; color: var(--soul-muted); }
+.soul-combo p { margin: 0; }
+.soul-combo strong { color: var(--soul-accent); font-weight: 600; }
+.soul-band {
+  display: grid; grid-template-columns: 1fr 1.3fr; gap: 28px; margin-top: 64px;
+  padding: 26px 32px; border-radius: var(--radius); background: var(--soul-band); border: 1px solid var(--soul-line);
+}
+.soul-band .soul-h { margin-top: 0; }
+.soul-check { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.soul-check li { font-size: .86rem; padding: 6px 14px; border-radius: 99px; background: var(--soul-chip-bg); color: var(--soul-chip-fg); }
+.soul-steps { list-style: none; counter-reset: step; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.soul-steps li { counter-increment: step; position: relative; font-size: .84rem; color: var(--soul-muted); line-height: 1.6; }
+.soul-steps li::before {
+  content: counter(step); display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 8px; border-radius: 50%;
+  font: 600 .82rem var(--serif); color: #fff; background: linear-gradient(135deg, var(--soul-accent2), var(--soul-accent));
+}
+.soul-steps li:not(:last-child)::after { /* 步驟之間的細線 */
+  content: ""; position: absolute; top: 14px; left: 36px; right: -6px; height: 1px; background: var(--soul-line);
+}
+.soul-steps strong { display: block; color: var(--soul-title); font-weight: 500; font-size: .92rem; }
+.soul-note { text-align: center; margin: 22px 0 0; font-size: .8rem; color: var(--soul-muted); }
+@media (max-width: 960px) {
+  .soul-top { grid-template-columns: 1fr; }
+  .soul-art { max-width: 520px; width: 92%; }
+  .soul-aspects li { grid-template-columns: 1fr; gap: 2px; }
+  .soul-band { grid-template-columns: 1fr; padding: 22px; }
+  .soul-steps { grid-template-columns: repeat(2, 1fr); row-gap: 18px; }
+  .soul-steps li::after { display: none; }
+}
+
 /* ========== 活潑細節（都很輕、很慢，保持優雅） ========== */
 
 /* 頁面最上方的捲動進度條 */
