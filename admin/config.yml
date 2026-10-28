@@ -75,6 +75,55 @@ collections:
               - { name: link, label: 報名連結, widget: string, required: false, hint: "Google 表單、LINE 或粉專的網址" }
               - { name: show, label: 顯示在網站上, widget: boolean, default: true }
 
+  # ───────── 靈魂藍圖 ─────────
+  - name: soul
+    label: 靈魂藍圖
+    files:
+      - name: soul
+        label: 靈魂藍圖介紹
+        file: content/soul.json
+        format: json
+        fields:
+          - { name: show, label: 顯示在網站上（關閉時整個區塊隱藏）, widget: boolean, default: true }
+          - { name: title, label: 標題, widget: string }
+          - { name: subtitle, label: 副標題, widget: string, required: false }
+          - name: theme
+            label: 區塊風格
+            widget: select
+            default: site
+            options:
+              - { label: 統一風格（和頌缽、大地靈氣同色系）, value: site }
+              - { label: 溫暖淡雅, value: warm }
+              - { label: 夢幻星空, value: dreamy }
+              - { label: 神秘高雅, value: mystic }
+              - { label: 清新自然, value: fresh }
+          - { name: image, label: 配圖（淺色風格用）, widget: image, required: false }
+          - { name: imageDark, label: 夜空版配圖（夢幻星空、神秘高雅用；沒放就用上面那張）, widget: image, required: false }
+          - { name: intro, label: 介紹文字, widget: markdown, required: false }
+          - name: aspects
+            label: 你可以從解讀中了解（小卡片）
+            widget: list
+            required: false
+            fields:
+              - { name: title, label: 標題, widget: string }
+              - { name: text, label: 說明, widget: string }
+          - name: suitable
+            label: 特別適合這樣的你
+            widget: list
+            required: false
+            field: { name: item, label: 項目, widget: string }
+          - name: steps
+            label: 解讀方式（步驟）
+            widget: list
+            required: false
+            fields:
+              - { name: title, label: 步驟名稱, widget: string }
+              - { name: text, label: 說明, widget: string }
+          - { name: combo, label: 搭配說明（按鈕上方的一句話）, widget: markdown, required: false }
+          - { name: ctaText, label: 按鈕文字, widget: string, required: false }
+          - { name: ctaLink, label: 按鈕連結, widget: string, required: false }
+          - { name: note, label: 最下方的小提醒, widget: string, required: false }
+
   # ───────── 購物商城 ─────────
   - name: shop
     label: 購物商城
