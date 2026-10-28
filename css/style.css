@@ -507,6 +507,20 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 }
 .soul.theme-fresh .soul-art img { filter: hue-rotate(85deg) saturate(.75) brightness(1.03); }
 
+/* 靈魂藍圖區塊裡的學員分享輪播：跟著目前的風格配色 */
+.soul-stories { margin-top: 48px; }
+.soul .slider-head h3 { color: var(--soul-title); }
+.soul .slider-head .eyebrow { color: var(--soul-accent); }
+.soul .slider-dots button { background: var(--soul-line); }
+.soul .slider-dots button.is-active { background: var(--soul-accent); }
+.soul .more-link { color: var(--soul-accent); }
+.soul .story-card { border-color: var(--soul-line); }
+.soul.theme-dreamy .story-card, .soul.theme-mystic .story-card { background: rgba(255, 255, 255, .07); }
+.soul.theme-dreamy .story-card blockquote, .soul.theme-mystic .story-card blockquote { color: var(--soul-title); }
+.soul.theme-dreamy .story-card p, .soul.theme-mystic .story-card p { color: var(--soul-muted); }
+.soul.theme-dreamy .story-who, .soul.theme-mystic .story-who { color: var(--soul-accent); }
+.soul.theme-dreamy .story-course, .soul.theme-mystic .story-course { background: var(--soul-chip-bg); color: var(--soul-chip-fg); }
+
 /* 預覽用的風格切換按鈕（只在自己電腦預覽時出現，正式網站不會顯示） */
 .soul-switch { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 36px; }
 .soul-switch span { font-size: .82rem; color: var(--soul-muted); align-self: center; }
