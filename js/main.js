@@ -394,7 +394,20 @@
     </div>`;
   };
 
-  function renderCourses(data) {
+  // 報名按鈕：每堂課都放「LINE 報名」和「Messenger 報名」讓學員自己選
+  // 課程的「報名連結」若填的是其他網址（例如 Google 表單），會再多一顆「線上報名」
+  const signupButtons = (c, site) => {
+    const line = ((site.contacts || []).find((x) => x.type === 'line') || {}).url;
+    const messenger = c.link && /m\.me\//.test(c.link) ? c.link : 'https://m.me/rekibowl988';
+    const custom = c.link && !/m\.me\//.test(c.link) && c.link !== line ? c.link : '';
+    return `<div class="signup-btns">
+      ${custom ? `<a class="btn btn-primary btn-small" href="${esc(custom)}" target="_blank" rel="noopener">線上報名</a>` : ''}
+      ${line ? `<a class="btn btn-small btn-line" href="${esc(line)}" target="_blank" rel="noopener">LINE 報名</a>` : ''}
+      <a class="btn btn-small btn-messenger" href="${esc(messenger)}" target="_blank" rel="noopener">Messenger 報名</a>
+    </div>`;
+  };
+
+  function renderCourses(data, site = {}) {
     const order = { '招生中': 0, '即將開課': 1, '已額滿': 2, '已結束': 3 };
     const items = (data.items || []).filter((c) => c.show !== false)
       .map((c, i) => ({ ...c, _i: i }))
@@ -404,7 +417,7 @@
       const badgeClass = c.status === '已額滿' ? 'full' : c.status === '已結束' ? 'ended' : '';
       const meta = [['日期', c.date], ['時間', c.time], ['時長', c.duration], ['地點', c.location]]
         .filter(([, v]) => v).map(([k, v]) => `<li data-label="${k}">${esc(v)}</li>`).join('');
-      const canSignup = c.link && c.status !== '已結束' && c.status !== '已額滿';
+      const canSignup = c.status !== '已結束' && c.status !== '已額滿';
       return `<article class="course reveal${c.status === '已結束' ? ' is-ended' : ''}" data-cat="${esc(c.category)}">
         <div class="course-media">${c.image ? `<img src="${esc(img(c.image))}" alt="${esc(c.title)}" loading="lazy">` : ''}
           ${c.status ? `<span class="badge ${badgeClass}">${esc(c.status)}</span>` : ''}</div>
@@ -415,7 +428,7 @@
           <div class="course-desc">${md(c.description)}</div>
           <div class="course-foot">
             ${priceHTML(c)}
-            ${canSignup ? `<a class="btn btn-primary btn-small" href="${esc(c.link)}" target="_blank" rel="noopener">我要報名</a>` : ''}
+            ${canSignup ? signupButtons(c, site) : ''}
           </div>
         </div></article>`;
     }).join('');
@@ -703,7 +716,7 @@
     renderSoul(soul);
     renderEvents(events);
     renderShop(shop, shopSettings, site);
-    renderCourses(courses);
+    renderCourses(courses, site);
     renderStories(stories);
     renderPosts(posts);
     renderGallery(gallery);
