@@ -1,0 +1,7 @@
+# 歡迎搜尋引擎收錄網站；後台與本機預覽工具不需要被收錄
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /本機預覽/
+
+Sitemap: https://inner988.github.io/sitemap.xml
