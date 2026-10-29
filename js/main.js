@@ -46,7 +46,8 @@
       hero.style.setProperty('--hero-img', `url("${new URL(img(site.heroImage), location.href).href}")`);
     }
     if (site.reikiBg) $('#reiki').style.setProperty('--reiki-bg', `url("${new URL(img(site.reikiBg), location.href).href}")`);
-    if (site.siteName) document.title = site.siteName;
+    // 只替換「｜」前面的網站名稱，後面給 Google 看的關鍵字說明保留
+    if (site.siteName) document.title = site.siteName + document.title.slice(document.title.indexOf('｜') >= 0 ? document.title.indexOf('｜') : document.title.length);
     // Logo：後台有上傳就換掉導覽列與瀏覽器分頁的小圖示
     if (site.logo) {
       $('.brand-mark').src = img(site.logo);
