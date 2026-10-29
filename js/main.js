@@ -128,7 +128,7 @@
 
   /* ---------- 最新活動 ---------- */
   // 沒有活動（或全部設為不顯示）時，整個區塊和導覽列連結一起隱藏，不留空白
-  function renderEvents(data) {
+  function renderEvents(data, site = {}) {
     const items = (data.items || []).filter((ev) => ev.show !== false && (ev.title || ev.image));
     const section = $('#events');
     section.hidden = items.length === 0;
@@ -146,7 +146,7 @@
           <h3>${esc(ev.title)}</h3>
           ${meta ? `<ul class="course-meta">${meta}</ul>` : ''}
           ${ev.description ? `<div class="course-desc">${md(ev.description)}</div>` : ''}
-          ${ev.link ? `<a class="btn btn-primary btn-small" href="${esc(ev.link)}" target="_blank" rel="noopener">${esc(ev.linkText || '了解更多')}</a>` : ''}
+          ${ev.link ? signupButtons(ev, site, ev.linkText && ev.linkText !== '私訊報名' ? ev.linkText : '了解更多') : ''}
         </div>
       </article>`;
     }).join('');
@@ -396,12 +396,12 @@
 
   // 報名按鈕：每堂課都放「LINE 報名」和「Messenger 報名」讓學員自己選
   // 課程的「報名連結」若填的是其他網址（例如 Google 表單），會再多一顆「線上報名」
-  const signupButtons = (c, site) => {
+  const signupButtons = (c, site, customLabel = '線上報名') => {
     const line = ((site.contacts || []).find((x) => x.type === 'line') || {}).url;
     const messenger = c.link && /m\.me\//.test(c.link) ? c.link : 'https://m.me/rekibowl988';
     const custom = c.link && !/m\.me\//.test(c.link) && c.link !== line ? c.link : '';
     return `<div class="signup-btns">
-      ${custom ? `<a class="btn btn-primary btn-small" href="${esc(custom)}" target="_blank" rel="noopener">線上報名</a>` : ''}
+      ${custom ? `<a class="btn btn-primary btn-small" href="${esc(custom)}" target="_blank" rel="noopener">${esc(customLabel)}</a>` : ''}
       ${line ? `<a class="btn btn-small btn-line" href="${esc(line)}" target="_blank" rel="noopener">LINE 報名</a>` : ''}
       <a class="btn btn-small btn-messenger" href="${esc(messenger)}" target="_blank" rel="noopener">Messenger 報名</a>
     </div>`;
@@ -714,7 +714,7 @@
   Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery', 'soul'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery, soul]) => {
     renderSite(site);
     renderSoul(soul);
-    renderEvents(events);
+    renderEvents(events, site);
     renderShop(shop, shopSettings, site);
     renderCourses(courses, site);
     renderStories(stories);
