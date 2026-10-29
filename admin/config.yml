@@ -72,7 +72,7 @@ collections:
               - { name: earlyPrice, label: 早鳥價（沒有可不填）, widget: string, required: false, hint: "例：NT$ 3,200。有填時，網站會把原價加上刪除線" }
               - { name: earlyDeadline, label: 早鳥優惠截止日（可不填）, widget: string, required: false, hint: "例：11/1（六）" }
               - { name: description, label: 課程介紹, widget: markdown, required: false }
-              - { name: link, label: 報名連結, widget: string, required: false, hint: "Google 表單、LINE 或粉專的網址" }
+              - { name: link, label: 其他報名連結（可不填）, widget: string, required: false, hint: "網站已自動顯示「LINE 報名」和「Messenger 報名」；若有 Google 表單等其他報名網址，填在這裡會多一顆「線上報名」" }
               - { name: show, label: 顯示在網站上, widget: boolean, default: true }
 
   # ───────── 靈魂藍圖 ─────────
