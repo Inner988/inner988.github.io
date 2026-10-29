@@ -399,7 +399,8 @@
   const signupButtons = (c, site, customLabel = '線上報名') => {
     const line = ((site.contacts || []).find((x) => x.type === 'line') || {}).url;
     const messenger = c.link && /m\.me\//.test(c.link) ? c.link : 'https://m.me/rekibowl988';
-    const custom = c.link && !/m\.me\//.test(c.link) && c.link !== line ? c.link : '';
+    // 只有真正的網址（http 開頭）才當成「其他報名連結」；填了一般文字就只顯示 LINE、Messenger
+    const custom = c.link && /^https?:\/\//.test(c.link.trim()) && !/m\.me\//.test(c.link) && c.link !== line ? c.link.trim() : '';
     return `<div class="signup-btns">
       ${custom ? `<a class="btn btn-primary btn-small" href="${esc(custom)}" target="_blank" rel="noopener">${esc(customLabel)}</a>` : ''}
       ${line ? `<a class="btn btn-small btn-line" href="${esc(line)}" target="_blank" rel="noopener">LINE 報名</a>` : ''}
