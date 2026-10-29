@@ -514,6 +514,37 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 }
 .soul.theme-fresh .soul-art img { filter: hue-rotate(85deg) saturate(.75) brightness(1.03); }
 
+/* 靈魂藍圖的動態 */
+/* 配圖：輕輕上下浮動，後面的框線慢慢錯位呼吸 */
+.soul-art img { animation: soulFloat 8s ease-in-out infinite; }
+.soul-art::before { animation: breathe 8s ease-in-out infinite; }
+@keyframes soulFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+/* 「你可以從解讀中了解」：從右側滑入，星星一閃一閃，滑過時整列亮起 */
+.soul-aspects li.reveal { transform: translateX(24px); }
+.soul-aspects li.reveal.is-visible { transform: none; }
+.soul-aspects li { position: relative; transition: background .35s, padding-left .35s; border-radius: 8px; }
+.soul-aspects li:hover { background: linear-gradient(90deg, rgba(240, 190, 90, .16), transparent 80%); padding-left: 10px; }
+.soul-aspects strong::before { display: inline-block; animation: twinkle 3s ease-in-out infinite; }
+.soul-aspects li:nth-child(2) strong::before { animation-delay: .6s; }
+.soul-aspects li:nth-child(3) strong::before { animation-delay: 1.2s; }
+.soul-aspects li:nth-child(4) strong::before { animation-delay: 1.8s; }
+.soul-aspects li:nth-child(5) strong::before { animation-delay: 2.4s; }
+@keyframes twinkle { 0%, 100% { opacity: .45; transform: scale(.85) rotate(0); } 50% { opacity: 1; transform: scale(1.2) rotate(45deg); } }
+/* 標籤：從下方浮上來 */
+.soul-check li.reveal { transform: translateY(14px) scale(.96); }
+.soul-check li.reveal.is-visible { transform: none; }
+/* 步驟：數字依序彈出，中間的連線由左往右畫出來 */
+.soul-steps li.reveal { transform: none; }
+.soul-steps li::before { transition: transform .6s cubic-bezier(.3, 1.6, .5, 1); transform: scale(.2); }
+.soul-steps li.is-visible::before { transform: scale(1); }
+.soul-steps li::after { transform: scaleX(0); transform-origin: 0 50%; transition: transform .9s ease .4s; }
+.soul-steps li.is-visible::after { transform: scaleX(1); }
+.soul .slider-head h3 { color: var(--soul-title); }
+@media (prefers-reduced-motion: reduce) {
+  .soul-art img, .soul-art::before, .soul-aspects strong::before { animation: none; }
+  .soul-steps li::before, .soul-steps li::after { transform: none; transition: none; }
+}
+
 /* 靈魂藍圖區塊裡的學員分享輪播：跟著目前的風格配色 */
 .soul-stories { margin-top: 48px; }
 .soul .slider-head h3 { color: var(--soul-title); }
@@ -612,7 +643,11 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
   88% { opacity: .7; }
   100% { transform: translate(calc(var(--drift, 20px) * -.5), -95vh); opacity: 0; }
 }
-.intro-reiki .motes { z-index: 0; }
+.intro-reiki .motes, .soul .motes { z-index: 0; }
+.soul .motes i {
+  background: radial-gradient(circle, #fff6d8 0%, rgba(232, 186, 96, .85) 35%, rgba(232, 186, 96, 0) 72%);
+  box-shadow: 0 0 9px 2px rgba(240, 196, 100, .4);
+}
 .intro-reiki > .container { position: relative; z-index: 1; }
 /* 大地靈氣區塊的光點：背景偏亮，所以用較飽和的金色加上光暈，才看得出來 */
 .intro-reiki .motes i {
