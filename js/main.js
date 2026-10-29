@@ -409,10 +409,11 @@
   };
 
   function renderCourses(data, site = {}) {
-    const order = { '招生中': 0, '即將開課': 1, '已額滿': 2, '已結束': 3 };
+    // 照後台排好的順序顯示；只有「已結束」的課程自動排到最後面
+    const ended = (c) => (c.status === '已結束' ? 1 : 0);
     const items = (data.items || []).filter((c) => c.show !== false)
       .map((c, i) => ({ ...c, _i: i }))
-      .sort((a, b) => (order[a.status] ?? 1) - (order[b.status] ?? 1) || a._i - b._i);
+      .sort((a, b) => ended(a) - ended(b) || a._i - b._i);
     const list = $('#course-list');
     list.innerHTML = items.map((c) => {
       const badgeClass = c.status === '已額滿' ? 'full' : c.status === '已結束' ? 'ended' : '';
