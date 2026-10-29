@@ -554,14 +554,38 @@
   }
 
   /* ---------- 相簿 ---------- */
+  // 影片：支援 YouTube、臉書連結，或直接上傳的 mp4
+  const youtubeId = (url) => {
+    const m = String(url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/);
+    return m ? m[1] : '';
+  };
+  const isVideo = (g) => g.type === 'video' || !!(g.video || g.videoFile);
+  const videoCover = (g) => (g.image ? img(g.image) : youtubeId(g.video) ? `https://img.youtube.com/vi/${youtubeId(g.video)}/hqdefault.jpg` : '');
+  const videoPlayer = (g) => {
+    const yt = youtubeId(g.video);
+    if (yt) return `<iframe src="https://www.youtube-nocookie.com/embed/${yt}?autoplay=1&rel=0" title="${esc(g.caption || '影片')}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    if (/facebook\.com|fb\.watch/.test(g.video || '')) {
+      return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(g.video)}&show_text=false&autoplay=true" title="${esc(g.caption || '影片')}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    }
+    if (g.videoFile) return `<video src="${esc(img(g.videoFile))}" controls autoplay playsinline ${g.image ? `poster="${esc(img(g.image))}"` : ''}></video>`;
+    if (g.video) return `<p class="lb-fallback"><a class="btn btn-primary" href="${esc(g.video)}" target="_blank" rel="noopener">開啟影片</a></p>`;
+    return '';
+  };
+
   function renderGallery(data) {
-    const items = (data.items || []).filter((g) => g.image);
+    const items = (data.items || []).filter((g) => (isVideo(g) ? (g.video || g.videoFile) : g.image));
     const grid = $('#gallery-grid');
-    grid.innerHTML = items.map((g, i) => `
-      <figure class="reveal" data-i="${i}" data-album="${esc(g.album || '')}">
-        <img src="${esc(img(g.image))}" alt="${esc(g.caption)}" loading="lazy">
+    grid.innerHTML = items.map((g, i) => {
+      const video = isVideo(g);
+      const cover = video ? videoCover(g) : img(g.image);
+      return `<figure class="reveal${video ? ' is-video' : ''}" data-i="${i}" data-album="${esc(g.album || '')}">
+        ${cover ? `<img src="${esc(cover)}" alt="${esc(g.caption)}" loading="lazy">`
+          : g.videoFile ? `<video src="${esc(img(g.videoFile))}#t=0.5" muted playsinline preload="metadata"></video>`
+          : '<div class="video-blank"></div>'}
+        ${video ? '<span class="play-badge" aria-hidden="true"></span>' : ''}
         ${g.caption ? `<figcaption>${esc(g.caption)}</figcaption>` : ''}
-      </figure>`).join('');
+      </figure>`;
+    }).join('');
     $('#gallery-empty').hidden = items.length > 0;
 
     const albums = [...new Set(items.map((g) => g.album).filter(Boolean))];
@@ -574,12 +598,16 @@
     // 看大圖（只在目前篩選後可見的相片間切換）
     const lb = $('#lightbox');
     let visible = [], cur = 0;
+    const media = $('#lb-media');
     const show = () => {
       const g = items[visible[cur]];
-      $('#lb-img').src = img(g.image);
-      $('#lb-img').alt = g.caption || '';
+      // 換下一張或關閉時，整個內容重建，正在播的影片就會停掉
+      media.innerHTML = isVideo(g)
+        ? `<div class="lb-video">${videoPlayer(g)}</div>`
+        : `<img src="${esc(img(g.image))}" alt="${esc(g.caption || '')}">`;
       $('#lb-cap').textContent = g.caption || '';
     };
+    lb.addEventListener('close', () => { media.innerHTML = ''; });
     grid.addEventListener('click', (e) => {
       const fig = e.target.closest('figure');
       if (!fig) return;
