@@ -115,9 +115,10 @@
       $('.container', section).prepend(bar);
     }
     applyTheme(d.theme);
-    $('#soul-aspects').innerHTML = (d.aspects || []).map((a) => `<li><strong>${esc(a.title)}</strong><span>${esc(a.text)}</span></li>`).join('');
-    $('#soul-suitable').innerHTML = (d.suitable || []).map((t) => `<li>${esc(t)}</li>`).join('');
-    $('#soul-steps').innerHTML = (d.steps || []).map((s) => `<li><strong>${esc(s.title)}</strong><span>${esc(s.text)}</span></li>`).join('');
+    // 每一列都加上 reveal，捲到時會一列接一列浮現
+    $('#soul-aspects').innerHTML = (d.aspects || []).map((a) => `<li class="reveal"><strong>${esc(a.title)}</strong><span>${esc(a.text)}</span></li>`).join('');
+    $('#soul-suitable').innerHTML = (d.suitable || []).map((t) => `<li class="reveal">${esc(t)}</li>`).join('');
+    $('#soul-steps').innerHTML = (d.steps || []).map((s) => `<li class="reveal"><strong>${esc(s.title)}</strong><span>${esc(s.text)}</span></li>`).join('');
     $('#soul-combo').innerHTML = d.combo ? md(d.combo) : '';
     const btn = $('#soul-btn');
     btn.hidden = !d.ctaLink;
@@ -681,15 +682,15 @@
   function setupMotion() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     // 光點：首頁 16 顆、大地靈氣區塊 10 顆，大小、速度、位置都隨機
-    [['.hero', 16], ['#reiki', 22]].forEach(([sel, n]) => {
+    [['.hero', 16], ['#reiki', 22], ['#soul', 14]].forEach(([sel, n]) => {
       const host = $(sel);
-      if (!host) return;
+      if (!host || host.hidden) return;
       const box = document.createElement('div');
       box.className = 'motes';
       box.setAttribute('aria-hidden', 'true');
       for (let i = 0; i < n; i++) {
         const m = document.createElement('i');
-        const size = sel === '#reiki' ? 6 + Math.random() * 9 : 3 + Math.random() * 7;
+        const size = sel === '.hero' ? 3 + Math.random() * 7 : 6 + Math.random() * 9;
         m.style.cssText = `left:${Math.random() * 100}%;width:${size}px;height:${size}px;`
           + `animation-duration:${14 + Math.random() * 16}s;animation-delay:${-Math.random() * 30}s;`
           + `--drift:${(Math.random() * 80 - 40).toFixed(0)}px`;
@@ -712,10 +713,10 @@
   }
 
   setupUI();
-  setupMotion();
   Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery', 'soul'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery, soul]) => {
     renderSite(site);
     renderSoul(soul);
+    setupMotion(); // 放在靈魂藍圖顯示之後，才知道要不要在那個區塊加光點
     renderEvents(events, site);
     renderShop(shop, shopSettings, site);
     renderCourses(courses, site);
