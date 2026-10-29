@@ -315,6 +315,13 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .price-original s { text-decoration-color: rgba(122, 112, 100, .7); }
 .price-deadline { flex-basis: 100%; font-family: var(--sans); font-size: .8rem; font-weight: 400; color: var(--muted); }
 .course.is-ended { opacity: .65; }
+/* 報名按鈕：LINE 綠、Messenger 藍，學員一眼就認得 */
+.signup-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-line, .btn-messenger { color: #fff; }
+.btn-line { background: #06c755; box-shadow: 0 8px 18px -10px rgba(6, 199, 85, .8); }
+.btn-line:hover { background: #05a847; }
+.btn-messenger { background: linear-gradient(135deg, #0a7cff, #8a3ffc); box-shadow: 0 8px 18px -10px rgba(10, 124, 255, .8); }
+.btn-messenger:hover { filter: brightness(.92); }
 
 /* ========== 分享 ========== */
 .section-sub { margin: 14px 0 0; color: var(--muted); font-family: var(--serif); letter-spacing: .12em; }
