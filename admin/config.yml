@@ -33,8 +33,8 @@ collections:
               - { name: time, label: 時間, widget: string, required: false }
               - { name: location, label: 地點, widget: string, required: false }
               - { name: description, label: 活動說明, widget: markdown, required: false }
-              - { name: link, label: 按鈕連結（可不填）, widget: string, required: false, hint: "報名表單、Messenger 或 LINE 網址" }
-              - { name: linkText, label: 按鈕文字, widget: string, required: false, default: 私訊報名 }
+              - { name: link, label: 報名連結（可不填）, widget: string, required: false, hint: "有填就會顯示「LINE 報名」和「Messenger 報名」兩顆按鈕；若填的是 Google 表單等其他網址，會再多一顆按鈕" }
+              - { name: linkText, label: 其他網址的按鈕文字, widget: string, required: false, hint: "只有在報名連結是其他網址時才會用到，例：線上報名" }
               - { name: show, label: 顯示在網站上, widget: boolean, default: true }
 
   # ───────── 課程 ─────────
