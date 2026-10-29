@@ -238,17 +238,26 @@ collections:
     label: 活動相簿
     files:
       - name: gallery
-        label: 相片
+        label: 相片與影片
         file: content/gallery.json
         format: json
         fields:
           - name: items
-            label: 相片
-            label_singular: 相片
+            label: 相片／影片
+            label_singular: 項目
             widget: list
-            summary: "{{fields.album}}｜{{fields.caption}}"
+            summary: "{{fields.type}}｜{{fields.album}}｜{{fields.caption}}"
             fields:
-              - { name: image, label: 相片, widget: image }
+              - name: type
+                label: 類型
+                widget: select
+                default: photo
+                options:
+                  - { label: 相片, value: photo }
+                  - { label: 影片, value: video }
+              - { name: image, label: 相片（影片的話放封面圖）, widget: image, required: false, hint: "影片若是 YouTube 連結，沒放封面也會自動抓 YouTube 的縮圖" }
+              - { name: video, label: 影片連結（YouTube 或臉書）, widget: string, required: false, hint: "例：https://www.youtube.com/watch?v=xxxx 或臉書影片的網址" }
+              - { name: videoFile, label: 或直接上傳短片（mp4，建議 20MB 以內）, widget: file, required: false }
               - { name: caption, label: 說明文字, widget: string, required: false }
               - { name: album, label: 相簿分類, widget: string, required: false, hint: "例：頌缽音浴、大地靈氣、日常（同名的會分在一起）" }
 
