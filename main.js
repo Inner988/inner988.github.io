@@ -46,7 +46,8 @@
       hero.style.setProperty('--hero-img', `url("${new URL(img(site.heroImage), location.href).href}")`);
     }
     if (site.reikiBg) $('#reiki').style.setProperty('--reiki-bg', `url("${new URL(img(site.reikiBg), location.href).href}")`);
-    if (site.siteName) document.title = site.siteName;
+    // 只替換「｜」前面的網站名稱，後面給 Google 看的關鍵字說明保留
+    if (site.siteName) document.title = site.siteName + document.title.slice(document.title.indexOf('｜') >= 0 ? document.title.indexOf('｜') : document.title.length);
     // Logo：後台有上傳就換掉導覽列與瀏覽器分頁的小圖示
     if (site.logo) {
       $('.brand-mark').src = img(site.logo);
@@ -115,9 +116,10 @@
       $('.container', section).prepend(bar);
     }
     applyTheme(d.theme);
-    $('#soul-aspects').innerHTML = (d.aspects || []).map((a) => `<li><strong>${esc(a.title)}</strong><span>${esc(a.text)}</span></li>`).join('');
-    $('#soul-suitable').innerHTML = (d.suitable || []).map((t) => `<li>${esc(t)}</li>`).join('');
-    $('#soul-steps').innerHTML = (d.steps || []).map((s) => `<li><strong>${esc(s.title)}</strong><span>${esc(s.text)}</span></li>`).join('');
+    // 每一列都加上 reveal，捲到時會一列接一列浮現
+    $('#soul-aspects').innerHTML = (d.aspects || []).map((a) => `<li class="reveal"><strong>${esc(a.title)}</strong><span>${esc(a.text)}</span></li>`).join('');
+    $('#soul-suitable').innerHTML = (d.suitable || []).map((t) => `<li class="reveal">${esc(t)}</li>`).join('');
+    $('#soul-steps').innerHTML = (d.steps || []).map((s) => `<li class="reveal"><strong>${esc(s.title)}</strong><span>${esc(s.text)}</span></li>`).join('');
     $('#soul-combo').innerHTML = d.combo ? md(d.combo) : '';
     const btn = $('#soul-btn');
     btn.hidden = !d.ctaLink;
@@ -146,7 +148,7 @@
           <h3>${esc(ev.title)}</h3>
           ${meta ? `<ul class="course-meta">${meta}</ul>` : ''}
           ${ev.description ? `<div class="course-desc">${md(ev.description)}</div>` : ''}
-          ${ev.link ? signupButtons(ev, site, ev.linkText && ev.linkText !== '私訊報名' ? ev.linkText : '了解更多') : ''}
+          ${ev.link ? signupButtons(ev, site, ev.linkText && ev.linkText !== '私訊報名' ? ev.linkText : '線上報名') : ''}
         </div>
       </article>`;
     }).join('');
@@ -394,70 +396,171 @@
     </div>`;
   };
 
-  // 報名按鈕：每堂課都放「LINE 報名」和「Messenger 報名」讓學員自己選
-  // 課程的「報名連結」若填的是其他網址（例如 Google 表單），會再多一顆「線上報名」
+  // 報名按鈕：預設放「LINE 報名」和「Messenger 報名」讓學員自己選
+  // 「報名連結」若填的是其他網址（例如 Google 表單），就只顯示那一顆按鈕
   const signupButtons = (c, site, customLabel = '線上報名') => {
     const line = ((site.contacts || []).find((x) => x.type === 'line') || {}).url;
-    const messenger = c.link && /m\.me\//.test(c.link) ? c.link : 'https://m.me/rekibowl988';
-    // 只有真正的網址（http 開頭）才當成「其他報名連結」；填了一般文字就只顯示 LINE、Messenger
-    const custom = c.link && /^https?:\/\//.test(c.link.trim()) && !/m\.me\//.test(c.link) && c.link !== line ? c.link.trim() : '';
+    const link = String(c.link || '').trim();
+    const messenger = /m\.me\//.test(link) ? link : 'https://m.me/rekibowl988';
+    // 只有真正的網址（http 開頭）才算其他報名連結；填了一般文字就顯示 LINE、Messenger
+    const custom = /^https?:\/\//.test(link) && !/m\.me\//.test(link) && link !== line ? link : '';
+    if (custom) return `<div class="signup-btns"><a class="btn btn-primary btn-small" href="${esc(custom)}" target="_blank" rel="noopener">${esc(customLabel)}</a></div>`;
     return `<div class="signup-btns">
-      ${custom ? `<a class="btn btn-primary btn-small" href="${esc(custom)}" target="_blank" rel="noopener">${esc(customLabel)}</a>` : ''}
       ${line ? `<a class="btn btn-small btn-line" href="${esc(line)}" target="_blank" rel="noopener">LINE 報名</a>` : ''}
       <a class="btn btn-small btn-messenger" href="${esc(messenger)}" target="_blank" rel="noopener">Messenger 報名</a>
     </div>`;
   };
 
   function renderCourses(data, site = {}) {
-    const order = { '招生中': 0, '即將開課': 1, '已額滿': 2, '已結束': 3 };
+    // 照後台排好的順序顯示；只有「已結束」的課程自動排到最後面
+    const ended = (c) => (c.status === '已結束' ? 1 : 0);
     const items = (data.items || []).filter((c) => c.show !== false)
       .map((c, i) => ({ ...c, _i: i }))
-      .sort((a, b) => (order[a.status] ?? 1) - (order[b.status] ?? 1) || a._i - b._i);
+      .sort((a, b) => ended(a) - ended(b) || a._i - b._i);
     const list = $('#course-list');
-    list.innerHTML = items.map((c) => {
-      const badgeClass = c.status === '已額滿' ? 'full' : c.status === '已結束' ? 'ended' : '';
-      const meta = [['日期', c.date], ['時間', c.time], ['時長', c.duration], ['地點', c.location]]
-        .filter(([, v]) => v).map(([k, v]) => `<li data-label="${k}">${esc(v)}</li>`).join('');
-      const canSignup = c.status !== '已結束' && c.status !== '已額滿';
-      return `<article class="course reveal${c.status === '已結束' ? ' is-ended' : ''}" data-cat="${esc(c.category)}">
+    const badgeClass = (c) => (c.status === '已額滿' ? 'full' : c.status === '已結束' ? 'ended' : '');
+    const metaHTML = (c) => [['日期', c.date], ['時間', c.time], ['時長', c.duration], ['地點', c.location]]
+      .filter(([, v]) => v).map(([k, v]) => `<li data-label="${k}">${esc(v)}</li>`).join('');
+    // 課程卡片只放基本資訊；詳細介紹、費用和報名按鈕都放在點開後的視窗裡
+    list.innerHTML = items.map((c, i) => `
+      <article class="course reveal${c.status === '已結束' ? ' is-ended' : ''}" data-cat="${esc(c.category)}" data-i="${i}">
         <div class="course-media">${c.image ? `<img src="${esc(img(c.image))}" alt="${esc(c.title)}" loading="lazy">` : ''}
-          ${c.status ? `<span class="badge ${badgeClass}">${esc(c.status)}</span>` : ''}</div>
+          ${c.status ? `<span class="badge ${badgeClass(c)}">${esc(c.status)}</span>` : ''}</div>
         <div class="course-body">
           <span class="course-cat">${esc(c.category)}</span>
           <h3>${esc(c.title)}</h3>
-          <ul class="course-meta">${meta}</ul>
-          <div class="course-desc">${md(c.description)}</div>
-          <div class="course-foot">
-            ${priceHTML(c)}
-            ${canSignup ? signupButtons(c, site) : ''}
-          </div>
-        </div></article>`;
-    }).join('');
+          <ul class="course-meta">${metaHTML(c)}</ul>
+          ${c.summary ? `<p class="course-summary">${esc(c.summary)}</p>` : ''}
+          <button type="button" class="btn btn-ghost btn-small course-more">查看課程介紹與費用</button>
+        </div>
+      </article>`).join('');
+    list.addEventListener('click', (e) => {
+      const card = e.target.closest('.course');
+      if (!card) return;
+      const c = items[+card.dataset.i];
+      const canSignup = c.status !== '已結束' && c.status !== '已額滿';
+      const hasPrice = c.price || c.earlyPrice;
+      openModal(`
+        ${c.image ? `<img class="post-hero" src="${esc(img(c.image))}" alt="">` : ''}
+        <span class="post-date">${esc(c.category)}${c.status ? `　${esc(c.status)}` : ''}</span>
+        <h2>${esc(c.title)}</h2>
+        <ul class="course-meta">${metaHTML(c)}</ul>
+        <div class="prose">${md(c.description || c.summary)}</div>
+        <div class="course-fee">
+          <h3>課程費用</h3>
+          ${hasPrice ? priceHTML(c) : '<p>費用請私訊詢問</p>'}
+        </div>
+        ${canSignup ? signupButtons(c, site) : `<p class="course-closed">${esc(c.status)}</p>`}`);
+    });
     setupFilter('[data-filter-group="courses"]', $$('.course', list), (el) => el.dataset.cat, $('#course-empty'));
   }
 
   const byDateDesc = (a, b) => String(b.date || '').localeCompare(String(a.date || ''));
   const openModal = (html) => {
+    const modal = $('#post-modal');
     $('#post-modal-body').innerHTML = html;
-    $('#post-modal').showModal();
-    $('#post-modal').scrollTop = 0;
+    if (!modal.open) modal.showModal();
+    modal.scrollTop = 0;
   };
+
+  /* ---------- 全部文章列表（老師隨筆、學員分享共用） ---------- */
+  // 首頁只放最新幾篇，其他的都在這個可搜尋的列表裡；點文章看全文，可以再回到列表
+  let archive = null;
+  const archiveResults = () => {
+    const q = archive.q.trim().toLowerCase();
+    const shown = archive.items.map((item, i) => ({ item, i })).filter(({ item }) =>
+      (archive.cat === 'all' || item.category === archive.cat)
+      && (!q || [item.title, item.summary, item.body, item.student, item.course, item.quote].join(' ').toLowerCase().includes(q)));
+    $('#archive-count').textContent = `共 ${shown.length} 篇`;
+    $('#archive-results').innerHTML = shown.length ? shown.map(({ item, i }) => {
+      const pic = item.cover || item.photo;
+      const sub = [formatDate(item.date), item.course].filter(Boolean).join('　');
+      return `<li><button type="button" class="archive-item" data-archive-item="${i}">
+        ${pic ? `<img src="${esc(img(pic))}" alt="" loading="lazy">` : ''}
+        <span class="archive-text"><small>${esc(sub)}</small><strong>${esc(item.title)}</strong><em>${esc(item.summary)}</em></span>
+      </button></li>`;
+    }).join('') : '<li class="empty">找不到符合的文章。</li>';
+  };
+  const showArchive = () => {
+    openModal(`
+      <h2>${esc(archive.title)}</h2>
+      <div class="archive-tools">
+        <input type="search" class="archive-search" placeholder="搜尋文章…" aria-label="搜尋文章" value="${esc(archive.q)}">
+        <span class="archive-count" id="archive-count"></span>
+      </div>
+      ${archive.cats ? `<div class="filters archive-chips">${[['all', '全部'], ...archive.cats].map(([v, label]) =>
+        `<button type="button" class="chip${archive.cat === v ? ' is-active' : ''}" data-archive-cat="${esc(v)}">${esc(label)}</button>`).join('')}</div>` : ''}
+      <ul class="archive-list" id="archive-results"></ul>`);
+    archiveResults();
+  };
+  const openArchive = (cfg) => { archive = { q: '', cat: 'all', ...cfg }; showArchive(); };
+  $('#post-modal-body').addEventListener('input', (e) => {
+    if (!e.target.classList.contains('archive-search')) return;
+    archive.q = e.target.value;
+    archiveResults();
+  });
+  $('#post-modal-body').addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-archive-cat]');
+    if (chip) {
+      archive.cat = chip.dataset.archiveCat;
+      $$('[data-archive-cat]').forEach((c) => c.classList.toggle('is-active', c === chip));
+      archiveResults();
+      return;
+    }
+    const row = e.target.closest('[data-archive-item]');
+    if (row) {
+      openModal(archive.detail(archive.items[+row.dataset.archiveItem], '<button type="button" class="archive-back" data-archive-back>← 回文章列表</button>'));
+      return;
+    }
+    if (e.target.closest('[data-archive-back]')) showArchive();
+  });
 
   /* ---------- 學員分享 ---------- */
   // 頌缽、大地靈氣的心得：各放最新 5 篇，在介紹區塊裡自動輪播
   // 個案療癒的心得：放在「療癒分享」區塊，最多 5 篇；沒有時整個區塊隱藏
   const FB_PAGE = 'https://www.facebook.com/rekibowl988';
+  // 沒有放相片的分享，用該主題的預設圖，卡片才不會有一大塊空白
+  const STORY_DEFAULT_PHOTO = {
+    頌缽: '/images/uploads/bowl-candle.jpg',
+    大地靈氣: '/images/uploads/reiki-art.jpg',
+    靈魂藍圖: '/images/uploads/soul-blueprint.svg',
+    個案: '/images/uploads/bowl-plants.jpg',
+  };
   const storyCard = (s, i, extra = '') => `
     <button class="story-card ${extra}" data-i="${i}">
-      ${s.photo ? `<div class="story-photo"><img src="${esc(img(s.photo))}" alt="" loading="lazy"></div>` : ''}
+      <div class="story-photo"><img src="${esc(img(s.photo || STORY_DEFAULT_PHOTO[s.category] || STORY_DEFAULT_PHOTO['個案']))}" alt="" loading="lazy" onerror="this.parentElement.remove()"></div>
       <span class="story-course">${esc(s.course)}</span>
       <blockquote>${esc(s.quote || s.title)}</blockquote>
       <p>${esc(s.summary)}</p>
       <span class="story-who">— ${esc(s.student || '學員')}</span>
     </button>`;
 
+  const storyDetail = (s, back = '') => `
+    ${s.photo ? `<img class="post-hero" src="${esc(img(s.photo))}" alt="">` : ''}
+    ${back}
+    <span class="post-date">${esc(s.course)}${s.date ? `　${formatDate(s.date)}` : ''}</span>
+    <h2>${esc(s.title)}</h2>
+    <div class="prose">${md(s.body || s.summary)}</div>
+    <p class="story-who">— ${esc(s.student || '學員')}</p>
+    ${s.link ? `<p><a class="btn btn-ghost btn-small" href="${esc(s.link)}" target="_blank" rel="noopener">閱讀完整原文</a></p>` : ''}`;
+
   function renderStories(data) {
-    const all = (data.items || []).slice().sort(byDateDesc);
+    // 靈魂藍圖區塊還沒開放時，它的分享也不列入
+    const all = (data.items || []).slice().sort(byDateDesc)
+      .filter((s) => s.category !== '靈魂藍圖' || !$('#soul').hidden);
+    const CAT_LABELS = { 頌缽: '頌缽', 大地靈氣: '大地靈氣', 靈魂藍圖: '靈魂藍圖', 個案: '個案療癒' };
+    const openStories = (cat) => openArchive({
+      title: '學員分享', items: all, cat, detail: storyDetail,
+      cats: Object.entries(CAT_LABELS).filter(([k]) => all.some((s) => s.category === k)),
+    });
+    const allButton = (cat, shown) => {
+      const total = all.filter((s) => s.category === cat).length;
+      return total > shown ? `<button type="button" class="more-link" data-all-stories="${esc(cat)}">看全部 ${total} 篇分享 →</button>` : '';
+    };
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-all-stories]');
+      if (b) openStories(b.dataset.allStories);
+    });
 
     $$('[data-story-slider]').forEach((box) => {
       const items = all.filter((s) => s.category === box.dataset.storySlider).slice(0, 5);
@@ -471,7 +574,10 @@
         <div class="slides">${items.map((s, i) => storyCard(s, i, i === 0 ? 'is-active' : '')).join('')}</div>
         <div class="slider-foot">
           ${items.length > 1 ? `<div class="slider-dots">${items.map((_, i) => `<button class="${i === 0 ? 'is-active' : ''}" data-go="${i}" aria-label="第 ${i + 1} 篇"></button>`).join('')}</div>` : '<span></span>'}
-          <a class="more-link" href="${FB_PAGE}" target="_blank" rel="noopener">到粉絲專頁看更多分享 →</a>
+          <div class="slider-links">
+            ${allButton(box.dataset.storySlider, items.length)}
+            <a class="more-link" href="${FB_PAGE}" target="_blank" rel="noopener">到粉絲專頁看更多分享 →</a>
+          </div>
         </div>`;
       bindStoryModal(box, items);
       if (items.length > 1) startSlider(box, items.length);
@@ -484,6 +590,7 @@
     const grid = $('#story-grid');
     grid.innerHTML = cases.map((s, i) => storyCard(s, i, 'reveal')).join('');
     bindStoryModal(grid, cases);
+    $('#story-all').innerHTML = allButton('個案', cases.length);
   }
 
   // 自動輪播：6 秒換一篇；滑鼠移上去或手指按住時暫停；手機可左右滑動
@@ -516,21 +623,26 @@
     root.addEventListener('click', (e) => {
       const card = e.target.closest('.story-card');
       if (!card) return;
-      const s = items[+card.dataset.i];
-      openModal(`
-        ${s.photo ? `<img class="post-hero" src="${esc(img(s.photo))}" alt="">` : ''}
-        <span class="post-date">${esc(s.course)}${s.date ? `　${formatDate(s.date)}` : ''}</span>
-        <h2>${esc(s.title)}</h2>
-        <div class="prose">${md(s.body || s.summary)}</div>
-        <p class="story-who">— ${esc(s.student || '學員')}</p>
-        ${s.link ? `<p><a class="btn btn-ghost btn-small" href="${esc(s.link)}" target="_blank" rel="noopener">閱讀完整原文</a></p>` : ''}`);
+      openModal(storyDetail(items[+card.dataset.i]));
     });
   }
 
   /* ---------- 老師隨筆 ---------- */
+  const postDetail = (p, back = '') => `
+    ${p.cover ? `<img class="post-hero" src="${esc(img(p.cover))}" alt="">` : ''}
+    ${back}
+    <span class="post-date">${formatDate(p.date)}</span>
+    <h2>${esc(p.title)}</h2>
+    <div class="prose">${md(p.body || p.summary)}</div>`;
+
   function renderPosts(data) {
-    // 網站只放最新 3 篇，其他文章引導到臉書粉專
-    const items = (data.items || []).slice().sort(byDateDesc).slice(0, 3);
+    // 首頁只放最新 3 篇，全部文章放在「看全部文章」列表
+    const all = (data.items || []).slice().sort(byDateDesc);
+    const items = all.slice(0, 3);
+    const allBtn = $('#post-all');
+    allBtn.hidden = all.length <= items.length;
+    allBtn.textContent = `看全部 ${all.length} 篇文章`;
+    allBtn.addEventListener('click', () => openArchive({ title: '老師隨筆', items: all, detail: postDetail }));
     const grid = $('#post-grid');
     $('#post-empty').hidden = items.length > 0;
     grid.innerHTML = items.map((p, i) => `
@@ -542,24 +654,43 @@
     grid.addEventListener('click', (e) => {
       const card = e.target.closest('.post-card');
       if (!card) return;
-      const p = items[+card.dataset.i];
-      openModal(`
-        ${p.cover ? `<img class="post-hero" src="${esc(img(p.cover))}" alt="">` : ''}
-        <span class="post-date">${formatDate(p.date)}</span>
-        <h2>${esc(p.title)}</h2>
-        <div class="prose">${md(p.body || p.summary)}</div>`);
+      openModal(postDetail(items[+card.dataset.i]));
     });
   }
 
   /* ---------- 相簿 ---------- */
+  // 影片：支援 YouTube、臉書連結，或直接上傳的 mp4
+  const youtubeId = (url) => {
+    const m = String(url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/);
+    return m ? m[1] : '';
+  };
+  const isVideo = (g) => g.type === 'video' || !!(g.video || g.videoFile);
+  const videoCover = (g) => (g.image ? img(g.image) : youtubeId(g.video) ? `https://img.youtube.com/vi/${youtubeId(g.video)}/hqdefault.jpg` : '');
+  const videoPlayer = (g) => {
+    const yt = youtubeId(g.video);
+    if (yt) return `<iframe src="https://www.youtube-nocookie.com/embed/${yt}?autoplay=1&rel=0" title="${esc(g.caption || '影片')}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    if (/facebook\.com|fb\.watch/.test(g.video || '')) {
+      return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(g.video)}&show_text=false&autoplay=true" title="${esc(g.caption || '影片')}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    }
+    if (g.videoFile) return `<video src="${esc(img(g.videoFile))}" controls autoplay playsinline ${g.image ? `poster="${esc(img(g.image))}"` : ''}></video>`;
+    if (g.video) return `<p class="lb-fallback"><a class="btn btn-primary" href="${esc(g.video)}" target="_blank" rel="noopener">開啟影片</a></p>`;
+    return '';
+  };
+
   function renderGallery(data) {
-    const items = (data.items || []).filter((g) => g.image);
+    const items = (data.items || []).filter((g) => (isVideo(g) ? (g.video || g.videoFile) : g.image));
     const grid = $('#gallery-grid');
-    grid.innerHTML = items.map((g, i) => `
-      <figure class="reveal" data-i="${i}" data-album="${esc(g.album || '')}">
-        <img src="${esc(img(g.image))}" alt="${esc(g.caption)}" loading="lazy">
+    grid.innerHTML = items.map((g, i) => {
+      const video = isVideo(g);
+      const cover = video ? videoCover(g) : img(g.image);
+      return `<figure class="reveal${video ? ' is-video' : ''}" data-i="${i}" data-album="${esc(g.album || '')}">
+        ${cover ? `<img src="${esc(cover)}" alt="${esc(g.caption)}" loading="lazy">`
+          : g.videoFile ? `<video src="${esc(img(g.videoFile))}#t=0.5" muted playsinline preload="metadata"></video>`
+          : '<div class="video-blank"></div>'}
+        ${video ? '<span class="play-badge" aria-hidden="true"></span>' : ''}
         ${g.caption ? `<figcaption>${esc(g.caption)}</figcaption>` : ''}
-      </figure>`).join('');
+      </figure>`;
+    }).join('');
     $('#gallery-empty').hidden = items.length > 0;
 
     const albums = [...new Set(items.map((g) => g.album).filter(Boolean))];
@@ -572,12 +703,16 @@
     // 看大圖（只在目前篩選後可見的相片間切換）
     const lb = $('#lightbox');
     let visible = [], cur = 0;
+    const media = $('#lb-media');
     const show = () => {
       const g = items[visible[cur]];
-      $('#lb-img').src = img(g.image);
-      $('#lb-img').alt = g.caption || '';
+      // 換下一張或關閉時，整個內容重建，正在播的影片就會停掉
+      media.innerHTML = isVideo(g)
+        ? `<div class="lb-video">${videoPlayer(g)}</div>`
+        : `<img src="${esc(img(g.image))}" alt="${esc(g.caption || '')}">`;
       $('#lb-cap').textContent = g.caption || '';
     };
+    lb.addEventListener('close', () => { media.innerHTML = ''; });
     grid.addEventListener('click', (e) => {
       const fig = e.target.closest('figure');
       if (!fig) return;
@@ -680,15 +815,15 @@
   function setupMotion() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     // 光點：首頁 16 顆、大地靈氣區塊 10 顆，大小、速度、位置都隨機
-    [['.hero', 16], ['#reiki', 22]].forEach(([sel, n]) => {
+    [['.hero', 16], ['#reiki', 22], ['#soul', 14]].forEach(([sel, n]) => {
       const host = $(sel);
-      if (!host) return;
+      if (!host || host.hidden) return;
       const box = document.createElement('div');
       box.className = 'motes';
       box.setAttribute('aria-hidden', 'true');
       for (let i = 0; i < n; i++) {
         const m = document.createElement('i');
-        const size = sel === '#reiki' ? 6 + Math.random() * 9 : 3 + Math.random() * 7;
+        const size = sel === '.hero' ? 3 + Math.random() * 7 : 6 + Math.random() * 9;
         m.style.cssText = `left:${Math.random() * 100}%;width:${size}px;height:${size}px;`
           + `animation-duration:${14 + Math.random() * 16}s;animation-delay:${-Math.random() * 30}s;`
           + `--drift:${(Math.random() * 80 - 40).toFixed(0)}px`;
@@ -711,10 +846,10 @@
   }
 
   setupUI();
-  setupMotion();
   Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery', 'soul'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery, soul]) => {
     renderSite(site);
     renderSoul(soul);
+    setupMotion(); // 放在靈魂藍圖顯示之後，才知道要不要在那個區塊加光點
     renderEvents(events, site);
     renderShop(shop, shopSettings, site);
     renderCourses(courses, site);
