@@ -457,10 +457,63 @@
 
   const byDateDesc = (a, b) => String(b.date || '').localeCompare(String(a.date || ''));
   const openModal = (html) => {
+    const modal = $('#post-modal');
     $('#post-modal-body').innerHTML = html;
-    $('#post-modal').showModal();
-    $('#post-modal').scrollTop = 0;
+    if (!modal.open) modal.showModal();
+    modal.scrollTop = 0;
   };
+
+  /* ---------- 全部文章列表（老師隨筆、學員分享共用） ---------- */
+  // 首頁只放最新幾篇，其他的都在這個可搜尋的列表裡；點文章看全文，可以再回到列表
+  let archive = null;
+  const archiveResults = () => {
+    const q = archive.q.trim().toLowerCase();
+    const shown = archive.items.map((item, i) => ({ item, i })).filter(({ item }) =>
+      (archive.cat === 'all' || item.category === archive.cat)
+      && (!q || [item.title, item.summary, item.body, item.student, item.course, item.quote].join(' ').toLowerCase().includes(q)));
+    $('#archive-count').textContent = `共 ${shown.length} 篇`;
+    $('#archive-results').innerHTML = shown.length ? shown.map(({ item, i }) => {
+      const pic = item.cover || item.photo;
+      const sub = [formatDate(item.date), item.course].filter(Boolean).join('　');
+      return `<li><button type="button" class="archive-item" data-archive-item="${i}">
+        ${pic ? `<img src="${esc(img(pic))}" alt="" loading="lazy">` : ''}
+        <span class="archive-text"><small>${esc(sub)}</small><strong>${esc(item.title)}</strong><em>${esc(item.summary)}</em></span>
+      </button></li>`;
+    }).join('') : '<li class="empty">找不到符合的文章。</li>';
+  };
+  const showArchive = () => {
+    openModal(`
+      <h2>${esc(archive.title)}</h2>
+      <div class="archive-tools">
+        <input type="search" class="archive-search" placeholder="搜尋文章…" aria-label="搜尋文章" value="${esc(archive.q)}">
+        <span class="archive-count" id="archive-count"></span>
+      </div>
+      ${archive.cats ? `<div class="filters archive-chips">${[['all', '全部'], ...archive.cats].map(([v, label]) =>
+        `<button type="button" class="chip${archive.cat === v ? ' is-active' : ''}" data-archive-cat="${esc(v)}">${esc(label)}</button>`).join('')}</div>` : ''}
+      <ul class="archive-list" id="archive-results"></ul>`);
+    archiveResults();
+  };
+  const openArchive = (cfg) => { archive = { q: '', cat: 'all', ...cfg }; showArchive(); };
+  $('#post-modal-body').addEventListener('input', (e) => {
+    if (!e.target.classList.contains('archive-search')) return;
+    archive.q = e.target.value;
+    archiveResults();
+  });
+  $('#post-modal-body').addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-archive-cat]');
+    if (chip) {
+      archive.cat = chip.dataset.archiveCat;
+      $$('[data-archive-cat]').forEach((c) => c.classList.toggle('is-active', c === chip));
+      archiveResults();
+      return;
+    }
+    const row = e.target.closest('[data-archive-item]');
+    if (row) {
+      openModal(archive.detail(archive.items[+row.dataset.archiveItem], '<button type="button" class="archive-back" data-archive-back>← 回文章列表</button>'));
+      return;
+    }
+    if (e.target.closest('[data-archive-back]')) showArchive();
+  });
 
   /* ---------- 學員分享 ---------- */
   // 頌缽、大地靈氣的心得：各放最新 5 篇，在介紹區塊裡自動輪播
@@ -475,8 +528,32 @@
       <span class="story-who">— ${esc(s.student || '學員')}</span>
     </button>`;
 
+  const storyDetail = (s, back = '') => `
+    ${s.photo ? `<img class="post-hero" src="${esc(img(s.photo))}" alt="">` : ''}
+    ${back}
+    <span class="post-date">${esc(s.course)}${s.date ? `　${formatDate(s.date)}` : ''}</span>
+    <h2>${esc(s.title)}</h2>
+    <div class="prose">${md(s.body || s.summary)}</div>
+    <p class="story-who">— ${esc(s.student || '學員')}</p>
+    ${s.link ? `<p><a class="btn btn-ghost btn-small" href="${esc(s.link)}" target="_blank" rel="noopener">閱讀完整原文</a></p>` : ''}`;
+
   function renderStories(data) {
-    const all = (data.items || []).slice().sort(byDateDesc);
+    // 靈魂藍圖區塊還沒開放時，它的分享也不列入
+    const all = (data.items || []).slice().sort(byDateDesc)
+      .filter((s) => s.category !== '靈魂藍圖' || !$('#soul').hidden);
+    const CAT_LABELS = { 頌缽: '頌缽', 大地靈氣: '大地靈氣', 靈魂藍圖: '靈魂藍圖', 個案: '個案療癒' };
+    const openStories = (cat) => openArchive({
+      title: '學員分享', items: all, cat, detail: storyDetail,
+      cats: Object.entries(CAT_LABELS).filter(([k]) => all.some((s) => s.category === k)),
+    });
+    const allButton = (cat, shown) => {
+      const total = all.filter((s) => s.category === cat).length;
+      return total > shown ? `<button type="button" class="more-link" data-all-stories="${esc(cat)}">看全部 ${total} 篇分享 →</button>` : '';
+    };
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-all-stories]');
+      if (b) openStories(b.dataset.allStories);
+    });
 
     $$('[data-story-slider]').forEach((box) => {
       const items = all.filter((s) => s.category === box.dataset.storySlider).slice(0, 5);
@@ -490,7 +567,10 @@
         <div class="slides">${items.map((s, i) => storyCard(s, i, i === 0 ? 'is-active' : '')).join('')}</div>
         <div class="slider-foot">
           ${items.length > 1 ? `<div class="slider-dots">${items.map((_, i) => `<button class="${i === 0 ? 'is-active' : ''}" data-go="${i}" aria-label="第 ${i + 1} 篇"></button>`).join('')}</div>` : '<span></span>'}
-          <a class="more-link" href="${FB_PAGE}" target="_blank" rel="noopener">到粉絲專頁看更多分享 →</a>
+          <div class="slider-links">
+            ${allButton(box.dataset.storySlider, items.length)}
+            <a class="more-link" href="${FB_PAGE}" target="_blank" rel="noopener">到粉絲專頁看更多分享 →</a>
+          </div>
         </div>`;
       bindStoryModal(box, items);
       if (items.length > 1) startSlider(box, items.length);
@@ -503,6 +583,7 @@
     const grid = $('#story-grid');
     grid.innerHTML = cases.map((s, i) => storyCard(s, i, 'reveal')).join('');
     bindStoryModal(grid, cases);
+    $('#story-all').innerHTML = allButton('個案', cases.length);
   }
 
   // 自動輪播：6 秒換一篇；滑鼠移上去或手指按住時暫停；手機可左右滑動
@@ -535,21 +616,26 @@
     root.addEventListener('click', (e) => {
       const card = e.target.closest('.story-card');
       if (!card) return;
-      const s = items[+card.dataset.i];
-      openModal(`
-        ${s.photo ? `<img class="post-hero" src="${esc(img(s.photo))}" alt="">` : ''}
-        <span class="post-date">${esc(s.course)}${s.date ? `　${formatDate(s.date)}` : ''}</span>
-        <h2>${esc(s.title)}</h2>
-        <div class="prose">${md(s.body || s.summary)}</div>
-        <p class="story-who">— ${esc(s.student || '學員')}</p>
-        ${s.link ? `<p><a class="btn btn-ghost btn-small" href="${esc(s.link)}" target="_blank" rel="noopener">閱讀完整原文</a></p>` : ''}`);
+      openModal(storyDetail(items[+card.dataset.i]));
     });
   }
 
   /* ---------- 老師隨筆 ---------- */
+  const postDetail = (p, back = '') => `
+    ${p.cover ? `<img class="post-hero" src="${esc(img(p.cover))}" alt="">` : ''}
+    ${back}
+    <span class="post-date">${formatDate(p.date)}</span>
+    <h2>${esc(p.title)}</h2>
+    <div class="prose">${md(p.body || p.summary)}</div>`;
+
   function renderPosts(data) {
-    // 網站只放最新 3 篇，其他文章引導到臉書粉專
-    const items = (data.items || []).slice().sort(byDateDesc).slice(0, 3);
+    // 首頁只放最新 3 篇，全部文章放在「看全部文章」列表
+    const all = (data.items || []).slice().sort(byDateDesc);
+    const items = all.slice(0, 3);
+    const allBtn = $('#post-all');
+    allBtn.hidden = all.length <= items.length;
+    allBtn.textContent = `看全部 ${all.length} 篇文章`;
+    allBtn.addEventListener('click', () => openArchive({ title: '老師隨筆', items: all, detail: postDetail }));
     const grid = $('#post-grid');
     $('#post-empty').hidden = items.length > 0;
     grid.innerHTML = items.map((p, i) => `
@@ -561,12 +647,7 @@
     grid.addEventListener('click', (e) => {
       const card = e.target.closest('.post-card');
       if (!card) return;
-      const p = items[+card.dataset.i];
-      openModal(`
-        ${p.cover ? `<img class="post-hero" src="${esc(img(p.cover))}" alt="">` : ''}
-        <span class="post-date">${formatDate(p.date)}</span>
-        <h2>${esc(p.title)}</h2>
-        <div class="prose">${md(p.body || p.summary)}</div>`);
+      openModal(postDetail(items[+card.dataset.i]));
     });
   }
 
