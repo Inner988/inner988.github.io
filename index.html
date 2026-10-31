@@ -56,6 +56,7 @@
   <nav class="nav-links">
     <a href="#events" id="nav-events" hidden>最新活動</a>
     <a href="#about">關於老師</a>
+    <a href="#journal">老師隨筆</a>
     <div class="nav-drop">
       <a href="#bowl" class="nav-drop-top">療癒介紹<span class="caret" aria-hidden="true"></span></a>
       <div class="nav-drop-menu">
@@ -64,7 +65,6 @@
         <a href="#soul" id="nav-soul" hidden>靈魂藍圖</a>
       </div>
     </div>
-    <a href="#journal">老師隨筆</a>
     <div class="nav-drop">
       <a href="#courses" class="nav-drop-top">課程活動<span class="caret" aria-hidden="true"></span></a>
       <div class="nav-drop-menu">
@@ -133,6 +133,23 @@
     </div>
   </section>
 
+  <!-- 老師隨筆 -->
+  <section id="journal" class="section posts">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Journal</p>
+        <h2 class="section-title">老師隨筆</h2>
+        <p class="section-sub">霏霏老師想和你分享的話</p>
+      </div>
+      <div class="post-grid" id="post-grid"></div>
+      <p class="empty" id="post-empty" hidden>老師的文章即將上線，敬請期待。</p>
+      <div class="more-wrap">
+        <button type="button" class="btn btn-primary" id="post-all" hidden>看全部文章</button>
+        <a class="btn btn-ghost" href="https://www.facebook.com/rekibowl988" target="_blank" rel="noopener">到粉絲專頁看更多文章</a>
+      </div>
+    </div>
+  </section>
+
   <!-- 頌缽 -->
   <section id="bowl" class="section intro intro-bowl">
     <div class="container intro-grid">
@@ -141,11 +158,11 @@
         <p class="eyebrow">Singing Bowl</p>
         <h2 class="section-title">頌缽音療</h2>
         <p class="lead">頌缽的聲音與振動，像一陣溫柔的水波，穿過身體每一個角落。</p>
+        <div class="story-slider" id="bowl-stories" data-story-slider="頌缽" hidden></div>
       </div>
       <div class="intro-body reveal">
         <div class="prose" data-site-md="bowlIntro"></div>
         <div class="benefits" data-site-benefits="bowlBenefits"></div>
-        <div class="story-slider" id="bowl-stories" data-story-slider="頌缽" hidden></div>
       </div>
     </div>
   </section>
@@ -157,11 +174,11 @@
         <p class="eyebrow">Earth Reiki</p>
         <h2 class="section-title">大地靈氣</h2>
         <p class="lead">與大地連結，讓穩定、溫暖的能量重新流回生命裡。</p>
+        <div class="story-slider" id="reiki-stories" data-story-slider="大地靈氣" hidden></div>
       </div>
       <div class="intro-body reveal">
         <div class="prose" data-site-md="reikiIntro"></div>
         <div class="benefits" data-site-benefits="reikiBenefits"></div>
-        <div class="story-slider" id="reiki-stories" data-story-slider="大地靈氣" hidden></div>
       </div>
     </div>
   </section>
@@ -196,23 +213,6 @@
       </div>
       <div class="story-slider soul-stories" id="soul-stories" data-story-slider="靈魂藍圖" hidden></div>
       <p class="soul-note" id="soul-note"></p>
-    </div>
-  </section>
-
-  <!-- 老師隨筆 -->
-  <section id="journal" class="section posts">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Journal</p>
-        <h2 class="section-title">老師隨筆</h2>
-        <p class="section-sub">霏霏老師想和你分享的話</p>
-      </div>
-      <div class="post-grid" id="post-grid"></div>
-      <p class="empty" id="post-empty" hidden>老師的文章即將上線，敬請期待。</p>
-      <div class="more-wrap">
-        <button type="button" class="btn btn-primary" id="post-all" hidden>看全部文章</button>
-        <a class="btn btn-ghost" href="https://www.facebook.com/rekibowl988" target="_blank" rel="noopener">到粉絲專頁看更多文章</a>
-      </div>
     </div>
   </section>
 
