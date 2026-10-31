@@ -831,6 +831,20 @@
       }
       host.prepend(box);
     });
+    // 大地靈氣背景：電腦版捲動時圖片緩緩移動，黑貓會慢慢移到主標後面
+    // 起點避開海報上方 40% 印好的文字，終點是圖片底部
+    const reiki = $('#reiki');
+    const wide = window.matchMedia('(min-width: 861px)');
+    const panReiki = () => {
+      if (!reiki) return;
+      if (!wide.matches) { reiki.style.backgroundPositionY = ''; return; }
+      const rect = reiki.getBoundingClientRect();
+      const imgH = rect.width * 1.9; // 背景寬度是區塊的 190%，圖片是正方形
+      const end = Math.min(0, rect.height - imgH);
+      const start = Math.max(end, -0.4 * imgH);
+      const p = Math.min(1, Math.max(0, (innerHeight - rect.top) / (innerHeight + rect.height)));
+      reiki.style.backgroundPositionY = `${Math.round(start + (end - start) * p)}px`;
+    };
     // 進度條
     const bar = document.createElement('div');
     bar.className = 'scroll-progress';
@@ -839,8 +853,10 @@
     const update = () => {
       const max = document.documentElement.scrollHeight - innerHeight;
       bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+      panReiki();
       ticking = false;
     };
+    addEventListener('resize', update, { passive: true });
     addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
     update();
   }
