@@ -262,13 +262,13 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .intro-reiki {
   position: relative; isolation: isolate;
   /* 放大並靠下對齊，只露出圖片下半部，避開海報上方印好的標題字 */
-  background: var(--reiki-bg, url("../images/uploads/reiki-bg.jpg")) 20% bottom / 160% auto no-repeat;
+  background: var(--reiki-bg, url("../images/uploads/reiki-bg.jpg")) 52% bottom / 190% auto no-repeat;
   background-color: var(--cream);
 }
 .intro-reiki::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
   background:
-    linear-gradient(180deg, rgba(247, 242, 234, .84) 0%, rgba(247, 242, 234, .82) 45%, rgba(247, 242, 234, .76) 100%);
+    linear-gradient(180deg, rgba(247, 242, 234, .95) 0%, rgba(247, 242, 234, .86) 45%, rgba(247, 242, 234, .78) 100%);
   backdrop-filter: saturate(.75);
 }
 .intro-reiki .prose { color: #4a433b; }
@@ -511,6 +511,8 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .intro-head { position: relative; top: auto; }
 .intro-grid.reverse { grid-template-columns: 1fr 1fr; }
 .intro-head .story-slider { margin-top: 28px; }
+/* 大地靈氣主標：電腦版恢復捲動時固定不動（左欄比較長時才有移動空間） */
+@media (min-width: 861px) { .intro-reiki .intro-head { position: sticky; top: 90px; align-self: start; } }
 
 /* ========== 靈魂藍圖（四種風格，可在後台切換） ========== */
 /* 預設：溫暖淡雅 */
@@ -750,11 +752,6 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .bowl-rings i:nth-child(2) { animation-delay: 2.5s; }
 .bowl-rings i:nth-child(3) { animation-delay: 5s; }
 @keyframes bowlRing { 0% { transform: scale(.25); opacity: 0; } 15% { opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
-/* 大地靈氣標題：同樣的擴散圓圈，改用大地綠和金色的光暈 */
-.intro-reiki { overflow-x: clip; }
-.intro-reiki .intro-head { isolation: isolate; }
-.earth-rings::before { background: radial-gradient(circle, rgba(236, 200, 120, .55), rgba(150, 175, 120, .28) 45%, transparent 72%); }
-.earth-rings i { border-color: rgba(84, 110, 66, .75); }
 @keyframes bowlGlow { 0%, 100% { transform: scale(.9); opacity: .7; } 50% { transform: scale(1.15); opacity: 1; } }
 
 /* 導覽列：滑過時底下出現一條細金線 */
