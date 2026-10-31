@@ -367,9 +367,12 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .slides { display: grid; }
 .slides .story-card {
   grid-area: 1 / 1; width: 100%; opacity: 0; visibility: hidden; transform: translateX(18px);
-  transition: opacity .7s ease, transform .7s ease, visibility .7s;
+  transition: opacity .3s ease, transform .3s ease, visibility .3s; /* 舊的先淡出 */
 }
-.slides .story-card.is-active { opacity: 1; visibility: visible; transform: none; }
+.slides .story-card.is-active {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity .6s ease .3s, transform .6s ease .3s, visibility 0s .3s; /* 新的等舊的淡出後才出現，文字不會重疊 */
+}
 .slides .story-card:hover { transform: none; }
 .slides .story-card p { -webkit-line-clamp: 3; }
 .intro-reiki .slides .story-card { background: rgba(255, 255, 255, .8); backdrop-filter: blur(6px); }
@@ -489,6 +492,16 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .lb-nav { position: fixed; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, .15); color: #fff; border: 0; width: 48px; height: 48px; border-radius: 50%; font-size: 2rem; cursor: pointer; }
 .lb-prev { left: 16px; }
 .lb-next { right: 16px; }
+
+/* ========== 區塊底色交錯、介紹區塊的欄位 ========== */
+/* 順序：關於老師（白）→ 老師隨筆（米）→ 頌缽（白）→ 大地靈氣（圖）→ 靈魂藍圖（白）→ 課程（米） */
+.intro-bowl { background: var(--paper); }
+.courses { background: var(--cream); }
+.shop { background: var(--paper); }
+/* 學員分享移到標題下方：標題欄不再固定在畫面上，大地靈氣改成左右等寬 */
+.intro-head { position: relative; top: auto; }
+.intro-grid.reverse { grid-template-columns: 1fr 1fr; }
+.intro-head .story-slider { margin-top: 28px; }
 
 /* ========== 靈魂藍圖（四種風格，可在後台切換） ========== */
 /* 預設：溫暖淡雅 */
@@ -868,8 +881,10 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
   .course { grid-template-columns: 1fr; }
   .course-media { min-height: 200px; aspect-ratio: 16 / 9; }
   .course-body { padding: 22px; }
-  .intro-reiki { background-size: cover; background-position: 22% center; }
+  /* 放大並靠下對齊，避開海報上方印好的字 */
+  .intro-reiki { background-size: auto 160%; background-position: 22% bottom; }
   .intro-bowl .intro-head { position: relative; }
+  .intro-grid.reverse { grid-template-columns: 1fr; }
   .event-list { grid-template-columns: 1fr; }
   .event-list.is-single .event-card { flex-direction: column; }
   .event-list.is-single .event-body { padding: 24px 22px 26px; }
