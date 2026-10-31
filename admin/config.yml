@@ -195,7 +195,7 @@ collections:
             summary: "{{fields.date}}｜{{fields.student}}｜{{fields.title}}"
             fields:
               - { name: title, label: 標題, widget: string }
-              - { name: student, label: 學員稱呼, widget: string, hint: "例：護理師・頌缽初階學員（可不寫真名）" }
+              - { name: student, label: 學員稱呼（可不填）, widget: string, required: false, hint: "例：護理師・頌缽初階學員。沒填時網站顯示「學員」" }
               - name: category
                 label: 分類
                 widget: select
@@ -206,7 +206,7 @@ collections:
                   - { label: 個案療癒, value: 個案 }
                 default: 頌缽
               - { name: course, label: 上過的課程, widget: string, required: false }
-              - { name: date, label: 日期, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+              - { name: date, label: 日期（可不填）, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD", required: false, hint: "沒填日期的文章會排在列表最後面" }
               - { name: quote, label: 一句話引言（卡片上的大字）, widget: string, required: false }
               - { name: summary, label: 摘要（卡片上的小字）, widget: text, required: false }
               - { name: body, label: 完整心得, widget: markdown, required: false }
@@ -229,7 +229,7 @@ collections:
             summary: "{{fields.date}}｜{{fields.title}}"
             fields:
               - { name: title, label: 標題, widget: string }
-              - { name: date, label: 日期, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+              - { name: date, label: 日期（可不填）, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD", required: false, hint: "沒填日期的文章會排在列表最後面" }
               - { name: cover, label: 封面照片, widget: image, required: false }
               - { name: summary, label: 摘要（列表上顯示的短文字）, widget: text, required: false }
               - { name: body, label: 內文, widget: markdown, required: false }
