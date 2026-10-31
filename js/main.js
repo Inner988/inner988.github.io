@@ -148,7 +148,7 @@
           <h3>${esc(ev.title)}</h3>
           ${meta ? `<ul class="course-meta">${meta}</ul>` : ''}
           ${ev.description ? `<div class="course-desc">${md(ev.description)}</div>` : ''}
-          ${ev.link ? signupButtons(ev, site, ev.linkText && ev.linkText !== '私訊報名' ? ev.linkText : '了解更多') : ''}
+          ${ev.link ? signupButtons(ev, site, ev.linkText && ev.linkText !== '私訊報名' ? ev.linkText : '線上報名') : ''}
         </div>
       </article>`;
     }).join('');
@@ -396,15 +396,16 @@
     </div>`;
   };
 
-  // 報名按鈕：每堂課都放「LINE 報名」和「Messenger 報名」讓學員自己選
-  // 課程的「報名連結」若填的是其他網址（例如 Google 表單），會再多一顆「線上報名」
+  // 報名按鈕：預設放「LINE 報名」和「Messenger 報名」讓學員自己選
+  // 「報名連結」若填的是其他網址（例如 Google 表單），就只顯示那一顆按鈕
   const signupButtons = (c, site, customLabel = '線上報名') => {
     const line = ((site.contacts || []).find((x) => x.type === 'line') || {}).url;
-    const messenger = c.link && /m\.me\//.test(c.link) ? c.link : 'https://m.me/rekibowl988';
-    // 只有真正的網址（http 開頭）才當成「其他報名連結」；填了一般文字就只顯示 LINE、Messenger
-    const custom = c.link && /^https?:\/\//.test(c.link.trim()) && !/m\.me\//.test(c.link) && c.link !== line ? c.link.trim() : '';
+    const link = String(c.link || '').trim();
+    const messenger = /m\.me\//.test(link) ? link : 'https://m.me/rekibowl988';
+    // 只有真正的網址（http 開頭）才算其他報名連結；填了一般文字就顯示 LINE、Messenger
+    const custom = /^https?:\/\//.test(link) && !/m\.me\//.test(link) && link !== line ? link : '';
+    if (custom) return `<div class="signup-btns"><a class="btn btn-primary btn-small" href="${esc(custom)}" target="_blank" rel="noopener">${esc(customLabel)}</a></div>`;
     return `<div class="signup-btns">
-      ${custom ? `<a class="btn btn-primary btn-small" href="${esc(custom)}" target="_blank" rel="noopener">${esc(customLabel)}</a>` : ''}
       ${line ? `<a class="btn btn-small btn-line" href="${esc(line)}" target="_blank" rel="noopener">LINE 報名</a>` : ''}
       <a class="btn btn-small btn-messenger" href="${esc(messenger)}" target="_blank" rel="noopener">Messenger 報名</a>
     </div>`;
@@ -417,25 +418,40 @@
       .map((c, i) => ({ ...c, _i: i }))
       .sort((a, b) => ended(a) - ended(b) || a._i - b._i);
     const list = $('#course-list');
-    list.innerHTML = items.map((c) => {
-      const badgeClass = c.status === '已額滿' ? 'full' : c.status === '已結束' ? 'ended' : '';
-      const meta = [['日期', c.date], ['時間', c.time], ['時長', c.duration], ['地點', c.location]]
-        .filter(([, v]) => v).map(([k, v]) => `<li data-label="${k}">${esc(v)}</li>`).join('');
-      const canSignup = c.status !== '已結束' && c.status !== '已額滿';
-      return `<article class="course reveal${c.status === '已結束' ? ' is-ended' : ''}" data-cat="${esc(c.category)}">
+    const badgeClass = (c) => (c.status === '已額滿' ? 'full' : c.status === '已結束' ? 'ended' : '');
+    const metaHTML = (c) => [['日期', c.date], ['時間', c.time], ['時長', c.duration], ['地點', c.location]]
+      .filter(([, v]) => v).map(([k, v]) => `<li data-label="${k}">${esc(v)}</li>`).join('');
+    // 課程卡片只放基本資訊；詳細介紹、費用和報名按鈕都放在點開後的視窗裡
+    list.innerHTML = items.map((c, i) => `
+      <article class="course reveal${c.status === '已結束' ? ' is-ended' : ''}" data-cat="${esc(c.category)}" data-i="${i}">
         <div class="course-media">${c.image ? `<img src="${esc(img(c.image))}" alt="${esc(c.title)}" loading="lazy">` : ''}
-          ${c.status ? `<span class="badge ${badgeClass}">${esc(c.status)}</span>` : ''}</div>
+          ${c.status ? `<span class="badge ${badgeClass(c)}">${esc(c.status)}</span>` : ''}</div>
         <div class="course-body">
           <span class="course-cat">${esc(c.category)}</span>
           <h3>${esc(c.title)}</h3>
-          <ul class="course-meta">${meta}</ul>
-          <div class="course-desc">${md(c.description)}</div>
-          <div class="course-foot">
-            ${priceHTML(c)}
-            ${canSignup ? signupButtons(c, site) : ''}
-          </div>
-        </div></article>`;
-    }).join('');
+          <ul class="course-meta">${metaHTML(c)}</ul>
+          ${c.summary ? `<p class="course-summary">${esc(c.summary)}</p>` : ''}
+          <button type="button" class="btn btn-ghost btn-small course-more">查看課程介紹與費用</button>
+        </div>
+      </article>`).join('');
+    list.addEventListener('click', (e) => {
+      const card = e.target.closest('.course');
+      if (!card) return;
+      const c = items[+card.dataset.i];
+      const canSignup = c.status !== '已結束' && c.status !== '已額滿';
+      const hasPrice = c.price || c.earlyPrice;
+      openModal(`
+        ${c.image ? `<img class="post-hero" src="${esc(img(c.image))}" alt="">` : ''}
+        <span class="post-date">${esc(c.category)}${c.status ? `　${esc(c.status)}` : ''}</span>
+        <h2>${esc(c.title)}</h2>
+        <ul class="course-meta">${metaHTML(c)}</ul>
+        <div class="prose">${md(c.description || c.summary)}</div>
+        <div class="course-fee">
+          <h3>課程費用</h3>
+          ${hasPrice ? priceHTML(c) : '<p>費用請私訊詢問</p>'}
+        </div>
+        ${canSignup ? signupButtons(c, site) : `<p class="course-closed">${esc(c.status)}</p>`}`);
+    });
     setupFilter('[data-filter-group="courses"]', $$('.course', list), (el) => el.dataset.cat, $('#course-empty'));
   }
 
