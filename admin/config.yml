@@ -33,8 +33,8 @@ collections:
               - { name: time, label: 時間, widget: string, required: false }
               - { name: location, label: 地點, widget: string, required: false }
               - { name: description, label: 活動說明, widget: markdown, required: false }
-              - { name: link, label: 報名連結（可不填）, widget: string, required: false, hint: "有填就會顯示「LINE 報名」和「Messenger 報名」兩顆按鈕；若填的是 Google 表單等其他網址，會再多一顆按鈕" }
-              - { name: linkText, label: 其他網址的按鈕文字, widget: string, required: false, hint: "只有在報名連結是其他網址時才會用到，例：線上報名" }
+              - { name: link, label: 報名連結（可不填）, widget: string, required: false, hint: "空白：不顯示按鈕。填 Google 表單等網址：只顯示一顆報名按鈕。填 https://m.me/rekibowl988：顯示「LINE 報名」和「Messenger 報名」" }
+              - { name: linkText, label: 表單按鈕文字（可不填）, widget: string, required: false, hint: "報名連結是 Google 表單等網址時使用，沒填就顯示「線上報名」" }
               - { name: show, label: 顯示在網站上, widget: boolean, default: true }
 
   # ───────── 課程 ─────────
@@ -68,11 +68,12 @@ collections:
               - { name: time, label: 時間, widget: string, required: false, hint: "例：19:30 – 21:00" }
               - { name: duration, label: 時長, widget: string, required: false }
               - { name: location, label: 地點, widget: string, required: false }
-              - { name: price, label: 原價, widget: string, required: false, hint: "例：NT$ 3,600" }
+              - { name: summary, label: 一句話簡介（顯示在課程卡片上，可不填）, widget: string, required: false }
+              - { name: price, label: 原價（點開課程才看得到）, widget: string, required: false, hint: "例：NT$ 3,600" }
               - { name: earlyPrice, label: 早鳥價（沒有可不填）, widget: string, required: false, hint: "例：NT$ 3,200。有填時，網站會把原價加上刪除線" }
               - { name: earlyDeadline, label: 早鳥優惠截止日（可不填）, widget: string, required: false, hint: "例：11/1（六）" }
-              - { name: description, label: 課程介紹, widget: markdown, required: false }
-              - { name: link, label: 其他報名連結（可不填）, widget: string, required: false, hint: "網站已自動顯示「LINE 報名」和「Messenger 報名」；若有 Google 表單等其他報名網址，填在這裡會多一顆「線上報名」" }
+              - { name: description, label: 課程詳細介紹（點開課程才看得到）, widget: markdown, required: false }
+              - { name: link, label: 報名表單網址（可不填）, widget: string, required: false, hint: "沒填時顯示「LINE 報名」和「Messenger 報名」；填了 Google 表單等網址，就只顯示一顆「線上報名」" }
               - { name: show, label: 顯示在網站上, widget: boolean, default: true }
 
   # ───────── 靈魂藍圖 ─────────
