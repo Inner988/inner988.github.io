@@ -378,7 +378,29 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .slider-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 99px; background: rgba(122, 90, 46, .25); cursor: pointer; transition: width .3s, background .3s; }
 .slider-dots button.is-active { width: 24px; background: var(--bronze); }
 .intro-reiki .slider-dots button.is-active { background: var(--earth); }
-.more-link { font-size: .9rem; color: var(--bronze-deep); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+.more-link { font: inherit; font-size: .9rem; color: var(--bronze-deep); text-decoration: none; background: none; border: 0; border-bottom: 1px solid currentColor; padding: 0 0 1px; cursor: pointer; }
+.slider-links { display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: flex-end; }
+.more-wrap { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; }
+#story-all:empty { display: none; }
+
+/* 全部文章列表 */
+.archive-tools { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.archive-search { flex: 1; min-width: 0; font: inherit; color: var(--ink); padding: 10px 16px; border: 1px solid var(--line); border-radius: 99px; background: #fff; }
+.archive-search:focus { outline: 2px solid var(--gold); border-color: transparent; }
+.archive-count { flex: none; font-size: .85rem; color: var(--muted); }
+.archive-chips { justify-content: flex-start; margin-bottom: 14px; }
+.archive-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.archive-item {
+  width: 100%; display: flex; gap: 16px; align-items: center; padding: 12px; text-align: left; font: inherit; color: inherit;
+  cursor: pointer; background: #fff; border: 1px solid var(--line); border-radius: 14px; transition: border-color .25s, background .25s, transform .25s;
+}
+.archive-item:hover { border-color: var(--gold); background: var(--cream); transform: translateX(3px); }
+.archive-item img { flex: none; width: 92px; height: 72px; object-fit: cover; border-radius: 10px; }
+.archive-text { min-width: 0; display: grid; gap: 2px; }
+.archive-text small { font-size: .78rem; color: var(--bronze); }
+.archive-text strong { font: 600 1rem/1.5 var(--serif); }
+.archive-text em { font-style: normal; font-size: .86rem; line-height: 1.6; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.archive-back { display: block; margin: 0 0 14px; padding: 0; font: inherit; font-size: .9rem; color: var(--bronze-deep); background: none; border: 0; cursor: pointer; }
 .intro-reiki .more-link { color: var(--earth); }
 @media (prefers-reduced-motion: reduce) { .slides .story-card { transition: none; } }
 .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; }
