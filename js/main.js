@@ -519,9 +519,16 @@
   // 頌缽、大地靈氣的心得：各放最新 5 篇，在介紹區塊裡自動輪播
   // 個案療癒的心得：放在「療癒分享」區塊，最多 5 篇；沒有時整個區塊隱藏
   const FB_PAGE = 'https://www.facebook.com/rekibowl988';
+  // 沒有放相片的分享，用該主題的預設圖，卡片才不會有一大塊空白
+  const STORY_DEFAULT_PHOTO = {
+    頌缽: '/images/uploads/bowl-candle.jpg',
+    大地靈氣: '/images/uploads/reiki-art.jpg',
+    靈魂藍圖: '/images/uploads/soul-blueprint.svg',
+    個案: '/images/uploads/bowl-plants.jpg',
+  };
   const storyCard = (s, i, extra = '') => `
     <button class="story-card ${extra}" data-i="${i}">
-      ${s.photo ? `<div class="story-photo"><img src="${esc(img(s.photo))}" alt="" loading="lazy"></div>` : ''}
+      <div class="story-photo"><img src="${esc(img(s.photo || STORY_DEFAULT_PHOTO[s.category] || STORY_DEFAULT_PHOTO['個案']))}" alt="" loading="lazy" onerror="this.parentElement.remove()"></div>
       <span class="story-course">${esc(s.course)}</span>
       <blockquote>${esc(s.quote || s.title)}</blockquote>
       <p>${esc(s.summary)}</p>
@@ -824,6 +831,20 @@
       }
       host.prepend(box);
     });
+    // 大地靈氣背景：電腦版捲動時圖片緩緩移動，黑貓會慢慢移到主標後面
+    // 起點避開海報上方 40% 印好的文字，終點是圖片底部
+    const reiki = $('#reiki');
+    const wide = window.matchMedia('(min-width: 861px)');
+    const panReiki = () => {
+      if (!reiki) return;
+      if (!wide.matches) { reiki.style.backgroundPositionY = ''; return; }
+      const rect = reiki.getBoundingClientRect();
+      const imgH = rect.width * 1.9; // 背景寬度是區塊的 190%，圖片是正方形
+      const end = Math.min(0, rect.height - imgH);
+      const start = Math.max(end, -0.4 * imgH);
+      const p = Math.min(1, Math.max(0, (innerHeight - rect.top) / (innerHeight + rect.height)));
+      reiki.style.backgroundPositionY = `${Math.round(start + (end - start) * p)}px`;
+    };
     // 進度條
     const bar = document.createElement('div');
     bar.className = 'scroll-progress';
@@ -832,8 +853,10 @@
     const update = () => {
       const max = document.documentElement.scrollHeight - innerHeight;
       bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+      panReiki();
       ticking = false;
     };
+    addEventListener('resize', update, { passive: true });
     addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
     update();
   }
