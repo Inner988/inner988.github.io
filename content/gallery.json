@@ -63,6 +63,22 @@
       "videoFile": "",
       "caption": "",
       "album": ""
+    },
+    {
+      "type": "photo",
+      "image": "/images/uploads/676414_0.jpg",
+      "video": "",
+      "videoFile": "",
+      "caption": "",
+      "album": ""
+    },
+    {
+      "type": "photo",
+      "image": "/images/uploads/676410_0.jpg",
+      "video": "",
+      "videoFile": "",
+      "caption": "",
+      "album": ""
     }
   ]
 }
