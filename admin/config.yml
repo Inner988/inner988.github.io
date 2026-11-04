@@ -243,24 +243,28 @@ collections:
         file: content/gallery.json
         format: json
         fields:
-          - name: items
-            label: 相片／影片
-            label_singular: 項目
+          # 一個相簿只要取名字，再一次選很多張相片／影片就好；不用寫任何說明
+          - name: albums
+            label: 相簿
+            label_singular: 相簿
             widget: list
-            summary: "{{fields.type}}｜{{fields.album}}｜{{fields.caption}}"
+            collapsed: true
+            summary: "{{fields.name}}"
             fields:
-              - name: type
-                label: 類型
-                widget: select
-                default: photo
-                options:
-                  - { label: 相片, value: photo }
-                  - { label: 影片, value: video }
-              - { name: image, label: 相片（影片的話放封面圖）, widget: image, required: false, hint: "影片若是 YouTube 連結，沒放封面也會自動抓 YouTube 的縮圖" }
-              - { name: video, label: 影片連結（YouTube 或臉書）, widget: string, required: false, hint: "例：https://www.youtube.com/watch?v=xxxx 或臉書影片的網址" }
-              - { name: videoFile, label: 或直接上傳短片（mp4，建議 20MB 以內）, widget: file, required: false }
-              - { name: caption, label: 說明文字, widget: string, required: false }
-              - { name: album, label: 相簿分類, widget: string, required: false, hint: "例：頌缽音浴、大地靈氣、日常（同名的會分在一起）" }
+              - { name: name, label: 相簿名稱（可不填）, widget: string, required: false, hint: "例：課程花絮、頌缽日常。不填就不分類" }
+              - name: media
+                label: 相片和影片（可以一次選很多個）
+                widget: file
+                multiple: true
+                required: false
+                accept: "image/*,video/mp4,video/webm,.mp4,.webm,.mov"
+                hint: "影片檔建議 20MB 以內，比較長的影片請放 YouTube，貼在下面"
+              - name: videos
+                label: YouTube／臉書影片連結（可不填）
+                widget: list
+                required: false
+                collapsed: true
+                field: { name: url, label: 影片網址, widget: string }
 
   # ───────── 網站基本資料 ─────────
   - name: settings
