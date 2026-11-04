@@ -678,7 +678,13 @@
   };
 
   function renderGallery(data) {
-    const items = (data.items || []).filter((g) => (isVideo(g) ? (g.video || g.videoFile) : g.image));
+    // 新格式：相簿（名稱＋一次上傳的多個檔案＋影片連結）；舊格式 items 也照樣顯示
+    const isVideoFile = (p) => /\.(mp4|webm|mov|m4v)$/i.test(p || '');
+    const fromAlbums = (data.albums || []).flatMap((a) => [
+      ...(a.media || []).filter(Boolean).map((p) => (isVideoFile(p) ? { type: 'video', videoFile: p, album: a.name } : { image: p, album: a.name })),
+      ...(a.videos || []).filter(Boolean).map((url) => ({ type: 'video', video: url, album: a.name })),
+    ]);
+    const items = [...fromAlbums, ...(data.items || [])].filter((g) => (isVideo(g) ? (g.video || g.videoFile) : g.image));
     const grid = $('#gallery-grid');
     grid.innerHTML = items.map((g, i) => {
       const video = isVideo(g);
