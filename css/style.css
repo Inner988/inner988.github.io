@@ -650,6 +650,10 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 }
 .intro-reiki .slider-links .more-link { --tone: var(--earth); }
 .soul .slider-links .more-link { --tone: var(--soul-accent); }
+/* 深色風格：外框按鈕用透明底，文字才看得清楚；實心按鈕用深色字 */
+.soul.theme-dreamy .slider-links .more-link, .soul.theme-mystic .slider-links .more-link { background: rgba(255, 255, 255, .04); }
+.soul.theme-dreamy .slider-links [data-all-stories], .soul.theme-mystic .slider-links [data-all-stories] { background: var(--tone); color: #1b1830; }
+.soul.theme-dreamy .slider-links a.more-link:hover, .soul.theme-mystic .slider-links a.more-link:hover { color: #1b1830; }
 /* 「看全部 N 篇分享」是主要按鈕：實心底色、輕輕發亮 */
 .slider-links [data-all-stories], .more-wrap [data-all-stories] {
   color: #fff; background: var(--tone); box-shadow: 0 10px 22px -12px var(--tone);
@@ -693,10 +697,29 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .soul-aspects strong { font-family: var(--serif); font-weight: 600; color: var(--soul-title); }
 .soul-aspects strong::before { content: "✦"; color: var(--soul-star); margin-right: 8px; }
 .soul-aspects span { color: var(--soul-muted); }
-.soul-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 26px; }
-.soul-combo { font-size: .86rem; color: var(--soul-muted); }
+/* 左欄：配圖＋學員分享小卡（和頌缽、大地靈氣一樣在側欄） */
+.soul-top { align-items: start; }
+.soul-side { min-width: 0; }
+/* 「可與塔羅解讀、靈魂能量解讀一起預約」：放在「解讀方式」下方，整排醒目提示，不另放按鈕 */
+.soul-combo {
+  grid-column: 1 / -1; display: flex; align-items: center; gap: 14px;
+  margin-top: 4px; padding: 14px 20px; border-radius: 14px;
+  background: var(--soul-chip-bg); border: 1px dashed var(--soul-accent);
+  font: 500 1.02rem/1.6 var(--serif); letter-spacing: .06em; color: var(--soul-title);
+}
+.soul-combo[hidden] { display: none; }
 .soul-combo p { margin: 0; }
-.soul-combo strong { color: var(--soul-accent); font-weight: 600; }
+.soul-combo strong {
+  color: var(--soul-strong, var(--soul-accent)); font-weight: 700; padding: 0 2px;
+  background-image: linear-gradient(transparent 55%, var(--soul-hl, rgba(201, 154, 78, .3)) 55%, var(--soul-hl, rgba(201, 154, 78, .3)) 92%, transparent 92%);
+}
+.soul.theme-dreamy .soul-combo, .soul.theme-mystic .soul-combo { background: rgba(255, 255, 255, .07); border-style: solid; }
+.soul-combo-icon {
+  flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  color: #fff; font-size: .95rem; background: linear-gradient(135deg, var(--soul-accent2), var(--soul-accent));
+  animation: breathe 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) { .soul-combo-icon { animation: none; } }
 .soul-band {
   display: grid; grid-template-columns: 1fr 1.3fr; gap: 28px; margin-top: 64px;
   padding: 26px 32px; border-radius: var(--radius); background: var(--soul-band); border: 1px solid var(--soul-line);
@@ -717,6 +740,11 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .soul-note { text-align: center; margin: 22px 0 0; font-size: .8rem; color: var(--soul-muted); }
 @media (max-width: 960px) {
   .soul-top { grid-template-columns: 1fr; }
+  /* 手機：配圖 → 介紹 → 學員分享 */
+  .soul-side { display: contents; }
+  .soul-art { order: 0; }
+  .soul-text { order: 1; }
+  .soul-stories { order: 2; margin-top: 8px; }
   .soul-art { max-width: 520px; width: 92%; }
   .soul-aspects li { grid-template-columns: 1fr; gap: 2px; }
   .soul-band { grid-template-columns: 1fr; padding: 22px; }
