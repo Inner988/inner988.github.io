@@ -704,7 +704,9 @@
     tabs.hidden = !(pets.length && people.length);
     $('#stories-sub').textContent = pets.length ? (people.length ? '個案療癒與毛孩療癒的真實體驗' : '毛孩療癒的真實體驗') : '個案療癒的真實體驗';
     if (!tabs.hidden) {
-      tabs.innerHTML = [['all', '全部'], ['個案', '個案療癒'], ['寵物', '🐾 毛孩療癒']]
+      // 毛孩標籤用自己畫的腳掌圖示（比表情符號大、可以做動態）
+      const paw = `<span class="paw" aria-hidden="true"><svg viewBox="0 0 32 32"><ellipse cx="16" cy="21.5" rx="7.2" ry="6.2"/><ellipse cx="7.2" cy="13.6" rx="3" ry="3.8" transform="rotate(-18 7.2 13.6)"/><ellipse cx="12.6" cy="8" rx="3" ry="4"/><ellipse cx="19.4" cy="8" rx="3" ry="4"/><ellipse cx="24.8" cy="13.6" rx="3" ry="3.8" transform="rotate(18 24.8 13.6)"/></svg></span>`;
+      tabs.innerHTML = [['all', '全部'], ['個案', '個案療癒'], ['寵物', `${paw}毛孩療癒`]]
         .map(([v, label]) => `<button type="button" class="chip" data-story-tab="${v}">${label}</button>`).join('');
       tabs.addEventListener('click', (e) => { const b = e.target.closest('[data-story-tab]'); if (b) showTab(b.dataset.storyTab); });
     }
