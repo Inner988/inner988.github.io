@@ -261,8 +261,8 @@ collections:
                 media_libraries:
                   default:
                     config:
-                      max_file_size: 52428800
-                hint: "可直接選電腦或手機裡的影片（mp4 最好）。每個檔案最大 50MB，超過會跳出提醒；太長的影片請放 YouTube，把網址貼在下面"
+                      max_file_size: 15728640
+                hint: "影片檔最大 15MB（約 20～30 秒的短片），一次儲存只放 1 支影片；超過或儲存失敗，請改放 YouTube（可設不公開），把網址貼在下面"
               - name: videos
                 label: YouTube／臉書影片連結（可不填）
                 widget: list
