@@ -467,8 +467,26 @@
       .sort((a, b) => ended(a) - ended(b) || a._i - b._i);
     const list = $('#course-list');
     const badgeClass = (c) => (c.status === '已額滿' ? 'full' : c.status === '已結束' ? 'ended' : '');
-    const metaHTML = (c) => [['日期', c.date], ['時間', c.time], ['時長', c.duration], ['地點', c.location]]
+    const metaHTML = (c) => [['時長', c.duration]]
       .filter(([, v]) => v).map(([k, v]) => `<li data-label="${k}">${esc(v)}</li>`).join('');
+    // 上課場次：同一課程不同日期／時間／地點都放在 sessions；舊資料（單一日期、時間、地點）也照樣顯示
+    const sessionsOf = (c) => ((c.sessions || []).filter((s) => s && (s.date || s.time || s.location)).length
+      ? c.sessions.filter((s) => s && (s.date || s.time || s.location))
+      : (c.date || c.time || c.location ? [{ date: c.date, time: c.time, location: c.location }] : []));
+    const sessionsHTML = (c, max = Infinity) => {
+      const all = sessionsOf(c);
+      if (!all.length) return '';
+      const shown = all.slice(0, max);
+      const rows = shown.map((s) => `
+        <li class="session${s.status === '已結束' ? ' is-ended' : s.status === '已額滿' ? ' is-full' : ''}">
+          ${s.date ? `<span class="s-date">${esc(s.date)}</span>` : ''}
+          ${s.time ? `<span class="s-time">${esc(s.time)}</span>` : ''}
+          ${s.location ? `<span class="s-loc">${esc(s.location)}</span>` : ''}
+          ${s.status ? `<em class="s-tag">${esc(s.status)}</em>` : ''}
+        </li>`).join('');
+      const more = all.length > shown.length ? `<li class="session-more">還有 ${all.length - shown.length} 個場次，點開看全部</li>` : '';
+      return `<ul class="course-sessions${all.length > 1 ? ' is-multi' : ''}">${rows}${more}</ul>`;
+    };
     // 課程卡片只放基本資訊；詳細介紹、費用和報名按鈕都放在點開後的視窗裡
     list.innerHTML = items.map((c, i) => `
       <article class="course reveal${c.status === '已結束' ? ' is-ended' : ''}" data-cat="${esc(c.category)}" data-i="${i}">
@@ -477,6 +495,8 @@
         <div class="course-body">
           <span class="course-cat">${esc(c.category)}</span>
           <h3>${esc(c.title)}</h3>
+          ${sessionsOf(c).length > 1 ? `<p class="sessions-label">${sessionsOf(c).length} 個場次可選</p>` : ''}
+          ${sessionsHTML(c, 3)}
           <ul class="course-meta">${metaHTML(c)}</ul>
           ${c.summary ? `<p class="course-summary">${esc(c.summary)}</p>` : ''}
           <button type="button" class="btn btn-ghost btn-small course-more">查看課程介紹與費用</button>
@@ -492,12 +512,14 @@
         ${c.image ? `<img class="post-hero" src="${esc(img(c.image))}" alt="">` : ''}
         <span class="post-date">${esc(c.category)}${c.status ? `　${esc(c.status)}` : ''}</span>
         <h2>${esc(c.title)}</h2>
+        ${sessionsOf(c).length ? `<div class="course-when"><h3>${sessionsOf(c).length > 1 ? `上課場次（共 ${sessionsOf(c).length} 場）` : '上課時間與地點'}</h3>${sessionsHTML(c)}</div>` : ''}
         <ul class="course-meta">${metaHTML(c)}</ul>
         <div class="prose">${md(c.description || c.summary)}</div>
         <div class="course-fee">
           <h3>課程費用</h3>
           ${hasPrice ? priceHTML(c) : '<p>費用請私訊詢問</p>'}
         </div>
+        ${c.note ? `<div class="course-note"><h3>備註</h3><div class="prose">${md(c.note)}</div></div>` : ''}
         ${canSignup ? signupButtons(c, site) : `<p class="course-closed">${esc(c.status)}</p>`}`);
     });
     // 有塔羅課程時，才顯示「塔羅」篩選按鈕和選單項目
