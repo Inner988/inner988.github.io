@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+<!-- 大地靈氣主標旁的動態圖（原創插畫）：「大地的心跳」＋「生命之樹」結合版
+     依「大地靈氣的故事由來」：上方是天空之神烏拉諾斯的星空（慢慢旋轉），地平線上是劃破黑暗的第一道光；
+     山脈、森林與海洋是蓋婭與烏拉諾斯共同創造的世界；中央一棵茂盛的生命之樹連結天與地；
+     地底是蓋婭的心——每一次心跳（撲通、撲通）都向外擴散成大地的脈動，
+     金色的靈氣沿著根脈流進樹幹、送到樹冠，樹上的光點一閃一閃，小光點（每個靈魂都是一顆星辰）從大地升起；
+     天空中淡淡的風是她的呼吸。 -->
+<style>
+  .sky { animation: spin 180s linear infinite; transform-box: view-box; transform-origin: 200px 200px; }
+  .dawn { animation: dawn 9s ease-in-out infinite; }
+  .sway { animation: sway 8s ease-in-out infinite; transform-box: view-box; transform-origin: 200px 270px; }
+  .beat { animation: beat 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .pulse { animation: pulse 2.6s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+  .pulse.b { animation-delay: .32s; }
+  .flowup { stroke-dasharray: 5 13; animation: flowup 3s linear infinite; }
+  .breath { stroke-dasharray: 40 220; animation: breath 10s ease-in-out infinite; }
+  .breath.b { animation-delay: -5s; }
+  .rise { animation: rise 7s ease-in infinite; }
+  .rise.b { animation-delay: -1.8s; } .rise.c { animation-delay: -3.6s; } .rise.d { animation-delay: -5.2s; }
+  .tw { animation: tw 3.4s ease-in-out infinite; } .tw.b { animation-delay: 1.1s; } .tw.c { animation-delay: 2.2s; }
+  .sea { animation: sea 4s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes dawn { 0%, 100% { opacity: .75; } 50% { opacity: 1; } }
+  @keyframes sway { 0%, 100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
+  /* 心跳：撲通（大）、撲通（小），然後休息 */
+  @keyframes beat { 0% { transform: scale(1); } 12% { transform: scale(1.18); } 22% { transform: scale(1.02); } 32% { transform: scale(1.1); } 45%, 100% { transform: scale(1); } }
+  @keyframes pulse { 0% { transform: scale(.5); opacity: .9; } 70% { opacity: .15; } 100% { transform: scale(2.2); opacity: 0; } }
+  @keyframes flowup { to { stroke-dashoffset: 72; } }
+  @keyframes breath { 0% { stroke-dashoffset: 260; opacity: 0; } 30% { opacity: .7; } 70% { opacity: .7; } 100% { stroke-dashoffset: -60; opacity: 0; } }
+  @keyframes rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 80% { opacity: .8; } 100% { transform: translateY(-150px); opacity: 0; } }
+  @keyframes tw { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+  @keyframes sea { to { stroke-dashoffset: -38; } }
+  @media (prefers-reduced-motion: reduce) {
+    .sky, .dawn, .sway, .beat, .pulse, .flowup, .breath, .rise, .tw, .sea { animation: none; }
+    .pulse, .rise, .breath { opacity: 0; }
+  }
+</style>
+<defs>
+  <clipPath id="disc"><circle cx="200" cy="200" r="184"/></clipPath>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#3e4a72"/><stop offset=".38" stop-color="#7d7fa6"/>
+    <stop offset=".54" stop-color="#d9b7a0"/><stop offset=".64" stop-color="#f4dcb4"/>
+  </linearGradient>
+  <radialGradient id="firstLight" cx="50%" cy="50%" r="50%">
+    <stop offset="0" stop-color="#fffbe9"/><stop offset=".25" stop-color="#fbe2a6" stop-opacity=".9"/>
+    <stop offset=".6" stop-color="#f3c77e" stop-opacity=".35"/><stop offset="1" stop-color="#f3c77e" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="earthG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#9c7a4e"/><stop offset=".5" stop-color="#7a5a36"/><stop offset="1" stop-color="#4f3a24"/>
+  </linearGradient>
+  <radialGradient id="heartGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0" stop-color="#fff3cf"/><stop offset=".4" stop-color="#f4c873" stop-opacity=".85"/>
+    <stop offset="1" stop-color="#f4c873" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="heartFill" cx="45%" cy="35%" r="70%">
+    <stop offset="0" stop-color="#fffaf0"/><stop offset=".5" stop-color="#fde3a6"/><stop offset="1" stop-color="#f0b860"/>
+  </radialGradient>
+  <linearGradient id="mt1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a7b391"/><stop offset="1" stop-color="#7f8f6a"/></linearGradient>
+  <linearGradient id="mt2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d8d68"/><stop offset="1" stop-color="#5c6c4b"/></linearGradient>
+  <linearGradient id="trunkG" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#5a4128"/><stop offset=".5" stop-color="#7a5a36"/><stop offset="1" stop-color="#5a4128"/>
+  </linearGradient>
+  <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="shade" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#2e3a24" flood-opacity=".35"/></filter>
+  <path id="heart" d="M0 8 C-14 -2 -16 -14 -8 -18 C-4 -20 -1 -17 0 -13 C1 -17 4 -20 8 -18 C16 -14 14 -2 0 8Z"/>
+  <path id="tree" d="M0 -16 L7 -2 L3 -2 L9 8 L-9 8 L-3 -2 L-7 -2Z"/>
+  <!-- 圓形的葉子（不要尖角） -->
+  <ellipse id="leaf" cx="0" cy="-9" rx="7.5" ry="8.5"/>
+</defs>
+
+<!-- 外框光暈 -->
+<circle cx="200" cy="200" r="196" fill="#f4dcb4" opacity=".35"/>
+
+<g clip-path="url(#disc)">
+  <!-- 天空 -->
+  <rect width="400" height="400" fill="url(#skyG)"/>
+  <!-- 烏拉諾斯的星空：繞著中心慢慢旋轉 -->
+  <g class="sky" fill="#fff6dc">
+    <circle cx="200" cy="30" r="1.8" class="tw"/><circle cx="96" cy="70" r="1.4" class="tw b"/><circle cx="306" cy="66" r="1.6" class="tw c"/>
+    <circle cx="56" cy="130" r="1.2" class="tw c"/><circle cx="346" cy="124" r="1.3" class="tw"/><circle cx="130" cy="44" r="1" class="tw b"/>
+    <circle cx="270" cy="40" r="1.1" class="tw"/><circle cx="40" cy="210" r="1.2" class="tw b"/><circle cx="362" cy="200" r="1.2" class="tw c"/>
+    <circle cx="200" cy="370" r="1.4" class="tw"/><circle cx="90" cy="330" r="1.2" class="tw c"/><circle cx="314" cy="330" r="1.2" class="tw b"/>
+    <path d="M56 130 L96 70 L130 44" fill="none" stroke="#fff6dc" stroke-width=".6" opacity=".35"/>
+    <path d="M270 40 L306 66 L346 124" fill="none" stroke="#fff6dc" stroke-width=".6" opacity=".35"/>
+  </g>
+  <!-- 蓋婭的呼吸：天空中飄過的淡淡氣流 -->
+  <g fill="none" stroke="#fff4dc" stroke-width="1.4" stroke-linecap="round">
+    <path d="M30 150 C90 130 140 160 200 142 S320 128 380 146" class="breath"/>
+    <path d="M24 186 C90 170 160 196 230 180 S330 164 386 182" class="breath b" stroke-width="1"/>
+  </g>
+  <!-- 第一道光：從樹後的地平線升起 -->
+  <g class="dawn">
+    <circle cx="200" cy="232" r="120" fill="url(#firstLight)"/>
+  </g>
+
+  <!-- 山脈（兩層）＋森林 -->
+  <path d="M0 238 L48 190 L88 216 L132 174 L176 214 L224 212 L268 176 L312 214 L356 184 L400 222 L400 262 L0 262Z" fill="url(#mt1)" opacity=".9"/>
+  <path d="M0 252 L38 226 L80 242 L120 214 L160 238 L240 238 L280 216 L320 240 L360 228 L400 240 L400 272 L0 272Z" fill="url(#mt2)"/>
+  <g fill="#4f5f40">
+    <use href="#tree" transform="translate(44 250) scale(.9)"/><use href="#tree" transform="translate(60 254) scale(.7)"/>
+    <use href="#tree" transform="translate(88 248)"/><use href="#tree" transform="translate(104 254) scale(.75)"/>
+    <use href="#tree" transform="translate(126 252) scale(.85)"/>
+  </g>
+  <!-- 海洋（右側），水面一閃一閃 -->
+  <path d="M252 256 C290 248 340 250 400 244 L400 278 L252 278Z" fill="#7fa3a8"/>
+  <g fill="none" stroke="#f3f8f4" stroke-width="1.4" stroke-linecap="round" opacity=".55">
+    <path d="M272 261 L380 258" class="sea" style="stroke-dasharray:3 16"/>
+    <path d="M286 269 L394 266" class="sea" style="stroke-dasharray:2 20;animation-duration:5.5s"/>
+  </g>
+
+  <!-- 大地（地底） -->
+  <path d="M0 268 C80 260 140 272 200 266 S330 260 400 268 L400 400 L0 400Z" fill="url(#earthG)"/>
+  <path d="M0 268 C80 260 140 272 200 266 S330 260 400 268" fill="none" stroke="#8fa077" stroke-width="5"/>
+
+  <!-- 樹根：從心往外擴散（金色靈氣流動） -->
+  <g fill="none" stroke-linecap="round">
+    <g stroke="#5a4128" stroke-width="3.2">
+      <path d="M196 272 C184 290 150 300 104 304"/><path d="M204 272 C216 290 250 300 296 304"/>
+      <path d="M194 274 C170 300 120 330 70 340"/><path d="M206 274 C230 300 280 330 330 340"/>
+      <path d="M198 276 C186 320 168 356 150 392"/><path d="M202 276 C214 320 232 356 250 392"/>
+    </g>
+    <g stroke="#ffe7a8" stroke-width="1.6" class="flowup" style="animation-direction:reverse">
+      <path d="M196 272 C184 290 150 300 104 304"/><path d="M204 272 C216 290 250 300 296 304"/>
+      <path d="M194 274 C170 300 120 330 70 340"/><path d="M206 274 C230 300 280 330 330 340"/>
+      <path d="M198 276 C186 320 168 356 150 392"/><path d="M202 276 C214 320 232 356 250 392"/>
+    </g>
+  </g>
+
+  <!-- ===== 生命之樹（輕輕搖擺） ===== -->
+  <g class="sway">
+    <!-- 樹幹與枝枒 -->
+    <path d="M188 272 C190 246 184 222 190 196 C178 186 160 176 142 168 L146 162 C164 168 182 176 194 186 C194 170 190 156 182 142 L188 138 C196 152 200 166 200 182 C204 166 210 152 220 138 L226 142 C216 156 210 170 208 186 C220 176 238 168 256 162 L260 168 C242 176 224 186 212 196 C218 222 212 246 214 272Z" fill="url(#trunkG)"/>
+    <!-- 靈氣沿著樹幹往上送到樹冠 -->
+    <path d="M201 270 C199 240 197 214 200 186 C200 170 200 150 200 120" fill="none" stroke="#ffe7a8" stroke-width="2.2" stroke-linecap="round" class="flowup"/>
+
+    <!-- 茂盛的樹冠：深、中、淺三層葉團疊出立體感 -->
+    <g filter="url(#shade)">
+      <g fill="#566a46">
+        <circle cx="200" cy="112" r="56"/><circle cx="148" cy="132" r="40"/><circle cx="252" cy="132" r="40"/>
+        <circle cx="120" cy="160" r="28"/><circle cx="280" cy="160" r="28"/><circle cx="168" cy="82" r="36"/><circle cx="232" cy="82" r="36"/>
+        <circle cx="200" cy="58" r="32"/><circle cx="176" cy="160" r="34"/><circle cx="224" cy="160" r="34"/>
+      </g>
+    </g>
+    <g fill="#6f8559">
+      <circle cx="194" cy="102" r="44"/><circle cx="146" cy="124" r="30"/><circle cx="250" cy="124" r="30"/>
+      <circle cx="164" cy="76" r="28"/><circle cx="230" cy="74" r="28"/><circle cx="198" cy="52" r="24"/>
+      <circle cx="122" cy="152" r="20"/><circle cx="278" cy="152" r="20"/><circle cx="178" cy="150" r="26"/><circle cx="222" cy="150" r="26"/>
+    </g>
+    <g fill="#8fa577" opacity=".75">
+      <circle cx="186" cy="90" r="26"/><circle cx="140" cy="116" r="18"/><circle cx="244" cy="114" r="18"/>
+      <circle cx="158" cy="68" r="16"/><circle cx="224" cy="66" r="16"/><circle cx="192" cy="44" r="14"/>
+      <circle cx="170" cy="142" r="14"/><circle cx="216" cy="140" r="14"/>
+    </g>
+    <!-- 葉團上的小葉子紋理，讓樹冠看起來更茂密 -->
+    <g fill="#9db384" opacity=".8">
+      <use href="#leaf" transform="translate(176 92) rotate(-30) scale(.6)"/><use href="#leaf" transform="translate(214 84) rotate(25) scale(.6)"/>
+      <use href="#leaf" transform="translate(150 124) rotate(-50) scale(.55)"/><use href="#leaf" transform="translate(250 122) rotate(50) scale(.55)"/>
+      <use href="#leaf" transform="translate(196 60) rotate(5) scale(.55)"/><use href="#leaf" transform="translate(166 66) rotate(-20) scale(.5)"/>
+      <use href="#leaf" transform="translate(232 62) rotate(20) scale(.5)"/><use href="#leaf" transform="translate(188 140) rotate(-10) scale(.5)"/>
+      <use href="#leaf" transform="translate(226 146) rotate(30) scale(.5)"/><use href="#leaf" transform="translate(126 150) rotate(-70) scale(.5)"/>
+      <use href="#leaf" transform="translate(276 148) rotate(70) scale(.5)"/>
+    </g>
+    <!-- 樹冠邊緣的葉子（往中心收一點，貼著樹冠） -->
+    <g transform="translate(200 112) scale(.88) translate(-200 -112)">
+    <g fill="#7f9466">
+      <use href="#leaf" transform="translate(200 28) rotate(0)"/><use href="#leaf" transform="translate(160 40) rotate(-30)"/><use href="#leaf" transform="translate(240 40) rotate(30)"/>
+      <use href="#leaf" transform="translate(128 70) rotate(-55)"/><use href="#leaf" transform="translate(272 70) rotate(55)"/>
+      <use href="#leaf" transform="translate(98 120) rotate(-80)"/><use href="#leaf" transform="translate(302 120) rotate(80)"/>
+      <use href="#leaf" transform="translate(94 160) rotate(-105)"/><use href="#leaf" transform="translate(306 160) rotate(105)"/>
+      <use href="#leaf" transform="translate(130 186) rotate(-140)"/><use href="#leaf" transform="translate(270 186) rotate(140)"/>
+    </g>
+    <g fill="#a5b88a">
+      <use href="#leaf" transform="translate(180 30) rotate(-15) scale(.8)"/><use href="#leaf" transform="translate(220 30) rotate(15) scale(.8)"/>
+      <use href="#leaf" transform="translate(110 92) rotate(-68) scale(.8)"/><use href="#leaf" transform="translate(290 92) rotate(68) scale(.8)"/>
+      <use href="#leaf" transform="translate(104 142) rotate(-95) scale(.8)"/><use href="#leaf" transform="translate(296 142) rotate(95) scale(.8)"/>
+    </g>
+    </g>
+    <!-- 樹上一閃一閃的光（靈氣的果實） -->
+    <g fill="#ffe7a8" filter="url(#soft)">
+      <circle cx="170" cy="100" r="3" class="tw"/><circle cx="226" cy="92" r="2.6" class="tw b"/><circle cx="200" cy="70" r="3.2" class="tw c"/>
+      <circle cx="150" cy="140" r="2.4" class="tw b"/><circle cx="252" cy="140" r="2.6" class="tw"/><circle cx="198" cy="126" r="2.8" class="tw c"/>
+      <circle cx="130" cy="122" r="2" class="tw"/><circle cx="270" cy="118" r="2" class="tw c"/><circle cx="214" cy="48" r="2" class="tw b"/>
+    </g>
+  </g>
+
+  <!-- 蓋婭的心（放大）：心跳時向外擴散成大地的脈動 -->
+  <g transform="translate(200 318)">
+    <circle r="40" fill="none" stroke="#ffe7a8" stroke-width="2.2" class="pulse"/>
+    <circle r="40" fill="none" stroke="#ffe7a8" stroke-width="1.6" class="pulse b"/>
+    <circle r="58" fill="url(#heartGlow)" class="beat"/>
+    <g class="beat">
+      <use href="#heart" fill="url(#heartFill)" filter="url(#soft)" transform="translate(0 9) scale(2.3)"/>
+      <use href="#heart" fill="none" stroke="#fff8e4" stroke-width=".6" transform="translate(0 9) scale(2.3)" opacity=".8"/>
+    </g>
+  </g>
+
+  <!-- 從大地升起的小光點（每個靈魂都是一顆星辰） -->
+  <g fill="#fff3cf" filter="url(#soft)">
+    <circle cx="120" cy="300" r="2.4" class="rise"/>
+    <circle cx="282" cy="296" r="2" class="rise b"/>
+    <circle cx="150" cy="290" r="1.8" class="rise c"/>
+    <circle cx="252" cy="304" r="2.2" class="rise d"/>
+    <circle cx="84" cy="296" r="1.6" class="rise c"/>
+    <circle cx="318" cy="300" r="1.8" class="rise"/>
+  </g>
+</g>
+
+<!-- 金色雙圈框 -->
+<circle cx="200" cy="200" r="184" fill="none" stroke="#c99a4e" stroke-width="3"/>
+<circle cx="200" cy="200" r="192" fill="none" stroke="#c99a4e" stroke-width="1" opacity=".55"/>
+<g fill="#c99a4e"><circle cx="200" cy="8" r="3"/><circle cx="200" cy="392" r="3"/><circle cx="8" cy="200" r="2.4"/><circle cx="392" cy="200" r="2.4"/></g>
+</svg>
