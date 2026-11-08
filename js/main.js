@@ -142,21 +142,39 @@
     $('#tarot-intro').innerHTML = md(d.intro);
     $('#tarot-benefits').innerHTML = (d.benefits || [])
       .map((b) => `<div class="benefit reveal"><h3>${esc(b.title)}</h3><p>${esc(b.text)}</p></div>`).join('');
-    // 兩張服務小卡：按鈕直接跳到課程區，並套用對應的分類（例如「塔羅」）
-    $('#tarot-offers').innerHTML = (d.offers || []).map((o) => `
-      <div class="tarot-offer reveal">
-        <h3>${esc(o.title)}</h3>
-        <div class="tarot-offer-text">${md(o.text)}</div>
-        ${o.button ? `<a class="more-link" href="#courses" data-course-cat="${esc(o.category || 'all')}">${esc(o.button)} →</a>` : ''}
-      </div>`).join('');
-    $('#tarot-offers').addEventListener('click', (e) => {
-      const a = e.target.closest('[data-course-cat]');
-      if (!a) return;
-      const chip = $(`[data-filter-group="courses"] [data-filter="${a.dataset.courseCat}"]`)
-        || $('[data-filter-group="courses"] [data-filter="all"]');
-      if (chip) chip.click();
-    });
+    renderOfferCards($('#tarot-offers'), d.offers);
   }
+
+  /* ---------- 服務小卡（頌缽、大地靈氣、靈魂藍圖、塔羅共用） ---------- */
+  // 每張卡：標題、說明、按鈕；按鈕的目標可以是課程分類（跳到課程區並篩選），或 #區塊（直接跳過去）
+  function renderOfferCards(el, list = []) {
+    if (!el) return;
+    const items = (list || []).filter((o) => o && o.title)
+      // 目標區塊被隱藏時（例如塔羅關閉），那張卡也不顯示
+      .filter((o) => { const t = o.target || o.category || ''; return !t.startsWith('#') || ($(t) && !$(t).hidden); });
+    el.innerHTML = items.map((o) => {
+      const target = o.target || o.category || 'all';
+      const href = target.startsWith('#') ? target : '#courses';
+      return `<div class="offer reveal">
+        <h3>${esc(o.title)}</h3>
+        <div class="offer-text">${md(o.text)}</div>
+        ${o.button ? `<a class="offer-btn" href="${esc(href)}" data-offer-target="${esc(target)}">${esc(o.button)} →</a>` : ''}
+      </div>`;
+    }).join('');
+  }
+  function renderOffers(d = {}) {
+    renderOfferCards($('#bowl-offers'), d.bowl);
+    renderOfferCards($('#reiki-offers'), d.reiki);
+    if (!$('#soul').hidden) renderOfferCards($('#soul-offers'), d.soul);
+  }
+  // 按鈕是課程分類時：跳到課程區，同時套用該分類的篩選
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-offer-target]');
+    if (!a || a.dataset.offerTarget.startsWith('#')) return;
+    const chip = $(`[data-filter-group="courses"] [data-filter="${a.dataset.offerTarget}"]`)
+      || $('[data-filter-group="courses"] [data-filter="all"]');
+    if (chip) chip.click();
+  });
 
   /* ---------- 最新活動 ---------- */
   // 沒有活動（或全部設為不顯示）時，整個區塊和導覽列連結一起隱藏，不留空白
@@ -912,7 +930,7 @@
   function setupMotion() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     // 光點：首頁 16 顆、大地靈氣區塊 10 顆，大小、速度、位置都隨機
-    [['.hero', 16], ['#reiki', 22], ['#soul', 14]].forEach(([sel, n]) => {
+    [['.hero', 16], ['#reiki', 22], ['#soul', 14], ['#tarot', 16]].forEach(([sel, n]) => {
       const host = $(sel);
       if (!host || host.hidden) return;
       const box = document.createElement('div');
@@ -959,12 +977,13 @@
   }
 
   setupUI();
-  Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery', 'soul', 'tarot'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery, soul, tarot]) => {
+  Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery', 'soul', 'tarot', 'offers'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery, soul, tarot, offers]) => {
     // 每個區塊各自執行：某一區出錯（例如檔案只更新了一半）時，其他區塊照常顯示，不會整頁空白
     const safe = (name, fn) => { try { fn(); } catch (err) { console.error(`[${name}] 顯示失敗：`, err); } };
     safe('site', () => renderSite(site));
     safe('soul', () => renderSoul(soul));
     safe('tarot', () => renderTarot(tarot));
+    safe('offers', () => renderOffers(offers));
     safe('motion', () => setupMotion()); // 放在靈魂藍圖顯示之後，才知道要不要在那個區塊加光點
     safe('events', () => renderEvents(events, site));
     safe('shop', () => renderShop(shop, shopSettings, site));
