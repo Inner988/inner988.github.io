@@ -1,40 +1,34 @@
 {
   "albums": [
     {
-      "name": "課程花絮",
+      "name": "頌缽日常",
       "media": [
         "/images/uploads/class-1.jpg",
         "/images/uploads/class-2.jpg",
         "/images/uploads/676367_0.jpg",
-        "/images/uploads/676377_0.jpg"
-      ],
-      "videos": []
-    },
-    {
-      "name": "大地靈氣高階",
-      "media": [
-        "/images/uploads/676763_1.jpg"
-      ],
-      "videos": []
-    },
-    {
-      "name": "大地靈氣",
-      "media": [
-        "/images/uploads/視訊會議中的泰迪熊格狀畫面.png"
-      ],
-      "videos": []
-    },
-    {
-      "name": "",
-      "media": [
+        "/images/uploads/676377_0.jpg",
         "/images/uploads/676381_0.jpg",
-        "/images/uploads/視訊會議中的玩偶時光.png",
-        "/images/uploads/676414_0.jpg",
         "/images/uploads/676410_0.jpg",
-        "/images/uploads/泰迪熊視訊會議拼圖.png",
-        "/images/uploads/汪沁霏・大地靈氣・頌缽.png",
+        "/images/uploads/676414_0.jpg"
+      ],
+      "videos": []
+    },
+    {
+      "name": "大地靈氣初階/進階/高階/大師階",
+      "media": [
+        "/images/uploads/676763_1.jpg",
         "/images/uploads/霏霏(Ivy)視訊會議畫面.png",
-        "/images/uploads/676762_0.jpg",
+        "/images/uploads/汪沁霏・大地靈氣・頌缽.png",
+        "/images/uploads/泰迪熊視訊會議拼圖.png",
+        "/images/uploads/視訊會議中的玩偶時光.png",
+        "/images/uploads/視訊會議中的泰迪熊格狀畫面.png",
+        "/images/uploads/676762_0.jpg"
+      ],
+      "videos": []
+    },
+    {
+      "name": "課程花絮",
+      "media": [
         "/images/uploads/676776_0.jpg",
         "/images/uploads/676406_0.jpg",
         "/images/uploads/676405_0.jpg",
