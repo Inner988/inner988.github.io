@@ -484,7 +484,13 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 /* 相簿影片：封面上的播放鍵、看大圖視窗裡的播放器 */
 .masonry figure.is-video { cursor: pointer; }
 .masonry video, .video-blank { width: 100%; display: block; }
-.video-blank { aspect-ratio: 16 / 9; background: linear-gradient(135deg, var(--earth), var(--earth-deep)); }
+/* 沒有縮圖的影片（例如臉書影片）：用柔和的漸層底，下方標示影片來源 */
+.video-blank {
+  position: relative; aspect-ratio: 16 / 9;
+  background: radial-gradient(circle at 30% 25%, rgba(242, 217, 164, .55), transparent 60%), linear-gradient(150deg, var(--earth), var(--earth-deep));
+}
+.video-blank.is-vertical { aspect-ratio: 3 / 4; }
+.video-blank span { position: absolute; left: 14px; bottom: 12px; font-size: .82rem; letter-spacing: .1em; color: rgba(255, 246, 228, .9); }
 .play-badge {
   position: absolute; left: 50%; top: 50%; width: 62px; height: 62px; margin: -31px 0 0 -31px; border-radius: 50%;
   background: rgba(30, 24, 16, .45); border: 1.5px solid rgba(255, 255, 255, .85); backdrop-filter: blur(4px);
@@ -493,9 +499,14 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .play-badge::after { content: ""; position: absolute; left: 25px; top: 19px; border-left: 18px solid #fff; border-top: 12px solid transparent; border-bottom: 12px solid transparent; }
 .masonry figure.is-video:hover .play-badge { transform: scale(1.1); background: rgba(160, 122, 69, .8); }
 .masonry figure.is-video figcaption { opacity: 1; }
-.lb-video { width: min(92vw, 1100px); aspect-ratio: 16 / 9; }
+.lb-video { width: min(92vw, 1100px, calc(82vh * 16 / 9)); aspect-ratio: 16 / 9; }
 .lb-video iframe, .lb-video video { width: 100%; height: 100%; border: 0; border-radius: 8px; background: #000; }
 .lb-video video { object-fit: contain; }
+/* 直式影片（Reels、Shorts）：直的播放框，完整顯示不裁切 */
+.lb-video.is-vertical { width: min(92vw, calc(82vh * 9 / 16)); aspect-ratio: 9 / 16; }
+/* 上傳的影片檔：照影片原本的比例顯示（直的、橫的都可以） */
+.lb-video.is-file { width: auto; aspect-ratio: auto; }
+.lb-video.is-file video { width: auto; height: auto; max-width: 92vw; max-height: 82vh; }
 .lightbox #lb-media img { max-width: 92vw; max-height: 82vh; border-radius: 8px; margin: auto; }
 .lightbox figcaption { margin-top: 12px; font-size: .95rem; opacity: .85; }
 .lb-nav { position: fixed; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, .15); color: #fff; border: 0; width: 48px; height: 48px; border-radius: 50%; font-size: 2rem; cursor: pointer; }
@@ -625,6 +636,34 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .soul .slider-dots button { background: var(--soul-line); }
 .soul .slider-dots button.is-active { background: var(--soul-accent); }
 .soul .more-link { color: var(--soul-accent); }
+
+/* 「看全部分享」「到粉絲專頁」：做成醒目的圓角按鈕，訪客一眼就看得到 */
+.slider-foot { margin-top: 18px; }
+.slider-links { gap: 10px; }
+.slider-links .more-link, .more-wrap .more-link {
+  --tone: var(--bronze-deep);
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 1rem; font-weight: 500; letter-spacing: .06em; line-height: 1.4;
+  padding: 10px 22px; border: 1.5px solid var(--tone); border-radius: 99px;
+  color: var(--tone); background: rgba(255, 255, 255, .75);
+  transition: transform .25s, box-shadow .25s, background .25s, color .25s;
+}
+.intro-reiki .slider-links .more-link { --tone: var(--earth); }
+.soul .slider-links .more-link { --tone: var(--soul-accent); }
+/* 「看全部 N 篇分享」是主要按鈕：實心底色、輕輕發亮 */
+.slider-links [data-all-stories], .more-wrap [data-all-stories] {
+  color: #fff; background: var(--tone); box-shadow: 0 10px 22px -12px var(--tone);
+  animation: ctaGlow 2.8s ease-in-out infinite;
+}
+.slider-links .more-link:hover, .more-wrap .more-link:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -12px var(--tone); }
+.slider-links a.more-link:hover, .more-wrap a.more-link:hover { background: var(--tone); color: #fff; }
+@keyframes ctaGlow { 0%, 100% { box-shadow: 0 10px 22px -12px var(--tone); } 50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--tone) 18%, transparent), 0 10px 22px -12px var(--tone); } }
+@media (prefers-reduced-motion: reduce) { .slider-links [data-all-stories], .more-wrap [data-all-stories] { animation: none; } }
+@media (max-width: 860px) {
+  .slider-foot { flex-direction: column; align-items: stretch; }
+  .slider-links { justify-content: stretch; }
+  .slider-links .more-link { flex: 1 1 auto; justify-content: center; }
+}
 .soul .story-card { border-color: var(--soul-line); }
 .soul.theme-dreamy .story-card, .soul.theme-mystic .story-card { background: rgba(255, 255, 255, .07); }
 .soul.theme-dreamy .story-card blockquote, .soul.theme-mystic .story-card blockquote { color: var(--soul-title); }
