@@ -905,9 +905,11 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .soul-band .soul-h { margin-top: 0; }
 /* 放進右欄後：上下排列（先「適合誰」、再「解讀方式」），寬度跟著右欄 */
 .soul-text .soul-band { grid-template-columns: 1fr; gap: 22px; margin-top: 30px; padding: 22px 24px; }
-/* 左欄縮短一點：配圖改成 16:10，學員分享卡的相片矮一點 */
-.soul-art img { aspect-ratio: 16 / 10; }
-.soul-stories .story-photo { aspect-ratio: 3 / 1; max-height: 150px; }
+/* 靈魂藍圖配圖：縮小並置中（不要佔滿整個左欄，左右才對稱） */
+@media (min-width: 961px) {
+  .soul-art { width: 68%; margin: 0 auto; }
+  .soul-art::before { inset: 12px -12px -12px 12px; }
+}
 .soul-check { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .soul-check li { font-size: .86rem; padding: 6px 14px; border-radius: 99px; background: var(--soul-chip-bg); color: var(--soul-chip-fg); }
 .soul-steps { list-style: none; counter-reset: step; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
