@@ -276,6 +276,15 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .intro-reiki .prose { color: #4a433b; }
 .intro-reiki .eyebrow { color: var(--earth); }
 .intro-reiki .section-title { color: var(--earth-deep); }
+/* 主標題右邊的蓋婭動態圖：圓形徽章，輕輕浮動、外圍有柔光 */
+.reiki-title-row { display: flex; align-items: center; justify-content: flex-start; gap: clamp(18px, 3vw, 34px); }
+.reiki-gaia {
+  flex: none; width: clamp(110px, 12vw, 150px); height: auto; aspect-ratio: 1; border-radius: 50%;
+  filter: drop-shadow(0 14px 22px rgba(74, 82, 64, .28));
+  animation: gaiaFloat 7s ease-in-out infinite;
+}
+@keyframes gaiaFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .reiki-gaia { animation: none; } }
 .intro-grid { display: grid; grid-template-columns: 4fr 7fr; gap: clamp(32px, 6vw, 90px); }
 .intro-grid.reverse .intro-head { order: 2; }
 .intro-head .lead { margin-top: 22px; }
@@ -290,10 +299,8 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 /* ========== 塔羅：米白底配一點靛藍與金色，和前後區塊做出區隔 ========== */
 .intro-tarot {
   --tarot: #4b4f7a; --tarot-deep: #33365a;
-  background:
-    radial-gradient(ellipse 60% 50% at 85% 10%, rgba(185, 179, 214, .28), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 10% 90%, rgba(240, 214, 162, .3), transparent 70%),
-    var(--paper);
+  /* 底色跟上下區塊一樣是暖米色，從上往下漸漸接到課程區的米色，不會出現一塊灰紫 */
+  background: linear-gradient(180deg, var(--paper), var(--cream));
 }
 .intro-tarot .eyebrow { color: var(--tarot); }
 .intro-tarot .section-title { color: var(--tarot-deep); }
@@ -357,17 +364,20 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .intro-tarot::before, .intro-tarot::after { content: ""; position: absolute; pointer-events: none; z-index: -1; }
 /* 右上角的星盤（細線圓環＋刻度），非常慢地旋轉 */
 .intro-tarot::before {
-  width: 760px; height: 760px; right: -220px; top: -200px; opacity: .55;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-100 -100 200 200'%3E%3Cg fill='none' stroke='%234b4f7a' stroke-opacity='.35'%3E%3Ccircle r='96' stroke-width='.4'/%3E%3Ccircle r='86' stroke-width='.6'/%3E%3Ccircle r='62' stroke-width='.3' stroke-dasharray='1 3'/%3E%3Ccircle r='40' stroke-width='.4'/%3E%3Cpath stroke-width='.4' d='M0-86V-96M0 86V96M-86 0H-96M86 0H96M60.8-60.8L67.9-67.9M-60.8 60.8L-67.9 67.9M60.8 60.8L67.9 67.9M-60.8-60.8L-67.9-67.9M32.9-79.5L36.7-88.7M-32.9 79.5L-36.7 88.7M79.5 32.9L88.7 36.7M-79.5-32.9L-88.7-36.7M79.5-32.9L88.7-36.7M-79.5 32.9L-88.7 36.7M32.9 79.5L36.7 88.7M-32.9-79.5L-36.7-88.7'/%3E%3Cpath stroke-width='.35' d='M0-62L53.7 31H-53.7Z M0 62L53.7-31H-53.7Z'/%3E%3C/g%3E%3Cg fill='%23c99a4e' fill-opacity='.55'%3E%3Ccircle cy='-91' r='1.4'/%3E%3Ccircle cx='91' r='1'/%3E%3Ccircle cy='91' r='1.4'/%3E%3Ccircle cx='-91' r='1'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  width: 760px; height: 760px; right: -220px; top: -200px; opacity: .5;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-100 -100 200 200'%3E%3Cg fill='none' stroke='%23b08850' stroke-opacity='.4'%3E%3Ccircle r='96' stroke-width='.4'/%3E%3Ccircle r='86' stroke-width='.6'/%3E%3Ccircle r='62' stroke-width='.3' stroke-dasharray='1 3'/%3E%3Ccircle r='40' stroke-width='.4'/%3E%3Cpath stroke-width='.4' d='M0-86V-96M0 86V96M-86 0H-96M86 0H96M60.8-60.8L67.9-67.9M-60.8 60.8L-67.9 67.9M60.8 60.8L67.9 67.9M-60.8-60.8L-67.9-67.9M32.9-79.5L36.7-88.7M-32.9 79.5L-36.7 88.7M79.5 32.9L88.7 36.7M-79.5-32.9L-88.7-36.7M79.5-32.9L88.7-36.7M-79.5 32.9L-88.7 36.7M32.9 79.5L36.7 88.7M-32.9-79.5L-36.7-88.7'/%3E%3Cpath stroke-width='.35' d='M0-62L53.7 31H-53.7Z M0 62L53.7-31H-53.7Z'/%3E%3C/g%3E%3Cg fill='%23c99a4e' fill-opacity='.55'%3E%3Ccircle cy='-91' r='1.4'/%3E%3Ccircle cx='91' r='1'/%3E%3Ccircle cy='91' r='1.4'/%3E%3Ccircle cx='-91' r='1'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
   animation: tarotWheel 240s linear infinite;
 }
 /* 左下的柔光（紫、蜜桃色）慢慢飄移、變換 */
 .intro-tarot::after {
   inset: -20%;
+  /* 柔光改成暖色為主、只帶一點點紫，而且上下邊緣淡出，和相鄰區塊自然接在一起 */
   background:
-    radial-gradient(closest-side at 25% 75%, rgba(185, 170, 225, .32), transparent),
-    radial-gradient(closest-side at 70% 35%, rgba(245, 205, 150, .26), transparent),
-    radial-gradient(closest-side at 50% 55%, rgba(200, 180, 230, .18), transparent);
+    radial-gradient(closest-side at 25% 70%, rgba(242, 208, 160, .3), transparent),
+    radial-gradient(closest-side at 72% 38%, rgba(246, 222, 186, .34), transparent),
+    radial-gradient(closest-side at 55% 60%, rgba(214, 196, 226, .14), transparent);
+  -webkit-mask-image: linear-gradient(180deg, transparent 12%, #000 30%, #000 72%, transparent 90%);
+  mask-image: linear-gradient(180deg, transparent 12%, #000 30%, #000 72%, transparent 90%);
   animation: tarotAurora 26s ease-in-out infinite alternate;
 }
 @keyframes tarotWheel { to { transform: rotate(360deg); } }
