@@ -384,6 +384,24 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 @keyframes storyZoom { from { transform: scale(1); } to { transform: scale(1.1); } }
 @media (prefers-reduced-motion: reduce) { .slides .story-card.is-active .story-photo img { animation: none; } }
 .slides .story-card p { -webkit-line-clamp: 3; }
+/* 有影片的分享：卡片相片上放播放鍵和「影片」小標 */
+.story-photo { position: relative; }
+.story-photo video { width: 100%; height: 100%; object-fit: cover; display: block; background: #1e1810; }
+.story-photo .play-badge { width: 54px; height: 54px; margin: -27px 0 0 -27px; }
+.story-photo .play-badge::after { left: 21px; top: 15px; border-left-width: 16px; border-top-width: 11px; border-bottom-width: 11px; }
+.story-card:hover .story-photo .play-badge { transform: scale(1.1); background: rgba(160, 122, 69, .8); }
+.story-video-tag {
+  position: absolute; left: 12px; top: 12px; font-size: .74rem; letter-spacing: .12em; padding: 3px 10px; border-radius: 99px;
+  color: #fff; background: rgba(30, 24, 16, .55); backdrop-filter: blur(4px);
+}
+/* 文章視窗裡的影片：撐滿視窗寬度；直式影片置中、不會太高 */
+.modal-body .story-video { width: 100%; margin: 0 0 28px; }
+.modal-body .story-video.is-vertical { width: min(100%, 340px, calc(70vh * 9 / 16)); margin-inline: auto; }
+.modal-body .story-video.is-file { width: 100%; text-align: center; }
+.modal-body .story-video.is-file video { max-width: 100%; max-height: 70vh; }
+/* 療癒分享的分類標籤（個案療癒／毛孩療癒） */
+.story-tabs { justify-content: center; margin: -8px 0 28px; }
+.story-tabs[hidden] { display: none; }
 .intro-reiki .slides .story-card { background: rgba(255, 255, 255, .8); backdrop-filter: blur(6px); }
 .slider-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
 .slider-dots { display: flex; gap: 8px; }
