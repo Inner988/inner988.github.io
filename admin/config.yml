@@ -120,9 +120,7 @@ collections:
             fields:
               - { name: title, label: 步驟名稱, widget: string }
               - { name: text, label: 說明, widget: string }
-          - { name: combo, label: 搭配說明（按鈕上方的一句話）, widget: markdown, required: false }
-          - { name: ctaText, label: 按鈕文字, widget: string, required: false }
-          - { name: ctaLink, label: 按鈕連結, widget: string, required: false }
+          - { name: combo, label: 可一起預約的解讀（醒目提示的一句話）, widget: markdown, required: false, hint: "顯示在「解讀方式」下方。用 **兩邊星號** 包起來的字會變色，例：可與**塔羅解讀**、**靈魂能量解讀**一起預約" }
           - { name: note, label: 最下方的小提醒, widget: string, required: false }
 
   # ───────── 購物商城 ─────────
