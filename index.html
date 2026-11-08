@@ -63,6 +63,7 @@
         <a href="#bowl">頌缽音療</a>
         <a href="#reiki">大地靈氣</a>
         <a href="#soul" id="nav-soul" hidden>靈魂藍圖</a>
+        <a href="#tarot" id="nav-tarot" hidden>塔羅</a>
       </div>
     </div>
     <div class="nav-drop">
@@ -72,6 +73,7 @@
         <a href="#courses" data-jump="courses" data-cat="頌缽">頌缽</a>
         <a href="#courses" data-jump="courses" data-cat="大地靈氣">大地靈氣</a>
         <a href="#courses" data-jump="courses" data-cat="個案">個案療癒</a>
+        <a href="#courses" data-jump="courses" data-cat="塔羅" id="nav-course-tarot" hidden>塔羅</a>
       </div>
     </div>
     <div class="nav-drop">
@@ -80,6 +82,7 @@
         <a href="#bowl-stories">頌缽學員分享</a>
         <a href="#reiki-stories">大地靈氣學員分享</a>
         <a href="#soul-stories">靈魂藍圖學員分享</a>
+        <a href="#tarot-stories">塔羅學員分享</a>
         <a href="#stories">個案療癒分享</a>
       </div>
     </div>
@@ -217,6 +220,24 @@
     </div>
   </section>
 
+  <!-- 塔羅：後台「塔羅」可修改或關閉（關閉時整個區塊隱藏） -->
+  <section id="tarot" class="section intro intro-tarot" hidden>
+    <div class="container intro-grid">
+      <div class="intro-head reveal">
+        <p class="eyebrow">Tarot</p>
+        <h2 class="section-title" id="tarot-title"></h2>
+        <p class="lead" id="tarot-lead"></p>
+        <div class="story-slider" id="tarot-stories" data-story-slider="塔羅" hidden></div>
+      </div>
+      <div class="intro-body reveal">
+        <figure class="tarot-art"><img id="tarot-img" alt="塔羅牌插畫" loading="lazy"></figure>
+        <div class="prose" id="tarot-intro"></div>
+        <div class="benefits" id="tarot-benefits"></div>
+        <div class="tarot-offers" id="tarot-offers"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- 課程 -->
   <section id="courses" class="section courses">
     <div class="container">
@@ -229,6 +250,7 @@
         <button class="chip" data-filter="頌缽">頌缽</button>
         <button class="chip" data-filter="大地靈氣">大地靈氣</button>
         <button class="chip" data-filter="個案">個案療癒</button>
+        <button class="chip" data-filter="塔羅" id="chip-course-tarot" hidden>塔羅</button>
         <button class="chip" data-filter="其他">其他</button>
       </div>
       <div class="course-list" id="course-list"></div>
