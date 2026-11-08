@@ -1,0 +1,255 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+<!-- 塔羅主視覺（原創插畫，柔和流動版）：
+     三張隨意散開的牌（月亮、太陽、星星）＋一條流動的金色光帶＋植物枝葉與飄落的花瓣
+     動態：牌卡輕輕搖擺、太陽光芒慢轉、光帶上有光點流過、星芒閃爍、花瓣飄落 -->
+<style>
+  .swayL { animation: swayL 9s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+  .swayC { animation: swayC 8s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+  .swayR { animation: swayR 10s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+  .sunrays { animation: spin 40s linear infinite; transform-box: fill-box; transform-origin: center; }
+  .glow { animation: glow 6s ease-in-out infinite; }
+  .flow { stroke-dasharray: 6 26; animation: flow 6s linear infinite; }
+  .flow2 { stroke-dasharray: 3 40; animation: flow 9s linear infinite reverse; }
+  .sp { animation: sparkle 3.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .sp.b { animation-delay: 1.2s; } .sp.c { animation-delay: 2.4s; } .sp.d { animation-delay: .6s; }
+  .tw { animation: tw 4s ease-in-out infinite; } .tw.b { animation-delay: 1.4s; } .tw.c { animation-delay: 2.8s; }
+  .petal { animation: fall 14s linear infinite; }
+  .petal.b { animation-delay: -4s; } .petal.c { animation-delay: -8s; } .petal.d { animation-delay: -11s; }
+  .leafsway { animation: leaf 7s ease-in-out infinite; transform-box: fill-box; transform-origin: 0% 100%; }
+  .leafsway.r { transform-origin: 100% 100%; animation-delay: -3s; }
+  .ripple { animation: ripple 5s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+  .ripple.b { animation-delay: 2.5s; }
+  @keyframes swayL { 0%, 100% { transform: rotate(-17deg) translateY(0); } 50% { transform: rotate(-13deg) translateY(-10px); } }
+  @keyframes swayC { 0%, 100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(2deg) translateY(-14px); } }
+  @keyframes swayR { 0%, 100% { transform: rotate(15deg) translateY(0); } 50% { transform: rotate(19deg) translateY(-8px); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes glow { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
+  @keyframes flow { to { stroke-dashoffset: -320; } }
+  @keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(.3) rotate(0deg); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
+  @keyframes tw { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+  @keyframes fall { 0% { transform: translate(0, -60px) rotate(0deg); opacity: 0; } 10% { opacity: .9; } 90% { opacity: .7; } 100% { transform: translate(-160px, 980px) rotate(300deg); opacity: 0; } }
+  @keyframes leaf { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(3deg); } }
+  @keyframes ripple { 0% { transform: scale(.6); opacity: .8; } 100% { transform: scale(1.5); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .swayL, .swayC, .swayR, .sunrays, .glow, .flow, .flow2, .sp, .tw, .petal, .leafsway, .ripple { animation: none; }
+    .swayL { transform: rotate(-15deg); } .swayR { transform: rotate(17deg); } .petal { display: none; }
+  }
+</style>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#fbf5ec"/><stop offset=".5" stop-color="#f6ede4"/><stop offset="1" stop-color="#eee6f0"/>
+  </linearGradient>
+  <radialGradient id="lav" cx="50%" cy="50%" r="50%">
+    <stop offset="0" stop-color="#c9bde6" stop-opacity=".6"/><stop offset="1" stop-color="#c9bde6" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="peach" cx="50%" cy="50%" r="50%">
+    <stop offset="0" stop-color="#f6cf9f" stop-opacity=".6"/><stop offset="1" stop-color="#f6cf9f" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="sage" cx="50%" cy="50%" r="50%">
+    <stop offset="0" stop-color="#c5d2b0" stop-opacity=".5"/><stop offset="1" stop-color="#c5d2b0" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+    <stop offset="0" stop-color="#fff4d6" stop-opacity="1"/><stop offset=".45" stop-color="#f7d99c" stop-opacity=".45"/><stop offset="1" stop-color="#f7d99c" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="sunCore" cx="40%" cy="38%" r="65%">
+    <stop offset="0" stop-color="#fff6dc"/><stop offset=".55" stop-color="#f6cf7e"/><stop offset="1" stop-color="#e2a94f"/>
+  </radialGradient>
+  <linearGradient id="night" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#2d3163"/><stop offset=".6" stop-color="#3f3a74"/><stop offset="1" stop-color="#5a4a82"/>
+  </linearGradient>
+  <linearGradient id="night2" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#26305e"/><stop offset=".65" stop-color="#344a7a"/><stop offset="1" stop-color="#4f6f96"/>
+  </linearGradient>
+  <linearGradient id="dawn" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fffaf0"/><stop offset=".6" stop-color="#fbeed6"/><stop offset="1" stop-color="#f5dcc0"/>
+  </linearGradient>
+  <linearGradient id="ribbon" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#d9b06a" stop-opacity="0"/><stop offset=".2" stop-color="#d9b06a" stop-opacity=".8"/>
+    <stop offset=".8" stop-color="#c79a52" stop-opacity=".8"/><stop offset="1" stop-color="#c79a52" stop-opacity="0"/>
+  </linearGradient>
+  <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10"/></filter>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="20" stdDeviation="20" flood-color="#4a3a5a" flood-opacity=".28"/></filter>
+  <path id="star4" d="M0 -16 C2 -4 4 -2 16 0 C4 2 2 4 0 16 C-2 4 -4 2 -16 0 C-4 -2 -2 -4 0 -16Z"/>
+  <path id="petal" d="M0 -9 C6 -6 7 4 0 9 C-7 4 -6 -6 0 -9Z"/>
+  <path id="leaf" d="M0 0 C8 -10 22 -12 30 -8 C22 -2 10 2 0 0Z"/>
+</defs>
+
+<!-- 底色：像水彩暈開的柔和色塊 -->
+<rect width="1200" height="900" fill="url(#bg)"/>
+<ellipse cx="200" cy="170" rx="380" ry="260" fill="url(#lav)"/>
+<ellipse cx="1030" cy="760" rx="380" ry="260" fill="url(#lav)"/>
+<ellipse cx="980" cy="150" rx="320" ry="220" fill="url(#peach)"/>
+<ellipse cx="170" cy="760" rx="320" ry="220" fill="url(#sage)"/>
+<circle cx="600" cy="430" r="400" fill="url(#halo)" class="glow"/>
+
+<!-- 流動的金色光帶：從左下繞到右上，光點沿著線流過 -->
+<g fill="none" stroke-linecap="round">
+  <path d="M-20 690 C200 560 300 760 520 650 S860 380 1000 300 S1180 200 1230 160" stroke="url(#ribbon)" stroke-width="2.2"/>
+  <path d="M-20 690 C200 560 300 760 520 650 S860 380 1000 300 S1180 200 1230 160" stroke="#fff3cf" stroke-width="3" class="flow"/>
+  <path d="M-30 760 C180 660 340 820 560 720 S900 470 1060 400 S1200 330 1240 300" stroke="url(#ribbon)" stroke-width="1.2" opacity=".6"/>
+  <path d="M-30 760 C180 660 340 820 560 720 S900 470 1060 400 S1200 330 1240 300" stroke="#e9c27a" stroke-width="2" class="flow2"/>
+  <path d="M-20 240 C160 300 260 140 420 190" stroke="url(#ribbon)" stroke-width="1.2" opacity=".55"/>
+</g>
+
+<!-- 左上、右下的枝葉（輕輕搖動） -->
+<g fill="#9fb08a" opacity=".75">
+  <g transform="translate(40 120)"><g class="leafsway">
+    <path d="M0 0 C60 20 120 60 170 120" fill="none" stroke="#8f9f7a" stroke-width="2"/>
+    <use href="#leaf" transform="translate(40 12) rotate(-20)"/><use href="#leaf" transform="translate(42 16) rotate(60) scale(.9)"/>
+    <use href="#leaf" transform="translate(90 40) rotate(-10)"/><use href="#leaf" transform="translate(92 46) rotate(70) scale(.9)"/>
+    <use href="#leaf" transform="translate(135 82) rotate(0) scale(.9)"/><use href="#leaf" transform="translate(136 88) rotate(80) scale(.8)"/>
+  </g></g>
+  <g transform="translate(1170 830) rotate(180)"><g class="leafsway r">
+    <path d="M0 0 C60 20 120 60 170 120" fill="none" stroke="#8f9f7a" stroke-width="2"/>
+    <use href="#leaf" transform="translate(40 12) rotate(-20)"/><use href="#leaf" transform="translate(42 16) rotate(60) scale(.9)"/>
+    <use href="#leaf" transform="translate(90 40) rotate(-10)"/><use href="#leaf" transform="translate(92 46) rotate(70) scale(.9)"/>
+    <use href="#leaf" transform="translate(135 82) scale(.9)"/>
+  </g></g>
+</g>
+
+<!-- 小星點 -->
+<g fill="#c49a55">
+  <g class="tw"><circle cx="300" cy="90" r="2.4"/><circle cx="1090" cy="420" r="2.2"/><circle cx="120" cy="520" r="2"/></g>
+  <g class="tw b"><circle cx="840" cy="70" r="2"/><circle cx="1120" cy="620" r="1.8"/><circle cx="380" cy="830" r="2"/></g>
+  <g class="tw c"><circle cx="520" cy="60" r="1.6"/><circle cx="60" cy="380" r="1.8"/><circle cx="760" cy="850" r="1.8"/></g>
+</g>
+
+<!-- ===== 左：月亮牌（夜空＋雲＋水面倒影） ===== -->
+<g transform="translate(405 485) scale(1.12)">
+  <g class="swayL">
+    <g filter="url(#shadow)">
+      <rect x="-118" y="-196" width="236" height="392" rx="20" fill="url(#night)"/>
+      <rect x="-118" y="-196" width="236" height="392" rx="20" fill="none" stroke="#d6ad66" stroke-width="3"/>
+      <rect x="-104" y="-182" width="208" height="364" rx="13" fill="none" stroke="#d6ad66" stroke-width="1" opacity=".55"/>
+    </g>
+    <circle cx="10" cy="-80" r="70" fill="#f7dfa6" opacity=".18" filter="url(#blur)"/>
+    <path d="M38 -122 A56 56 0 1 0 38 -38 A44 44 0 1 1 38 -122Z" fill="#f7dfa6" filter="url(#soft)"/>
+    <!-- 雲 -->
+    <path d="M-92 -12 C-80 -30 -56 -28 -48 -16 C-40 -30 -14 -30 -8 -12 C4 -14 12 -6 10 4 L-92 4 C-100 0 -98 -8 -92 -12Z" fill="#fff" opacity=".22"/>
+    <g fill="#f7dfa6"><circle cx="66" cy="-150" r="2.4" class="tw"/><circle cx="-70" cy="-140" r="2" class="tw b"/><circle cx="76" cy="-40" r="1.8" class="tw c"/></g>
+    <!-- 水面與月光倒影 -->
+    <g fill="none" stroke="#e9c98a" stroke-linecap="round">
+      <path d="M-96 60 C-60 48 -30 72 0 60 S60 48 96 60" stroke-width="1.6" opacity=".85"/>
+      <path d="M-96 92 C-60 80 -30 104 0 92 S60 80 96 92" stroke-width="1.4" opacity=".6"/>
+      <path d="M-96 124 C-60 112 -30 136 0 124 S60 112 96 124" stroke-width="1.2" opacity=".4"/>
+      <path d="M-18 70 L18 70 M-12 100 L12 100 M-7 130 L7 130" stroke="#f7dfa6" stroke-width="3" opacity=".7"/>
+    </g>
+    <text y="172" text-anchor="middle" font-family="Georgia, serif" font-size="15" letter-spacing="5" fill="#e9c98a">XVIII</text>
+  </g>
+</g>
+
+<!-- ===== 右：星星牌（大星＋流水） ===== -->
+<g transform="translate(795 495) scale(1.12)">
+  <g class="swayR">
+    <g filter="url(#shadow)">
+      <rect x="-118" y="-196" width="236" height="392" rx="20" fill="url(#night2)"/>
+      <rect x="-118" y="-196" width="236" height="392" rx="20" fill="none" stroke="#d6ad66" stroke-width="3"/>
+      <rect x="-104" y="-182" width="208" height="364" rx="13" fill="none" stroke="#d6ad66" stroke-width="1" opacity=".55"/>
+    </g>
+    <circle cx="0" cy="-92" r="64" fill="#f7dfa6" opacity=".22" filter="url(#blur)" class="glow"/>
+    <g transform="translate(0 -92) scale(3.2)"><use href="#star4" fill="#f9e2ad" filter="url(#soft)"/></g>
+    <g fill="#f9e2ad">
+      <g transform="translate(-62 -150)"><use href="#star4" class="sp" transform="scale(.5)"/></g>
+      <g transform="translate(64 -40)"><use href="#star4" class="sp b" transform="scale(.45)"/></g>
+      <g transform="translate(-70 -30)"><use href="#star4" class="sp c" transform="scale(.4)"/></g>
+      <circle cx="58" cy="-156" r="2.2" class="tw"/><circle cx="-30" cy="-10" r="1.8" class="tw b"/><circle cx="30" cy="-16" r="1.8" class="tw c"/>
+    </g>
+    <!-- 兩道流水匯成水池，水面有漣漪 -->
+    <g fill="none" stroke="#e9c98a" stroke-linecap="round">
+      <path d="M-34 0 C-44 50 -80 70 -84 120" stroke-width="2"/>
+      <path d="M34 0 C44 50 80 70 84 120" stroke-width="2"/>
+      <path d="M-24 4 C-30 40 -50 60 -54 112" stroke-width="1" opacity=".6"/>
+      <path d="M24 4 C30 40 50 60 54 112" stroke-width="1" opacity=".6"/>
+    </g>
+    <g transform="translate(0 132)" fill="none" stroke="#f7dfa6" stroke-width="1.4">
+      <ellipse rx="40" ry="8" class="ripple"/><ellipse rx="40" ry="8" class="ripple b"/>
+      <ellipse rx="70" ry="12" opacity=".5"/>
+    </g>
+    <text y="172" text-anchor="middle" font-family="Georgia, serif" font-size="15" letter-spacing="5" fill="#e9c98a">XVII</text>
+  </g>
+</g>
+
+<!-- ===== 中：太陽牌（最前面；光芒慢慢轉、晨光山丘、向日葵） ===== -->
+<g transform="translate(600 435) scale(1.14)">
+  <g class="swayC">
+    <g filter="url(#shadow)">
+      <rect x="-128" y="-208" width="256" height="416" rx="22" fill="url(#dawn)"/>
+      <rect x="-128" y="-208" width="256" height="416" rx="22" fill="none" stroke="#c99a4e" stroke-width="3.2"/>
+      <rect x="-113" y="-193" width="226" height="386" rx="14" fill="none" stroke="#c99a4e" stroke-width="1.1" opacity=".6"/>
+    </g>
+    <g transform="translate(0 -60)">
+      <circle r="120" fill="url(#halo)" class="glow"/>
+      <!-- 波浪狀的光芒（長短交錯、慢慢旋轉） -->
+      <g class="sunrays" fill="#efc372" opacity=".9">
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(30)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(60)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(90)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(120)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(150)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(180)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(210)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(240)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(270)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(300)"/>
+        <path d="M-6 -56 C-10 -74 -2 -84 0 -98 C2 -84 10 -74 6 -56Z" transform="rotate(330)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(15)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(45)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(75)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(105)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(135)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(165)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(195)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(225)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(255)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(285)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(315)"/>
+        <path d="M-3 -56 C-4 -64 -1 -70 0 -76 C1 -70 4 -64 3 -56Z" transform="rotate(345)"/>
+      </g>
+      <circle r="48" fill="url(#sunCore)" filter="url(#soft)"/>
+      <circle r="34" fill="none" stroke="#fff6dc" stroke-width="1.4" opacity=".7"/>
+    </g>
+    <!-- 晨光山丘與向日葵 -->
+    <path d="M-113 120 C-60 82 -20 96 10 108 C50 84 90 88 113 104 L113 193 L-113 193Z" fill="#e8cfa4" opacity=".55"/>
+    <path d="M-113 146 C-50 118 30 140 113 124 L113 193 L-113 193Z" fill="#d9b884" opacity=".5"/>
+    <g>
+      <g transform="translate(-52 102)">
+        <path d="M0 0 C-2 18 2 30 0 46" fill="none" stroke="#9fb08a" stroke-width="2.2"/>
+        <use href="#leaf" fill="#9fb08a" transform="translate(0 26) rotate(-30) scale(.6)"/>
+        <g fill="#e9b75a"><use href="#petal" transform="translate(0 -9)"/><use href="#petal" transform="rotate(60) translate(0 -9)"/><use href="#petal" transform="rotate(120) translate(0 -9)"/><use href="#petal" transform="rotate(180) translate(0 -9)"/><use href="#petal" transform="rotate(240) translate(0 -9)"/><use href="#petal" transform="rotate(300) translate(0 -9)"/></g>
+        <circle r="5" fill="#8a6230"/>
+      </g>
+      <g transform="translate(8 90) scale(1.2)">
+        <path d="M0 0 C2 20 -2 34 0 52" fill="none" stroke="#9fb08a" stroke-width="2"/>
+        <use href="#leaf" fill="#9fb08a" transform="translate(0 28) rotate(-150) scale(.55)"/>
+        <g fill="#efc062"><use href="#petal" transform="translate(0 -9)"/><use href="#petal" transform="rotate(60) translate(0 -9)"/><use href="#petal" transform="rotate(120) translate(0 -9)"/><use href="#petal" transform="rotate(180) translate(0 -9)"/><use href="#petal" transform="rotate(240) translate(0 -9)"/><use href="#petal" transform="rotate(300) translate(0 -9)"/></g>
+        <circle r="5" fill="#8a6230"/>
+      </g>
+      <g transform="translate(60 106) scale(.85)">
+        <path d="M0 0 C-2 16 2 28 0 44" fill="none" stroke="#9fb08a" stroke-width="2.2"/>
+        <g fill="#e9b75a"><use href="#petal" transform="translate(0 -9)"/><use href="#petal" transform="rotate(60) translate(0 -9)"/><use href="#petal" transform="rotate(120) translate(0 -9)"/><use href="#petal" transform="rotate(180) translate(0 -9)"/><use href="#petal" transform="rotate(240) translate(0 -9)"/><use href="#petal" transform="rotate(300) translate(0 -9)"/></g>
+        <circle r="5" fill="#8a6230"/>
+      </g>
+    </g>
+    <text y="182" text-anchor="middle" font-family="Georgia, serif" font-size="16" letter-spacing="6" fill="#8a6230">XIX</text>
+  </g>
+</g>
+
+<!-- 閃爍的星芒 -->
+<g fill="#e2b45f">
+  <g transform="translate(230 330)"><use href="#star4" class="sp"/></g>
+  <g transform="translate(1000 250) scale(1.2)"><use href="#star4" class="sp b"/></g>
+  <g transform="translate(985 640) scale(.8)"><use href="#star4" class="sp c"/></g>
+  <g transform="translate(200 640) scale(.9)"><use href="#star4" class="sp d"/></g>
+  <g transform="translate(620 70) scale(.7)"><use href="#star4" class="sp b"/></g>
+</g>
+
+<!-- 飄落的花瓣 -->
+<g fill="#eab9a6" opacity=".85">
+  <g transform="translate(260 0)"><use href="#petal" class="petal"/></g>
+  <g transform="translate(700 0) scale(1.2)"><use href="#petal" class="petal b" fill="#f0cfa0"/></g>
+  <g transform="translate(1000 0)"><use href="#petal" class="petal c"/></g>
+  <g transform="translate(480 0) scale(.9)"><use href="#petal" class="petal d" fill="#d9c6ea"/></g>
+</g>
+</svg>
