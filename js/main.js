@@ -20,6 +20,30 @@
     return isNaN(t) ? esc(d) : `${t.getFullYear()}.${String(t.getMonth() + 1).padStart(2, '0')}.${String(t.getDate()).padStart(2, '0')}`;
   };
 
+  /* ---------- 說明小卡片（頌缽、大地靈氣、塔羅共用）：立體卡＋發亮的金色圓珠＋跟著滑鼠的光澤 ---------- */
+  const benefitCard = (b) => `<div class="benefit reveal"><span class="benefit-shine" aria-hidden="true"></span>`
+    + `<h3><span class="orb" aria-hidden="true"></span>${esc(b.title)}</h3><p>${esc(b.text)}</p></div>`;
+  // 電腦用滑鼠移動時，卡片跟著微微傾斜（像拿在手上轉動）；手機觸控不傾斜
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const card = e.target.closest && e.target.closest('.benefit');
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      card.style.transition = 'transform .12s ease-out, box-shadow .45s';
+      card.style.transform = `translateY(-5px) rotateX(${((0.5 - y) * 10).toFixed(2)}deg) rotateY(${((x - 0.5) * 12).toFixed(2)}deg)`;
+      card.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`);
+      card.style.setProperty('--my', `${(y * 100).toFixed(1)}%`);
+      card.style.boxShadow = `inset 0 1px 0 rgba(255,255,255,.95), ${((0.5 - x) * 14).toFixed(1)}px ${(14 + (0.5 - y) * 6).toFixed(1)}px 30px -14px rgba(90,65,38,.38)`;
+    });
+    document.addEventListener('pointerout', (e) => {
+      const card = e.target.closest && e.target.closest('.benefit');
+      if (!card || card.contains(e.relatedTarget)) return;
+      card.style.transition = ''; card.style.transform = ''; card.style.boxShadow = '';
+    });
+  }
+
   /* ---------- 網站基本資料 ---------- */
   function renderSite(site) {
     $$('[data-site]').forEach((el) => {
@@ -35,8 +59,7 @@
       el.innerHTML = (site[el.dataset.siteList] || []).map((t) => `<li>${esc(t)}</li>`).join('');
     });
     $$('[data-site-benefits]').forEach((el) => {
-      el.innerHTML = (site[el.dataset.siteBenefits] || [])
-        .map((b) => `<div class="benefit reveal"><h3>${esc(b.title)}</h3><p>${esc(b.text)}</p></div>`).join('');
+      el.innerHTML = (site[el.dataset.siteBenefits] || []).map(benefitCard).join('');
     });
     if (site.heroImage) {
       const hero = $('.hero');
@@ -140,8 +163,7 @@
     pic.closest('figure').hidden = !d.image;
     if (d.image) pic.src = img(d.image);
     $('#tarot-intro').innerHTML = md(d.intro);
-    $('#tarot-benefits').innerHTML = (d.benefits || [])
-      .map((b) => `<div class="benefit reveal"><h3>${esc(b.title)}</h3><p>${esc(b.text)}</p></div>`).join('');
+    $('#tarot-benefits').innerHTML = (d.benefits || []).map(benefitCard).join('');
     renderOfferCards($('#tarot-offers'), d.offers);
   }
 
