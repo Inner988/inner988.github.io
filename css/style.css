@@ -309,7 +309,9 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .intro-tarot .benefit h3 { color: var(--tarot); }
 .intro-tarot .slider-head .eyebrow { color: var(--tarot); }
 .intro-tarot .slider-links .more-link { --tone: var(--tarot); }
-.tarot-art { margin: 0 0 32px; }
+/* 塔羅插畫：縮小一點、置中，不要佔滿整欄 */
+.tarot-art { margin: 0 auto 32px; width: 82%; max-width: 560px; }
+@media (max-width: 860px) { .tarot-art { width: 92%; } }
 .tarot-art[hidden] { display: none; }
 .tarot-art img {
   display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 22px;
