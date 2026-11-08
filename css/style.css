@@ -435,6 +435,29 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .course-fee h3 { font-size: .95rem; color: var(--bronze-deep); margin-bottom: 6px; }
 .course-fee p { margin: 0; color: var(--muted); }
 .course-closed { color: var(--muted); }
+/* 上課場次：同一課程的不同日期／時間／地點，一行一場 */
+.sessions-label { margin: -6px 0 6px; font-size: .8rem; letter-spacing: .08em; color: var(--bronze); }
+.course-sessions { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 6px; }
+.session {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 0;
+  padding: 6px 12px; border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0;
+  background: var(--cream); font-size: .9rem; line-height: 1.6;
+}
+.s-date { font-weight: 600; color: var(--bronze-deep); }
+.s-time, .s-loc { color: var(--muted); }
+.session span + span::before { content: "・"; margin: 0 6px; color: var(--gold); }
+.s-tag { margin-left: 10px; font-style: normal; font-size: .75rem; padding: 1px 9px; border-radius: 99px; background: #e9e1d4; color: var(--muted); }
+.session.is-full .s-tag { background: #f1dcd2; color: #9a5a40; }
+.session.is-ended { opacity: .55; }
+.session.is-ended .s-date { text-decoration: line-through; }
+.session-more { font-size: .82rem; color: var(--bronze); padding-left: 15px; }
+.course-when { margin: 4px 0 18px; }
+.course-when h3, .course-note h3 { font-size: .95rem; color: var(--bronze-deep); margin: 0 0 8px; }
+.modal-body .session { font-size: .95rem; padding: 8px 14px; }
+/* 備註 */
+.course-note { margin: -6px 0 20px; padding: 14px 20px; border-radius: 12px; background: #fbf6ec; border: 1px dashed var(--gold); }
+.course-note .prose { font-size: .92rem; color: #4a433b; }
+.course-note .prose p:last-child, .course-note .prose ul:last-child { margin-bottom: 0; }
 /* 報名按鈕：LINE 綠、Messenger 藍，學員一眼就認得 */
 .signup-btns { display: flex; flex-wrap: wrap; gap: 8px; }
 .btn-line, .btn-messenger { color: #fff; }
