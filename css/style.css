@@ -194,14 +194,22 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .prose ul { margin: 0 0 1.1em; padding-left: 1.3em; }
 /* 內文裡用「粗體」標出的重點字：赭紅色＋粗體，捲到畫面上時金色螢光筆由左往右畫過去 */
 .prose strong {
+  --hl: rgba(240, 190, 90, .6);
   color: #a4462a; font-weight: 700; padding: 0 3px; border-radius: 3px;
-  background-image: linear-gradient(transparent 45%, rgba(240, 190, 90, .6) 45%, rgba(240, 190, 90, .6) 95%, transparent 95%);
-  background-repeat: no-repeat; background-size: 0% 100%;
+  /* 兩層：上層是一道會滑過去的亮光，下層是金色螢光筆 */
+  background-image:
+    linear-gradient(100deg, transparent 42%, rgba(255, 251, 236, .9) 50%, transparent 58%),
+    linear-gradient(transparent 45%, var(--hl) 45%, var(--hl) 95%, transparent 95%);
+  background-repeat: no-repeat; background-size: 0% 100%, 0% 100%; background-position: 0 0, 0 0;
   transition: background-size 1s cubic-bezier(.6, .1, .2, 1);
   box-decoration-break: clone; -webkit-box-decoration-break: clone;
 }
-.prose strong.is-lit { background-size: 100% 100%; }
-@media (prefers-reduced-motion: reduce) { .prose strong { background-size: 100% 100%; transition: none; } }
+/* 畫好螢光筆之後，每隔幾秒有一道柔光從左滑到右，重點字會一直「亮亮的」 */
+.prose strong.is-lit { background-size: 300% 100%, 100% 100%; animation: hlShine 5.5s ease-in-out 2.4s infinite; }
+@keyframes hlShine { 0% { background-position: 100% 0, 0 0; } 40%, 100% { background-position: 0% 0, 0 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .prose strong, .prose strong.is-lit { background-size: 0% 100%, 100% 100%; transition: none; animation: none; }
+}
 .prose img { border-radius: 12px; margin: 1.2em 0; }
 .prose h2, .prose h3 { margin: 1.6em 0 .6em; font-size: 1.25rem; }
 .prose blockquote { margin: 1.4em 0; padding: 4px 0 4px 20px; border-left: 2px solid var(--gold); color: var(--muted); font-family: var(--serif); }
@@ -309,9 +317,10 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .intro-tarot .benefit h3 { color: var(--tarot); }
 .intro-tarot .slider-head .eyebrow { color: var(--tarot); }
 .intro-tarot .slider-links .more-link { --tone: var(--tarot); }
-/* 塔羅插畫：縮小一點、置中，不要佔滿整欄 */
-.tarot-art { margin: 0 auto 32px; width: 82%; max-width: 560px; }
-@media (max-width: 860px) { .tarot-art { width: 92%; } }
+/* 塔羅插畫：放在左欄標題下方，寬度跟著左欄（和其他介紹的左欄內容一樣寬） */
+.tarot-art { margin: 28px 0 0; width: 100%; }
+.intro-tarot .intro-head .story-slider { margin-top: 28px; }
+@media (max-width: 860px) { .tarot-art { max-width: 520px; } }
 .tarot-art[hidden] { display: none; }
 .tarot-art img {
   display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 22px;
@@ -715,7 +724,7 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 .soul .lead { margin: 12px 0 18px; color: var(--soul-muted); }
 .soul .prose { color: var(--soul-text); }
 .soul .prose p:last-child { margin-bottom: 0; }
-.soul .prose strong { color: var(--soul-strong); background-image: linear-gradient(transparent 45%, var(--soul-hl) 45%, var(--soul-hl) 95%, transparent 95%); }
+.soul .prose strong { color: var(--soul-strong); --hl: var(--soul-hl); }
 
 /* 統一風格（預設）：和頌缽、大地靈氣同一套顏色——米白底、古銅金點綴、大地綠輔色 */
 .soul.theme-site {
