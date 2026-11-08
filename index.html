@@ -187,7 +187,11 @@
   <section id="soul" class="section soul" hidden>
     <div class="container">
       <div class="soul-top">
-        <figure class="soul-art reveal"><img id="soul-img" alt="靈魂藍圖示意圖" loading="lazy"></figure>
+        <div class="soul-side">
+          <figure class="soul-art reveal"><img id="soul-img" alt="靈魂藍圖示意圖" loading="lazy"></figure>
+          <!-- 學員分享：和頌缽、大地靈氣一樣，放在側欄的小卡輪播 -->
+          <div class="story-slider soul-stories" id="soul-stories" data-story-slider="靈魂藍圖" hidden></div>
+        </div>
         <div class="soul-text reveal">
           <p class="eyebrow">Soul Blueprint</p>
           <h2 class="section-title" id="soul-title"></h2>
@@ -195,10 +199,6 @@
           <div class="prose" id="soul-intro"></div>
           <h3 class="soul-h">你可以從解讀中了解</h3>
           <ul class="soul-aspects" id="soul-aspects"></ul>
-          <div class="soul-cta">
-            <a class="btn btn-primary" id="soul-btn" target="_blank" rel="noopener"></a>
-            <div class="soul-combo" id="soul-combo"></div>
-          </div>
         </div>
       </div>
       <div class="soul-band reveal">
@@ -210,8 +210,9 @@
           <h3 class="soul-h">解讀方式</h3>
           <ol class="soul-steps" id="soul-steps"></ol>
         </div>
+        <!-- 可一起預約的其他解讀（後台「搭配說明」）；預約請用網站的預約聯絡按鈕 -->
+        <div class="soul-combo" id="soul-combo" hidden></div>
       </div>
-      <div class="story-slider soul-stories" id="soul-stories" data-story-slider="靈魂藍圖" hidden></div>
       <p class="soul-note" id="soul-note"></p>
     </div>
   </section>
