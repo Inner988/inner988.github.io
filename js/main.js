@@ -127,6 +127,37 @@
     $('#soul-note').textContent = d.note || '';
   }
 
+  /* ---------- 塔羅 ---------- */
+  // 後台「塔羅」：關閉或沒有標題時整個區塊和選單項目一起隱藏
+  function renderTarot(d = {}) {
+    const on = d.show !== false && !!d.title;
+    $('#tarot').hidden = !on;
+    $('#nav-tarot').hidden = !on;
+    if (!on) return;
+    $('#tarot-title').textContent = d.title;
+    $('#tarot-lead').textContent = d.lead || '';
+    const pic = $('#tarot-img');
+    pic.closest('figure').hidden = !d.image;
+    if (d.image) pic.src = img(d.image);
+    $('#tarot-intro').innerHTML = md(d.intro);
+    $('#tarot-benefits').innerHTML = (d.benefits || [])
+      .map((b) => `<div class="benefit reveal"><h3>${esc(b.title)}</h3><p>${esc(b.text)}</p></div>`).join('');
+    // 兩張服務小卡：按鈕直接跳到課程區，並套用對應的分類（例如「塔羅」）
+    $('#tarot-offers').innerHTML = (d.offers || []).map((o) => `
+      <div class="tarot-offer reveal">
+        <h3>${esc(o.title)}</h3>
+        <div class="tarot-offer-text">${md(o.text)}</div>
+        ${o.button ? `<a class="more-link" href="#courses" data-course-cat="${esc(o.category || 'all')}">${esc(o.button)} →</a>` : ''}
+      </div>`).join('');
+    $('#tarot-offers').addEventListener('click', (e) => {
+      const a = e.target.closest('[data-course-cat]');
+      if (!a) return;
+      const chip = $(`[data-filter-group="courses"] [data-filter="${a.dataset.courseCat}"]`)
+        || $('[data-filter-group="courses"] [data-filter="all"]');
+      if (chip) chip.click();
+    });
+  }
+
   /* ---------- 最新活動 ---------- */
   // 沒有活動（或全部設為不顯示）時，整個區塊和導覽列連結一起隱藏，不留空白
   function renderEvents(data, site = {}) {
@@ -451,6 +482,10 @@
         </div>
         ${canSignup ? signupButtons(c, site) : `<p class="course-closed">${esc(c.status)}</p>`}`);
     });
+    // 有塔羅課程時，才顯示「塔羅」篩選按鈕和選單項目
+    const hasTarot = items.some((c) => c.category === '塔羅');
+    $('#chip-course-tarot').hidden = !hasTarot;
+    $('#nav-course-tarot').hidden = !hasTarot;
     setupFilter('[data-filter-group="courses"]', $$('.course', list), (el) => el.dataset.cat, $('#course-empty'));
   }
 
@@ -493,6 +528,11 @@
     archiveResults();
   };
   const openArchive = (cfg) => { archive = { q: '', cat: 'all', ...cfg }; showArchive(); };
+  // 關掉文章視窗時，裡面的影片一起停掉（不然會在背景繼續播放聲音）
+  $('#post-modal').addEventListener('close', (e) => {
+    if (e.currentTarget.open) return; // 已經又打開別篇了，不要清掉新的影片
+    $$('#post-modal-body iframe, #post-modal-body video').forEach((v) => v.remove());
+  });
   $('#post-modal-body').addEventListener('input', (e) => {
     if (!e.target.classList.contains('archive-search')) return;
     archive.q = e.target.value;
@@ -523,11 +563,20 @@
     頌缽: '/images/uploads/bowl-candle.jpg',
     大地靈氣: '/images/uploads/reiki-art.jpg',
     靈魂藍圖: '/images/uploads/soul-blueprint.svg',
+    塔羅: '/images/uploads/tarot-cards.svg',
     個案: '/images/uploads/bowl-plants.jpg',
+  };
+  // 分享可以附影片（YouTube／臉書網址，或直接上傳的短片）
+  const storyHasVideo = (s) => !!(s.video || s.videoFile);
+  const storyPhoto = (s) => {
+    if (s.photo) return `<img src="${esc(img(s.photo))}" alt="" loading="lazy" onerror="this.parentElement.remove()">`;
+    if (youtubeId(s.video)) return `<img src="https://img.youtube.com/vi/${youtubeId(s.video)}/hqdefault.jpg" alt="" loading="lazy">`;
+    if (s.videoFile && !s.video) return `<video src="${esc(img(s.videoFile))}#t=0.5" muted playsinline preload="metadata"></video>`;
+    return `<img src="${esc(img(STORY_DEFAULT_PHOTO[s.category] || STORY_DEFAULT_PHOTO['個案']))}" alt="" loading="lazy" onerror="this.parentElement.remove()">`;
   };
   const storyCard = (s, i, extra = '') => `
     <button class="story-card ${extra}" data-i="${i}">
-      <div class="story-photo"><img src="${esc(img(s.photo || STORY_DEFAULT_PHOTO[s.category] || STORY_DEFAULT_PHOTO['個案']))}" alt="" loading="lazy" onerror="this.parentElement.remove()"></div>
+      <div class="story-photo">${storyPhoto(s)}${storyHasVideo(s) ? '<span class="play-badge" aria-hidden="true"></span><span class="story-video-tag">影片</span>' : ''}</div>
       <span class="story-course">${esc(s.course)}</span>
       <blockquote>${esc(s.quote || s.title)}</blockquote>
       <p>${esc(s.summary)}</p>
@@ -535,7 +584,9 @@
     </button>`;
 
   const storyDetail = (s, back = '') => `
-    ${s.photo ? `<img class="post-hero" src="${esc(img(s.photo))}" alt="">` : ''}
+    ${storyHasVideo(s)
+      ? `<div class="story-video lb-video${isVertical(s) ? ' is-vertical' : s.videoFile && !s.video ? ' is-file' : ''}">${videoPlayer({ ...s, image: s.photo })}</div>`
+      : s.photo ? `<img class="post-hero" src="${esc(img(s.photo))}" alt="">` : ''}
     ${back}
     <span class="post-date">${esc(s.course)}${s.date ? `　${formatDate(s.date)}` : ''}</span>
     <h2>${esc(s.title)}</h2>
@@ -546,8 +597,8 @@
   function renderStories(data) {
     // 靈魂藍圖區塊還沒開放時，它的分享也不列入
     const all = (data.items || []).slice().sort(byDateDesc)
-      .filter((s) => s.category !== '靈魂藍圖' || !$('#soul').hidden);
-    const CAT_LABELS = { 頌缽: '頌缽', 大地靈氣: '大地靈氣', 靈魂藍圖: '靈魂藍圖', 個案: '個案療癒' };
+      .filter((s) => (s.category !== '靈魂藍圖' || !$('#soul').hidden) && (s.category !== '塔羅' || !$('#tarot').hidden));
+    const CAT_LABELS = { 頌缽: '頌缽', 大地靈氣: '大地靈氣', 靈魂藍圖: '靈魂藍圖', 塔羅: '塔羅', 個案: '個案療癒', 寵物: '毛孩療癒' };
     const openStories = (cat) => openArchive({
       title: '學員分享', items: all, cat, detail: storyDetail,
       cats: Object.entries(CAT_LABELS).filter(([k]) => all.some((s) => s.category === k)),
@@ -582,14 +633,50 @@
       if (items.length > 1) startSlider(box, items.length);
     });
 
-    const cases = all.filter((s) => s.category === '個案').slice(0, 5);
-    $('#stories').hidden = cases.length === 0;
+    // 療癒分享區塊：個案療癒＋毛孩療癒（寵物）；有毛孩分享時才出現分類標籤
+    const people = all.filter((s) => s.category === '個案');
+    const pets = all.filter((s) => s.category === '寵物');
+    const hasAny = people.length + pets.length > 0;
+    $('#stories').hidden = !hasAny;
     const caseLink = $('.nav-links a[href="#stories"]');
-    if (caseLink) caseLink.hidden = cases.length === 0;
+    if (caseLink) caseLink.hidden = !hasAny;
+    if (!hasAny) return;
     const grid = $('#story-grid');
-    grid.innerHTML = cases.map((s, i) => storyCard(s, i, 'reveal')).join('');
-    bindStoryModal(grid, cases);
-    $('#story-all').innerHTML = allButton('個案', cases.length);
+    let shown = [];
+    let firstPaint = true;
+    const healing = all.filter((s) => s.category === '個案' || s.category === '寵物');
+    const showTab = (cat) => {
+      const list = cat === '寵物' ? pets : cat === '個案' ? people : healing;
+      shown = list.slice(0, 6);
+      // 第一次跟著捲動淡入；之後切換標籤直接顯示
+      grid.innerHTML = shown.map((s, i) => storyCard(s, i, firstPaint ? 'reveal' : 'reveal is-visible')).join('');
+      firstPaint = false;
+      // 「看全部」：打開可搜尋的列表，只列個案＋毛孩的分享，也能再切換分類
+      $('#story-all').innerHTML = list.length > shown.length
+        ? `<button type="button" class="more-link" data-all-healing="${esc(cat)}">看全部 ${list.length} 篇分享 →</button>` : '';
+      $$('#story-tabs [data-story-tab]').forEach((b) => b.classList.toggle('is-active', b.dataset.storyTab === cat));
+    };
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.story-card');
+      if (card) openModal(storyDetail(shown[+card.dataset.i]));
+    });
+    const tabs = $('#story-tabs');
+    tabs.hidden = !(pets.length && people.length);
+    $('#stories-sub').textContent = pets.length ? (people.length ? '個案療癒與毛孩療癒的真實體驗' : '毛孩療癒的真實體驗') : '個案療癒的真實體驗';
+    if (!tabs.hidden) {
+      tabs.innerHTML = [['all', '全部'], ['個案', '個案療癒'], ['寵物', '🐾 毛孩療癒']]
+        .map(([v, label]) => `<button type="button" class="chip" data-story-tab="${v}">${label}</button>`).join('');
+      tabs.addEventListener('click', (e) => { const b = e.target.closest('[data-story-tab]'); if (b) showTab(b.dataset.storyTab); });
+    }
+    showTab(tabs.hidden ? (pets.length ? '寵物' : '個案') : 'all');
+    $('#story-all').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-all-healing]');
+      if (!b) return;
+      openArchive({
+        title: '療癒分享', items: healing, cat: b.dataset.allHealing, detail: storyDetail,
+        cats: pets.length && people.length ? [['個案', '個案療癒'], ['寵物', '毛孩療癒']] : null,
+      });
+    });
   }
 
   // 自動輪播：6 秒換一篇；滑鼠移上去或手指按住時暫停；手機可左右滑動
@@ -872,11 +959,12 @@
   }
 
   setupUI();
-  Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery', 'soul'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery, soul]) => {
+  Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery', 'soul', 'tarot'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery, soul, tarot]) => {
     // 每個區塊各自執行：某一區出錯（例如檔案只更新了一半）時，其他區塊照常顯示，不會整頁空白
     const safe = (name, fn) => { try { fn(); } catch (err) { console.error(`[${name}] 顯示失敗：`, err); } };
     safe('site', () => renderSite(site));
     safe('soul', () => renderSoul(soul));
+    safe('tarot', () => renderTarot(tarot));
     safe('motion', () => setupMotion()); // 放在靈魂藍圖顯示之後，才知道要不要在那個區塊加光點
     safe('events', () => renderEvents(events, site));
     safe('shop', () => renderShop(shop, shopSettings, site));
