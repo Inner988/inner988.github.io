@@ -36,20 +36,22 @@
   }
 </style>
 <defs>
+  <!-- 底色＝淺咖啡（奶茶色），和網站的米色、古銅金同一個色系；四角帶一點更深的咖啡與奶油色暈染 -->
+  <!-- 底色＝頌缽服務小卡的古銅棕（#8a6a45 → #5a4126，左上亮、右下深） -->
   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#fbf5ec"/><stop offset=".5" stop-color="#f6ede4"/><stop offset="1" stop-color="#eee6f0"/>
+    <stop offset="0" stop-color="#8a6a45"/><stop offset=".55" stop-color="#735535"/><stop offset="1" stop-color="#5a4126"/>
   </linearGradient>
   <radialGradient id="lav" cx="50%" cy="50%" r="50%">
-    <stop offset="0" stop-color="#c9bde6" stop-opacity=".6"/><stop offset="1" stop-color="#c9bde6" stop-opacity="0"/>
+    <stop offset="0" stop-color="#4a331d" stop-opacity=".45"/><stop offset="1" stop-color="#4a331d" stop-opacity="0"/>
   </radialGradient>
   <radialGradient id="peach" cx="50%" cy="50%" r="50%">
-    <stop offset="0" stop-color="#f6cf9f" stop-opacity=".6"/><stop offset="1" stop-color="#f6cf9f" stop-opacity="0"/>
+    <stop offset="0" stop-color="#c79a60" stop-opacity=".35"/><stop offset="1" stop-color="#c79a60" stop-opacity="0"/>
   </radialGradient>
   <radialGradient id="sage" cx="50%" cy="50%" r="50%">
-    <stop offset="0" stop-color="#c5d2b0" stop-opacity=".5"/><stop offset="1" stop-color="#c5d2b0" stop-opacity="0"/>
+    <stop offset="0" stop-color="#a88457" stop-opacity=".3"/><stop offset="1" stop-color="#a88457" stop-opacity="0"/>
   </radialGradient>
   <radialGradient id="halo" cx="50%" cy="50%" r="50%">
-    <stop offset="0" stop-color="#fff4d6" stop-opacity="1"/><stop offset=".45" stop-color="#f7d99c" stop-opacity=".45"/><stop offset="1" stop-color="#f7d99c" stop-opacity="0"/>
+    <stop offset="0" stop-color="#f3d9a0" stop-opacity=".6"/><stop offset=".45" stop-color="#d9a95e" stop-opacity=".25"/><stop offset="1" stop-color="#d9a95e" stop-opacity="0"/>
   </radialGradient>
   <radialGradient id="sunCore" cx="40%" cy="38%" r="65%">
     <stop offset="0" stop-color="#fff6dc"/><stop offset=".55" stop-color="#f6cf7e"/><stop offset="1" stop-color="#e2a94f"/>
@@ -92,16 +94,16 @@
   <path d="M-20 240 C160 300 260 140 420 190" stroke="url(#ribbon)" stroke-width="1.2" opacity=".55"/>
 </g>
 
-<!-- 左上、右下的枝葉（輕輕搖動） -->
-<g fill="#9fb08a" opacity=".75">
+<!-- 左上、右下的枝葉（輕輕搖動）：深棕底上改用淺金色，才看得清楚 -->
+<g fill="#e8c98e" opacity=".7">
   <g transform="translate(40 120)"><g class="leafsway">
-    <path d="M0 0 C60 20 120 60 170 120" fill="none" stroke="#8f9f7a" stroke-width="2"/>
+    <path d="M0 0 C60 20 120 60 170 120" fill="none" stroke="#d9b77a" stroke-width="2"/>
     <use href="#leaf" transform="translate(40 12) rotate(-20)"/><use href="#leaf" transform="translate(42 16) rotate(60) scale(.9)"/>
     <use href="#leaf" transform="translate(90 40) rotate(-10)"/><use href="#leaf" transform="translate(92 46) rotate(70) scale(.9)"/>
     <use href="#leaf" transform="translate(135 82) rotate(0) scale(.9)"/><use href="#leaf" transform="translate(136 88) rotate(80) scale(.8)"/>
   </g></g>
   <g transform="translate(1170 830) rotate(180)"><g class="leafsway r">
-    <path d="M0 0 C60 20 120 60 170 120" fill="none" stroke="#8f9f7a" stroke-width="2"/>
+    <path d="M0 0 C60 20 120 60 170 120" fill="none" stroke="#d9b77a" stroke-width="2"/>
     <use href="#leaf" transform="translate(40 12) rotate(-20)"/><use href="#leaf" transform="translate(42 16) rotate(60) scale(.9)"/>
     <use href="#leaf" transform="translate(90 40) rotate(-10)"/><use href="#leaf" transform="translate(92 46) rotate(70) scale(.9)"/>
     <use href="#leaf" transform="translate(135 82) scale(.9)"/>
@@ -109,7 +111,7 @@
 </g>
 
 <!-- 小星點 -->
-<g fill="#c49a55">
+<g fill="#f3d9a0">
   <g class="tw"><circle cx="300" cy="90" r="2.4"/><circle cx="1090" cy="420" r="2.2"/><circle cx="120" cy="520" r="2"/></g>
   <g class="tw b"><circle cx="840" cy="70" r="2"/><circle cx="1120" cy="620" r="1.8"/><circle cx="380" cy="830" r="2"/></g>
   <g class="tw c"><circle cx="520" cy="60" r="1.6"/><circle cx="60" cy="380" r="1.8"/><circle cx="760" cy="850" r="1.8"/></g>
