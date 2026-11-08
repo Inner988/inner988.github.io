@@ -19,6 +19,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+/* 漂浮的光點、水波有時會超出畫面邊緣，裁掉以免整頁可以左右滑動（clip 不會影響固定標題） */
+html, body { overflow-x: clip; }
 body {
   margin: 0;
   background: var(--paper);
@@ -284,6 +286,45 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .benefit h3 { font-size: 1.05rem; margin-bottom: 6px; color: var(--bronze-deep); }
 .intro-reiki .benefit h3 { color: var(--earth); }
 .benefit p { margin: 0; font-size: .92rem; line-height: 1.8; opacity: .85; }
+
+/* ========== 塔羅：米白底配一點靛藍與金色，和前後區塊做出區隔 ========== */
+.intro-tarot {
+  --tarot: #4b4f7a; --tarot-deep: #33365a;
+  background:
+    radial-gradient(ellipse 60% 50% at 85% 10%, rgba(185, 179, 214, .28), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 90%, rgba(240, 214, 162, .3), transparent 70%),
+    var(--paper);
+}
+.intro-tarot .eyebrow { color: var(--tarot); }
+.intro-tarot .section-title { color: var(--tarot-deep); }
+.intro-tarot .prose strong { color: var(--tarot-deep); }
+.intro-tarot .benefit { background: rgba(255, 255, 255, .7); border-color: rgba(75, 79, 122, .16); }
+.intro-tarot .benefit h3 { color: var(--tarot); }
+.intro-tarot .slider-head .eyebrow { color: var(--tarot); }
+.intro-tarot .slider-links .more-link { --tone: var(--tarot); }
+.tarot-art { margin: 0 0 32px; }
+.tarot-art[hidden] { display: none; }
+.tarot-art img {
+  display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 22px;
+  box-shadow: 0 26px 60px -32px rgba(51, 54, 90, .55);
+}
+.tarot-offers { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 18px; }
+.tarot-offers:empty { display: none; }
+.tarot-offer {
+  display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 22px; border-radius: var(--radius);
+  background: linear-gradient(160deg, #3d4068, var(--tarot-deep)); color: rgba(255, 250, 240, .86);
+  box-shadow: 0 18px 40px -26px rgba(51, 54, 90, .7);
+}
+.tarot-offer h3 { margin: 0; font-size: 1.1rem; color: #f3d9a0; letter-spacing: .08em; }
+.tarot-offer h3::before { content: "✦"; margin-right: 8px; font-size: .85em; }
+.tarot-offer-text p { margin: 0; font-size: .92rem; line-height: 1.8; }
+.tarot-offer-text strong { color: #fff; font-weight: 600; }
+.tarot-offer .more-link {
+  align-self: flex-start; margin-top: auto; padding: 8px 18px; border-radius: 99px; font-size: .92rem; letter-spacing: .06em;
+  color: var(--tarot-deep); background: #f3d9a0; transition: transform .25s, background .25s;
+}
+.tarot-offer .more-link:hover { transform: translateY(-2px); background: #fff; }
+.chip[hidden] { display: none; }
 
 /* ========== 課程 ========== */
 .course-list { display: grid; gap: 22px; }
