@@ -120,11 +120,10 @@
     $('#soul-aspects').innerHTML = (d.aspects || []).map((a) => `<li class="reveal"><strong>${esc(a.title)}</strong><span>${esc(a.text)}</span></li>`).join('');
     $('#soul-suitable').innerHTML = (d.suitable || []).map((t) => `<li class="reveal">${esc(t)}</li>`).join('');
     $('#soul-steps').innerHTML = (d.steps || []).map((s) => `<li class="reveal"><strong>${esc(s.title)}</strong><span>${esc(s.text)}</span></li>`).join('');
-    $('#soul-combo').innerHTML = d.combo ? md(d.combo) : '';
-    const btn = $('#soul-btn');
-    btn.hidden = !d.ctaLink;
-    btn.href = d.ctaLink || '#';
-    btn.textContent = d.ctaText || '私訊預約';
+    // 不另放預約按鈕（網站已有預約聯絡）；只醒目提示可以一起預約哪些解讀
+    const combo = $('#soul-combo');
+    combo.hidden = !d.combo;
+    combo.innerHTML = d.combo ? `<span class="soul-combo-icon" aria-hidden="true">✦</span><div>${md(d.combo)}</div>` : '';
     $('#soul-note').textContent = d.note || '';
   }
 
@@ -874,15 +873,17 @@
 
   setupUI();
   Promise.all(['site', 'events', 'courses', 'shop', 'shop-settings', 'stories', 'posts', 'gallery', 'soul'].map(loadJSON)).then(([site, events, courses, shop, shopSettings, stories, posts, gallery, soul]) => {
-    renderSite(site);
-    renderSoul(soul);
-    setupMotion(); // 放在靈魂藍圖顯示之後，才知道要不要在那個區塊加光點
-    renderEvents(events, site);
-    renderShop(shop, shopSettings, site);
-    renderCourses(courses, site);
-    renderStories(stories);
-    renderPosts(posts);
-    renderGallery(gallery);
+    // 每個區塊各自執行：某一區出錯（例如檔案只更新了一半）時，其他區塊照常顯示，不會整頁空白
+    const safe = (name, fn) => { try { fn(); } catch (err) { console.error(`[${name}] 顯示失敗：`, err); } };
+    safe('site', () => renderSite(site));
+    safe('soul', () => renderSoul(soul));
+    safe('motion', () => setupMotion()); // 放在靈魂藍圖顯示之後，才知道要不要在那個區塊加光點
+    safe('events', () => renderEvents(events, site));
+    safe('shop', () => renderShop(shop, shopSettings, site));
+    safe('courses', () => renderCourses(courses, site));
+    safe('stories', () => renderStories(stories));
+    safe('posts', () => renderPosts(posts));
+    safe('gallery', () => renderGallery(gallery));
     observeReveal();
   });
 })();
