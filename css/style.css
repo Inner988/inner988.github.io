@@ -536,6 +536,23 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 /* 療癒分享的分類標籤（個案療癒／毛孩療癒） */
 .story-tabs { justify-content: center; margin: -8px 0 28px; }
 .story-tabs[hidden] { display: none; }
+/* 標籤放大一點點 */
+.story-tabs .chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 24px; font-size: 1rem; }
+/* 毛孩腳掌：比文字大、古銅色，每隔幾秒「啪、啪」輕拍兩下；滑過時左右搖一搖 */
+.paw { display: inline-block; width: 1.45em; height: 1.45em; line-height: 0; color: var(--bronze); transform-origin: 50% 85%;
+  animation: pawPat 3.6s ease-in-out infinite; }
+.paw svg { width: 100%; height: 100%; fill: currentColor; }
+.chip.is-active .paw { color: #fff; }
+.chip:hover .paw { animation: pawWiggle .7s ease-in-out infinite; }
+@keyframes pawPat {
+  0%, 62%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  68% { transform: translateY(-4px) rotate(-12deg) scale(1.08); }
+  74% { transform: translateY(0) rotate(0deg) scale(.94); }
+  80% { transform: translateY(-3px) rotate(10deg) scale(1.05); }
+  86% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+@keyframes pawWiggle { 0%, 100% { transform: rotate(-14deg); } 50% { transform: rotate(14deg); } }
+@media (prefers-reduced-motion: reduce) { .paw, .chip:hover .paw { animation: none; } }
 .intro-reiki .slides .story-card { background: rgba(255, 255, 255, .8); backdrop-filter: blur(6px); }
 .slider-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
 .slider-dots { display: flex; gap: 8px; }
