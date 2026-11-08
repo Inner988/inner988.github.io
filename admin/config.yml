@@ -64,15 +64,31 @@ collections:
                 options: [招生中, 即將開課, 已額滿, 已結束]
                 default: 招生中
               - { name: image, label: 課程照片, widget: image, required: false }
-              - { name: date, label: 日期, widget: string, required: false, hint: "例：2026/11/15（六）" }
-              - { name: time, label: 時間, widget: string, required: false, hint: "例：19:30 – 21:00" }
-              - { name: duration, label: 時長, widget: string, required: false }
-              - { name: location, label: 地點, widget: string, required: false }
+              # 同一個課程開在不同日期、時間、地點時，在這裡多加一個場次就好，不用另外新增課程
+              - name: sessions
+                label: 上課場次（同一課程不同日期／時間／地點，都加在這裡）
+                label_singular: 場次
+                widget: list
+                required: false
+                collapsed: true
+                summary: "{{fields.date}}｜{{fields.time}}｜{{fields.location}}"
+                fields:
+                  - { name: date, label: 日期, widget: string, required: false, hint: "例：2026/11/15（六）–16（日），或「預約制」「日期未定」" }
+                  - { name: time, label: 時間, widget: string, required: false, hint: "例：10:00 – 17:00" }
+                  - { name: location, label: 地點, widget: string, required: false, hint: "例：台北（實體）、線上" }
+                  - name: status
+                    label: 這個場次的狀態（可不填）
+                    widget: select
+                    required: false
+                    options: [已額滿, 已結束]
+                    hint: "只有這一場額滿或結束時才選；整個課程的狀態請用上面的「狀態」"
+              - { name: duration, label: 時長, widget: string, required: false, hint: "例：兩天、一天（7.5 小時）" }
               - { name: summary, label: 一句話簡介（顯示在課程卡片上，可不填）, widget: string, required: false }
               - { name: price, label: 原價（點開課程才看得到）, widget: string, required: false, hint: "例：NT$ 3,600" }
               - { name: earlyPrice, label: 早鳥價（沒有可不填）, widget: string, required: false, hint: "例：NT$ 3,200。有填時，網站會把原價加上刪除線" }
               - { name: earlyDeadline, label: 早鳥優惠截止日（可不填）, widget: string, required: false, hint: "例：11/1（六）" }
               - { name: description, label: 課程詳細介紹（點開課程才看得到）, widget: markdown, required: false }
+              - { name: note, label: 備註（可不填）, widget: markdown, required: false, hint: "顯示在課程視窗的費用下方。例：請自備頌缽、可分期、需先完成初階…" }
               - { name: link, label: 報名表單網址（可不填）, widget: string, required: false, hint: "沒填時顯示「LINE 報名」和「Messenger 報名」；填了 Google 表單等網址，就只顯示一顆「線上報名」" }
               - { name: show, label: 顯示在網站上, widget: boolean, default: true }
 
