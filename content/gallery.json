@@ -40,11 +40,8 @@
         "/images/uploads/676759_0.jpg",
         "/images/uploads/513659.jpg",
         "/images/uploads/513580_0.jpg",
-        "/images/uploads/513582_0.jpg",
-        "/images/uploads/513586_0.jpg",
         "/images/uploads/513587_0.jpg",
-        "/images/uploads/513589_0.jpg",
-        "/images/uploads/513591_0.jpg"
+        "/images/uploads/513590_0.jpg"
       ],
       "videos": []
     },
@@ -54,6 +51,17 @@
         "/images/uploads/f6a1a703-b26c-49bd-ac68-d3e28f5924a0.mp4",
         "/images/uploads/31798432-11c6-4724-8821-acb175d62d30.mp4",
         "/images/uploads/c9961780-8d06-4fcb-b811-fe7f070d03d9.mp4"
+      ],
+      "videos": []
+    },
+    {
+      "name": "塔羅課程",
+      "media": [
+        "/images/uploads/513580_0.jpg",
+        "/images/uploads/513582_0.jpg",
+        "/images/uploads/513586_0.jpg",
+        "/images/uploads/513589_0.jpg",
+        "/images/uploads/513592_0.jpg"
       ],
       "videos": []
     }
