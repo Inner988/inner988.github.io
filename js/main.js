@@ -665,12 +665,17 @@
     return m ? m[1] : '';
   };
   const isVideo = (g) => g.type === 'video' || !!(g.video || g.videoFile);
+  // 臉書 Reels、YouTube Shorts 是直式影片，要用直的播放框，否則會被裁切放大
+  const isVertical = (g) => /facebook\.com\/reel|instagram\.com\/reel|youtube\.com\/shorts/.test(g.video || '');
+  const videoSource = (g) => (/facebook\.com|fb\.watch/.test(g.video || '') ? '臉書影片' : youtubeId(g.video) ? 'YouTube' : '影片');
   const videoCover = (g) => (g.image ? img(g.image) : youtubeId(g.video) ? `https://img.youtube.com/vi/${youtubeId(g.video)}/hqdefault.jpg` : '');
   const videoPlayer = (g) => {
     const yt = youtubeId(g.video);
     if (yt) return `<iframe src="https://www.youtube-nocookie.com/embed/${yt}?autoplay=1&rel=0" title="${esc(g.caption || '影片')}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
     if (/facebook\.com|fb\.watch/.test(g.video || '')) {
-      return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(g.video)}&show_text=false&autoplay=true" title="${esc(g.caption || '影片')}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+      // 臉書的播放器需要明確的寬高，直式影片給 9:16、一般影片給 16:9
+      const [w, h] = isVertical(g) ? [360, 640] : [960, 540];
+      return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(g.video)}&show_text=false&autoplay=true&width=${w}&height=${h}" title="${esc(g.caption || '影片')}" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>`;
     }
     if (g.videoFile) return `<video src="${esc(img(g.videoFile))}" controls autoplay playsinline ${g.image ? `poster="${esc(img(g.image))}"` : ''}></video>`;
     if (g.video) return `<p class="lb-fallback"><a class="btn btn-primary" href="${esc(g.video)}" target="_blank" rel="noopener">開啟影片</a></p>`;
@@ -692,7 +697,7 @@
       return `<figure class="reveal${video ? ' is-video' : ''}" data-i="${i}" data-album="${esc(g.album || '')}">
         ${cover ? `<img src="${esc(cover)}" alt="${esc(g.caption)}" loading="lazy">`
           : g.videoFile ? `<video src="${esc(img(g.videoFile))}#t=0.5" muted playsinline preload="metadata"></video>`
-          : '<div class="video-blank"></div>'}
+          : `<div class="video-blank${isVertical(g) ? ' is-vertical' : ''}"><span>${videoSource(g)}</span></div>`}
         ${video ? '<span class="play-badge" aria-hidden="true"></span>' : ''}
         ${g.caption ? `<figcaption>${esc(g.caption)}</figcaption>` : ''}
       </figure>`;
@@ -714,7 +719,7 @@
       const g = items[visible[cur]];
       // 換下一張或關閉時，整個內容重建，正在播的影片就會停掉
       media.innerHTML = isVideo(g)
-        ? `<div class="lb-video">${videoPlayer(g)}</div>`
+        ? `<div class="lb-video${isVertical(g) ? ' is-vertical' : g.videoFile && !g.video ? ' is-file' : ''}">${videoPlayer(g)}</div>`
         : `<img src="${esc(img(g.image))}" alt="${esc(g.caption || '')}">`;
       $('#lb-cap').textContent = g.caption || '';
     };
