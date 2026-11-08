@@ -258,7 +258,11 @@ collections:
                 multiple: true
                 required: false
                 accept: "image/*,video/mp4,video/webm,.mp4,.webm,.mov"
-                hint: "影片檔建議 20MB 以內，比較長的影片請放 YouTube，貼在下面"
+                media_libraries:
+                  default:
+                    config:
+                      max_file_size: 52428800
+                hint: "可直接選電腦或手機裡的影片（mp4 最好）。每個檔案最大 50MB，超過會跳出提醒；太長的影片請放 YouTube，把網址貼在下面"
               - name: videos
                 label: YouTube／臉書影片連結（可不填）
                 widget: list
