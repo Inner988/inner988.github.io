@@ -1062,10 +1062,33 @@ dialog::backdrop { background: rgba(30, 24, 16, .7); backdrop-filter: blur(4px);
 }
 @media (prefers-reduced-motion: reduce) { .orb { animation: none; } .benefit, .benefit:hover { transform: none; } }
 
-/* 課程、活動、商品相片：滑過時慢慢放大 */
+/* 活動、商品相片：滑過時慢慢放大 */
 .course-media, .event-poster, .product-img { overflow: hidden; }
-.course-media img, .product-img img { transition: transform 1.2s ease; }
-.course:hover .course-media img, .product-card:hover .product-img img { transform: scale(1.06); }
+.product-img img { transition: transform 1.2s ease; }
+.product-card:hover .product-img img { transform: scale(1.06); }
+
+/* 課程相片（④ 組合）：鏡頭非常慢地推近、微微平移（每張方向和速度不同），
+   每隔幾秒有一道柔和的金光斜斜掃過（各張錯開）；老師上傳的任何相片都會自動套用 */
+.course-media { isolation: isolate; }
+.course-media img { animation: courseKb 22s ease-in-out infinite alternate; transform-origin: 50% 50%; }
+.course:nth-child(3n+2) .course-media img { animation-name: courseKb2; animation-duration: 26s; }
+.course:nth-child(3n) .course-media img { animation-name: courseKb3; animation-duration: 24s; }
+@keyframes courseKb  { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.12) translate(-2.5%, -1.5%); } }
+@keyframes courseKb2 { from { transform: scale(1.1) translate(2%, 1%); } to { transform: scale(1) translate(0, 0); } }
+@keyframes courseKb3 { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.12) translate(2%, -2%); } }
+.course-media::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 236, 190, .45) 48%, rgba(255, 250, 235, .6) 50%, rgba(255, 236, 190, .45) 52%, transparent 62%);
+  transform: translateX(-120%); animation: courseSheen 6.5s ease-in-out infinite;
+}
+.course:nth-child(3n+2) .course-media::after { animation-delay: 2.1s; }
+.course:nth-child(3n) .course-media::after { animation-delay: 4.2s; }
+@keyframes courseSheen { 0% { transform: translateX(-120%); } 35%, 100% { transform: translateX(120%); } }
+.course-media .badge { z-index: 2; }
+/* 已結束的課程保持靜止 */
+.course.is-ended .course-media img, .course.is-ended .course-media::after { animation: none; }
+.course.is-ended .course-media::after { display: none; }
+@media (prefers-reduced-motion: reduce) { .course-media img, .course-media::after { animation: none; } .course-media::after { display: none; } }
 .course { transition: transform .4s ease, box-shadow .4s ease; }
 .course:hover { transform: translateY(-3px); box-shadow: 0 24px 50px -26px rgba(60, 40, 15, .45); }
 
