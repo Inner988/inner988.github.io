@@ -662,7 +662,7 @@
     // 靈魂藍圖區塊還沒開放時，它的分享也不列入
     const all = (data.items || []).slice().sort(byDateDesc)
       .filter((s) => (s.category !== '靈魂藍圖' || !$('#soul').hidden) && (s.category !== '塔羅' || !$('#tarot').hidden));
-    const CAT_LABELS = { 頌缽: '頌缽', 大地靈氣: '大地靈氣', 靈魂藍圖: '靈魂藍圖', 塔羅: '塔羅', 個案: '個案療癒', 寵物: '毛孩療癒' };
+    const CAT_LABELS = { 頌缽: '頌缽', 大地靈氣: '大地靈氣', 靈魂藍圖: '靈魂藍圖', 塔羅: '塔羅', 個案: '一對一陪伴', 寵物: '毛孩陪伴' };
     // 「轉化故事」視窗：只顯示學員分享，可切換分類、搜尋；選單和「看全部 N 篇分享」都打開這個
     const openStories = (cat) => openArchive({
       title: '轉化故事', items: all, detail: storyDetail,
@@ -689,7 +689,7 @@
       if (navLink) navLink.hidden = items.length === 0 || box.closest('section').hidden;
       if (!items.length) return;
       box.innerHTML = `
-        <div class="slider-head"><span class="eyebrow">Student Stories</span><h3>學員分享</h3></div>
+        <div class="slider-head"><span class="eyebrow">Student Stories</span><h3>學員課後分享</h3></div>
         <div class="slides">${items.map((s, i) => storyCard(s, i, i === 0 ? 'is-active' : '')).join('')}</div>
         <div class="slider-foot">
           ${items.length > 1 ? `<div class="slider-dots">${items.map((_, i) => `<button class="${i === 0 ? 'is-active' : ''}" data-go="${i}" aria-label="第 ${i + 1} 篇"></button>`).join('')}</div>` : '<span></span>'}
@@ -732,11 +732,11 @@
     });
     const tabs = $('#story-tabs');
     tabs.hidden = !(pets.length && people.length);
-    $('#stories-sub').textContent = pets.length ? (people.length ? '個案療癒與毛孩療癒的真實體驗' : '毛孩療癒的真實體驗') : '個案療癒的真實體驗';
+    $('#stories-sub').textContent = pets.length ? (people.length ? '一對一陪伴與毛孩陪伴的真實體驗' : '毛孩陪伴的真實體驗') : '一對一陪伴的真實體驗';
     if (!tabs.hidden) {
       // 毛孩標籤用自己畫的腳掌圖示（比表情符號大、可以做動態）
       const paw = `<span class="paw" aria-hidden="true"><svg viewBox="0 0 32 32"><ellipse cx="16" cy="21.5" rx="7.2" ry="6.2"/><ellipse cx="7.2" cy="13.6" rx="3" ry="3.8" transform="rotate(-18 7.2 13.6)"/><ellipse cx="12.6" cy="8" rx="3" ry="4"/><ellipse cx="19.4" cy="8" rx="3" ry="4"/><ellipse cx="24.8" cy="13.6" rx="3" ry="3.8" transform="rotate(18 24.8 13.6)"/></svg></span>`;
-      tabs.innerHTML = [['all', '全部'], ['個案', '個案療癒'], ['寵物', `${paw}毛孩療癒`]]
+      tabs.innerHTML = [['all', '全部'], ['個案', '一對一陪伴'], ['寵物', `${paw}毛孩陪伴`]]
         .map(([v, label]) => `<button type="button" class="chip" data-story-tab="${v}">${label}</button>`).join('');
       tabs.addEventListener('click', (e) => { const b = e.target.closest('[data-story-tab]'); if (b) showTab(b.dataset.storyTab); });
     }
@@ -746,7 +746,7 @@
       if (!b) return;
       openArchive({
         title: '療癒分享', items: healing, cat: b.dataset.allHealing, detail: storyDetail,
-        cats: pets.length && people.length ? [['個案', '個案療癒'], ['寵物', '毛孩療癒']] : null,
+        cats: pets.length && people.length ? [['個案', '一對一陪伴'], ['寵物', '毛孩陪伴']] : null,
       });
     });
   }
