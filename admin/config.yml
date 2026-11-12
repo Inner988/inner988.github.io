@@ -174,7 +174,7 @@ collections:
                 default: 塔羅
                 options:
                   - { label: 塔羅課程, value: 塔羅 }
-                  - { label: 個案療癒（含靈魂藍圖・塔羅解讀）, value: 個案 }
+                  - { label: 一對一陪伴（含靈魂藍圖・塔羅解讀）, value: 個案 }
                   - { label: 全部課程, value: all }
 
   # ───────── 服務小卡（頌缽、大地靈氣、靈魂藍圖介紹裡的深色小卡）─────────
@@ -203,7 +203,7 @@ collections:
                 options:
                   - { label: 頌缽課程, value: 頌缽 }
                   - { label: 大地靈氣課程, value: 大地靈氣 }
-                  - { label: 個案療癒（含靈魂藍圖・塔羅解讀）, value: 個案 }
+                  - { label: 一對一陪伴（含靈魂藍圖・塔羅解讀）, value: 個案 }
                   - { label: 塔羅課程, value: 塔羅 }
                   - { label: 全部課程, value: all }
                   - { label: 塔羅介紹區塊, value: "#tarot" }
@@ -291,8 +291,8 @@ collections:
                   - { label: 大地靈氣, value: 大地靈氣 }
                   - { label: 靈魂藍圖, value: 靈魂藍圖 }
                   - { label: 塔羅, value: 塔羅 }
-                  - { label: 個案療癒, value: 個案 }
-                  - { label: 毛孩療癒（寵物）, value: 寵物 }
+                  - { label: 一對一陪伴, value: 個案 }
+                  - { label: 毛孩陪伴（寵物）, value: 寵物 }
                 default: 頌缽
               - { name: course, label: 上過的課程, widget: string, required: false }
               - { name: date, label: 日期（可不填）, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD", required: false, hint: "沒填日期的文章會排在列表最後面" }
