@@ -65,13 +65,16 @@
       </div>
     </div>
     <div class="nav-drop">
-      <a href="#bowl-stories" class="nav-drop-top">轉化故事<span class="caret" aria-hidden="true"></span></a>
+      <!-- 轉化故事：點了會打開「故事視窗」，只顯示學員分享（可切換分類、搜尋）；不再跳到頁面中間 -->
+      <a href="#bowl-stories" class="nav-drop-top" data-stories="all">轉化故事<span class="caret" aria-hidden="true"></span></a>
       <div class="nav-drop-menu">
-        <a href="#bowl-stories">頌缽學員分享</a>
-        <a href="#reiki-stories">大地靈氣學員分享</a>
-        <a href="#soul-stories">靈魂藍圖學員分享</a>
-        <a href="#tarot-stories">塔羅學員分享</a>
-        <a href="#stories">個案療癒分享</a>
+        <a href="#stories" data-stories="all" id="nav-story-all">全部故事</a>
+        <a href="#bowl-stories" data-stories="頌缽">頌缽學員分享</a>
+        <a href="#reiki-stories" data-stories="大地靈氣">大地靈氣學員分享</a>
+        <a href="#soul-stories" data-stories="靈魂藍圖">靈魂藍圖學員分享</a>
+        <a href="#tarot-stories" data-stories="塔羅">塔羅學員分享</a>
+        <a href="#stories" data-stories="個案" id="nav-story-case">個案療癒分享</a>
+        <a href="#stories" data-stories="寵物" id="nav-story-pet" hidden>毛孩療癒分享</a>
       </div>
     </div>
     <div class="nav-drop">
