@@ -587,6 +587,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 
 /* 全部文章列表 */
 .archive-tools { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.modal-body h2 + .archive-intro { margin: -14px 0 20px; color: var(--muted); font-size: .95rem; }
 .archive-search { flex: 1; min-width: 0; font: inherit; color: var(--ink); padding: 10px 16px; border: 1px solid var(--line); border-radius: 99px; background: #fff; }
 .archive-search:focus { outline: 2px solid var(--gold); border-color: transparent; }
 .archive-count { flex: none; font-size: .85rem; color: var(--muted); }
