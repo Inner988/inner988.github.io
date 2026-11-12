@@ -919,7 +919,7 @@
     });
     const isMobileMenu = () => window.matchMedia('(max-width: 1180px)').matches;
     $$('.nav-links a').forEach((a) => a.addEventListener('click', (e) => {
-      // 手機版：點「課程活動」「療癒分享」只展開／收合子選單，不跳頁
+      // 手機版：點「身心旅程」「轉化故事」「課程介紹」「關於老師」只展開／收合子選單，不跳頁
       if (a.classList.contains('nav-drop-top') && isMobileMenu()) {
         e.preventDefault();
         const drop = a.parentElement;
