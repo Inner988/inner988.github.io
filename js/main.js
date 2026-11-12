@@ -562,6 +562,7 @@
   /* ---------- 全部文章列表（老師隨筆、學員分享共用） ---------- */
   // 首頁只放最新幾篇，其他的都在這個可搜尋的列表裡；點文章看全文，可以再回到列表
   let archive = null;
+  let openStoriesHub = null; // 學員分享載入後才有；選單「轉化故事」用它打開故事視窗
   const archiveResults = () => {
     const q = archive.q.trim().toLowerCase();
     const shown = archive.items.map((item, i) => ({ item, i })).filter(({ item }) =>
@@ -569,7 +570,7 @@
       && (!q || [item.title, item.summary, item.body, item.student, item.course, item.quote].join(' ').toLowerCase().includes(q)));
     $('#archive-count').textContent = `共 ${shown.length} 篇`;
     $('#archive-results').innerHTML = shown.length ? shown.map(({ item, i }) => {
-      const pic = item.cover || item.photo;
+      const pic = archive.thumb ? archive.thumb(item) : (item.cover || item.photo);
       const sub = [formatDate(item.date), item.course].filter(Boolean).join('　');
       return `<li><button type="button" class="archive-item" data-archive-item="${i}">
         ${pic ? `<img src="${esc(img(pic))}" alt="" loading="lazy">` : ''}
@@ -580,8 +581,9 @@
   const showArchive = () => {
     openModal(`
       <h2>${esc(archive.title)}</h2>
+      ${archive.intro ? `<p class="archive-intro">${esc(archive.intro)}</p>` : ''}
       <div class="archive-tools">
-        <input type="search" class="archive-search" placeholder="搜尋文章…" aria-label="搜尋文章" value="${esc(archive.q)}">
+        <input type="search" class="archive-search" placeholder="${esc(archive.placeholder || '搜尋文章…')}" aria-label="搜尋" value="${esc(archive.q)}">
         <span class="archive-count" id="archive-count"></span>
       </div>
       ${archive.cats ? `<div class="filters archive-chips">${[['all', '全部'], ...archive.cats].map(([v, label]) =>
@@ -661,10 +663,15 @@
     const all = (data.items || []).slice().sort(byDateDesc)
       .filter((s) => (s.category !== '靈魂藍圖' || !$('#soul').hidden) && (s.category !== '塔羅' || !$('#tarot').hidden));
     const CAT_LABELS = { 頌缽: '頌缽', 大地靈氣: '大地靈氣', 靈魂藍圖: '靈魂藍圖', 塔羅: '塔羅', 個案: '個案療癒', 寵物: '毛孩療癒' };
+    // 「轉化故事」視窗：只顯示學員分享，可切換分類、搜尋；選單和「看全部 N 篇分享」都打開這個
     const openStories = (cat) => openArchive({
-      title: '學員分享', items: all, cat, detail: storyDetail,
+      title: '轉化故事', items: all, detail: storyDetail,
+      intro: '學員們親身經歷的改變與感受，點一篇就能看完整分享。', placeholder: '搜尋故事…',
+      thumb: (s) => s.photo || (youtubeId(s.video) ? `https://img.youtube.com/vi/${youtubeId(s.video)}/hqdefault.jpg` : STORY_DEFAULT_PHOTO[s.category] || STORY_DEFAULT_PHOTO['個案']),
+      cat: cat && cat !== 'all' && all.some((s) => s.category === cat) ? cat : 'all',
       cats: Object.entries(CAT_LABELS).filter(([k]) => all.some((s) => s.category === k)),
     });
+    openStoriesHub = openStories;
     const allButton = (cat, shown) => {
       const total = all.filter((s) => s.category === cat).length;
       return total > shown ? `<button type="button" class="more-link" data-all-stories="${esc(cat)}">看全部 ${total} 篇分享 →</button>` : '';
@@ -700,8 +707,9 @@
     const pets = all.filter((s) => s.category === '寵物');
     const hasAny = people.length + pets.length > 0;
     $('#stories').hidden = !hasAny;
-    const caseLink = $('.nav-links a[href="#stories"]');
-    if (caseLink) caseLink.hidden = !hasAny;
+    // 選單「轉化故事」裡的個案、毛孩項目：有分享才出現
+    $('#nav-story-case').hidden = people.length === 0;
+    $('#nav-story-pet').hidden = pets.length === 0;
     if (!hasAny) return;
     const grid = $('#story-grid');
     let shown = [];
@@ -930,6 +938,12 @@
       nav.classList.remove('is-open');
       $$('.nav-drop').forEach((d) => d.classList.remove('is-open'));
       a.blur(); // 收起桌機版的下拉選單
+      // 轉化故事：不跳到頁面中間，直接打開只有學員分享的「故事視窗」（筆電、桌機、手機都一樣清楚）
+      if (a.dataset.stories && openStoriesHub) {
+        e.preventDefault();
+        openStoriesHub(a.dataset.stories);
+        return;
+      }
       // 下拉選單的分類：跳到該區塊並套用同名的分類篩選
       if (a.dataset.jump) {
         const chip = $(`[data-filter-group="${a.dataset.jump}"] [data-filter="${a.dataset.cat}"]`);
