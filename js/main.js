@@ -565,16 +565,19 @@
   let openStoriesHub = null; // 學員分享載入後才有；選單「轉化故事」用它打開故事視窗
   const archiveResults = () => {
     const q = archive.q.trim().toLowerCase();
+    // 分組時，「全部學員」「全部個案」這類按鈕會一次篩出整組的分類
+    const groupCats = (archive.groups || []).find((g) => g.key === archive.cat);
     const shown = archive.items.map((item, i) => ({ item, i })).filter(({ item }) =>
-      (archive.cat === 'all' || item.category === archive.cat)
+      (archive.cat === 'all' || item.category === archive.cat || (groupCats && groupCats.cats.some(([k]) => k === item.category)))
       && (!q || [item.title, item.summary, item.body, item.student, item.course, item.quote].join(' ').toLowerCase().includes(q)));
     $('#archive-count').textContent = `共 ${shown.length} 篇`;
     $('#archive-results').innerHTML = shown.length ? shown.map(({ item, i }) => {
       const pic = archive.thumb ? archive.thumb(item) : (item.cover || item.photo);
       const sub = [formatDate(item.date), item.course].filter(Boolean).join('　');
+      const tag = archive.tag ? archive.tag(item) : null; // 例如「學員課後」「一對一體驗」小標籤
       return `<li><button type="button" class="archive-item" data-archive-item="${i}">
         ${pic ? `<img src="${esc(img(pic))}" alt="" loading="lazy">` : ''}
-        <span class="archive-text"><small>${esc(sub)}</small><strong>${esc(item.title)}</strong><em>${esc(item.summary)}</em></span>
+        <span class="archive-text"><small>${esc(sub)}${tag ? `<b class="archive-tag ${esc(tag.cls)}">${esc(tag.text)}</b>` : ''}</small><strong>${esc(item.title)}</strong><em>${esc(item.summary)}</em></span>
       </button></li>`;
     }).join('') : '<li class="empty">找不到符合的文章。</li>';
   };
@@ -586,10 +589,19 @@
         <input type="search" class="archive-search" placeholder="${esc(archive.placeholder || '搜尋文章…')}" aria-label="搜尋" value="${esc(archive.q)}">
         <span class="archive-count" id="archive-count"></span>
       </div>
-      ${archive.cats ? `<div class="filters archive-chips">${[['all', '全部'], ...archive.cats].map(([v, label]) =>
+      ${archive.groups ? archiveGroupsHTML() : archive.cats ? `<div class="filters archive-chips">${[['all', '全部'], ...archive.cats].map(([v, label]) =>
         `<button type="button" class="chip${archive.cat === v ? ' is-active' : ''}" data-archive-cat="${esc(v)}">${esc(label)}</button>`).join('')}</div>` : ''}
       <ul class="archive-list" id="archive-results"></ul>`);
     archiveResults();
+  };
+  // 分組的分類按鈕：「全部」＋每一組一個框（組名、說明、整組按鈕、各分類按鈕）；沒有分享的組不顯示
+  const archiveGroupsHTML = () => {
+    const chip = (v, label) => `<button type="button" class="chip${archive.cat === v ? ' is-active' : ''}" data-archive-cat="${esc(v)}">${label}</button>`;
+    return `<div class="filters archive-chips">${chip('all', '全部')}</div>${archive.groups.filter((g) => g.cats.length).map((g) => `
+      <div class="archive-group ${esc(g.cls || '')}">
+        <h3>${g.icon || ''}${esc(g.title)}${g.note ? `<small>${esc(g.note)}</small>` : ''}</h3>
+        <div class="filters archive-chips">${g.cats.length > 1 ? chip(g.key, esc(g.allLabel)) : ''}${g.cats.map(([k, label]) => chip(k, label)).join('')}</div>
+      </div>`).join('')}`;
   };
   const openArchive = (cfg) => { archive = { q: '', cat: 'all', ...cfg }; showArchive(); };
   // 關掉文章視窗時，裡面的影片一起停掉（不然會在背景繼續播放聲音）
@@ -662,14 +674,29 @@
     // 靈魂藍圖區塊還沒開放時，它的分享也不列入
     const all = (data.items || []).slice().sort(byDateDesc)
       .filter((s) => (s.category !== '靈魂藍圖' || !$('#soul').hidden) && (s.category !== '塔羅' || !$('#tarot').hidden));
-    const CAT_LABELS = { 頌缽: '頌缽', 大地靈氣: '大地靈氣', 靈魂藍圖: '靈魂藍圖', 塔羅: '塔羅', 個案: '一對一陪伴', 寵物: '毛孩陪伴' };
+    const CAT_LABELS = { 頌缽: '頌缽', 大地靈氣: '大地靈氣', 靈魂藍圖: '靈魂藍圖', 塔羅: '塔羅', 個案: '一對一個案體驗', 寵物: '毛孩的故事' };
+    // 三組：上過課的「學員課後分享」、直接來找老師的「一對一個案體驗」、不分學員或個案的「毛孩的故事」
+    const STUDENT_CATS = ['頌缽', '大地靈氣', '靈魂藍圖', '塔羅'];
+    const exists = (k) => all.some((s) => s.category === k);
+    const countOf = (k) => all.filter((s) => s.category === k).length;
+    const pawIcon = `<span class="paw" aria-hidden="true"><svg viewBox="0 0 32 32"><ellipse cx="16" cy="21.5" rx="7.2" ry="6.2"/><ellipse cx="7.2" cy="13.6" rx="3" ry="3.8" transform="rotate(-18 7.2 13.6)"/><ellipse cx="12.6" cy="8" rx="3" ry="4"/><ellipse cx="19.4" cy="8" rx="3" ry="4"/><ellipse cx="24.8" cy="13.6" rx="3" ry="3.8" transform="rotate(18 24.8 13.6)"/></svg></span>`;
     // 「轉化故事」視窗：只顯示學員分享，可切換分類、搜尋；選單和「看全部 N 篇分享」都打開這個
     const openStories = (cat) => openArchive({
       title: '轉化故事', items: all, detail: storyDetail,
-      intro: '學員們親身經歷的改變與感受，點一篇就能看完整分享。', placeholder: '搜尋故事…',
+      intro: '學員、個案與毛孩們親身經歷的改變與感受，點一篇就能看完整分享。', placeholder: '搜尋故事…',
       thumb: (s) => s.photo || (youtubeId(s.video) ? `https://img.youtube.com/vi/${youtubeId(s.video)}/hqdefault.jpg` : STORY_DEFAULT_PHOTO[s.category] || STORY_DEFAULT_PHOTO['個案']),
-      cat: cat && cat !== 'all' && all.some((s) => s.category === cat) ? cat : 'all',
-      cats: Object.entries(CAT_LABELS).filter(([k]) => all.some((s) => s.category === k)),
+      tag: (s) => (s.category === '寵物' ? { text: '毛孩的故事', cls: 'is-pet' }
+        : s.category === '個案' ? { text: '一對一體驗', cls: 'is-client' } : { text: '學員課後', cls: 'is-student' }),
+      cat: cat && (cat === 'g-student' || exists(cat)) ? cat : 'all',
+      groups: [
+        { key: 'g-student', title: '學員課後分享', note: '上過老師課程的學員', allLabel: '全部學員',
+          cats: STUDENT_CATS.filter(exists).map((k) => [k, esc(CAT_LABELS[k])]) },
+        // 只有一個分類的組：按鈕直接寫「看全部 N 篇」
+        { key: '個案', title: '一對一個案體驗', note: '沒上課、直接來找老師的個案', cls: 'is-client',
+          cats: exists('個案') ? [['個案', `看全部 ${countOf('個案')} 篇`]] : [] },
+        { key: '寵物', title: '毛孩的故事', note: '學員或個案與毛孩之間的故事', cls: 'is-pet', icon: pawIcon,
+          cats: exists('寵物') ? [['寵物', `${pawIcon}看全部 ${countOf('寵物')} 篇`]] : [] },
+      ],
     });
     openStoriesHub = openStories;
     const allButton = (cat, shown) => {
@@ -710,6 +737,8 @@
     // 選單「轉化故事」裡的個案、毛孩項目：有分享才出現
     $('#nav-story-case').hidden = people.length === 0;
     $('#nav-story-pet').hidden = pets.length === 0;
+    // 個案、毛孩都沒有分享時，分隔線也一起隱藏
+    $('#nav-story-sep').hidden = !hasAny;
     if (!hasAny) return;
     const grid = $('#story-grid');
     let shown = [];
@@ -732,22 +761,19 @@
     });
     const tabs = $('#story-tabs');
     tabs.hidden = !(pets.length && people.length);
-    $('#stories-sub').textContent = pets.length ? (people.length ? '一對一陪伴與毛孩陪伴的真實體驗' : '毛孩陪伴的真實體驗') : '一對一陪伴的真實體驗';
+    $('#stories-sub').textContent = pets.length ? (people.length ? '一對一個案體驗與毛孩的故事' : '毛孩的故事') : '一對一個案體驗';
     if (!tabs.hidden) {
       // 毛孩標籤用自己畫的腳掌圖示（比表情符號大、可以做動態）
-      const paw = `<span class="paw" aria-hidden="true"><svg viewBox="0 0 32 32"><ellipse cx="16" cy="21.5" rx="7.2" ry="6.2"/><ellipse cx="7.2" cy="13.6" rx="3" ry="3.8" transform="rotate(-18 7.2 13.6)"/><ellipse cx="12.6" cy="8" rx="3" ry="4"/><ellipse cx="19.4" cy="8" rx="3" ry="4"/><ellipse cx="24.8" cy="13.6" rx="3" ry="3.8" transform="rotate(18 24.8 13.6)"/></svg></span>`;
-      tabs.innerHTML = [['all', '全部'], ['個案', '一對一陪伴'], ['寵物', `${paw}毛孩陪伴`]]
+      tabs.innerHTML = [['all', '全部'], ['個案', '一對一個案體驗'], ['寵物', `${pawIcon}毛孩的故事`]]
         .map(([v, label]) => `<button type="button" class="chip" data-story-tab="${v}">${label}</button>`).join('');
       tabs.addEventListener('click', (e) => { const b = e.target.closest('[data-story-tab]'); if (b) showTab(b.dataset.storyTab); });
     }
     showTab(tabs.hidden ? (pets.length ? '寵物' : '個案') : 'all');
+    // 「看全部」：打開同一個「轉化故事」視窗，停在目前選的分類（全部時就顯示全部故事）
     $('#story-all').addEventListener('click', (e) => {
       const b = e.target.closest('[data-all-healing]');
       if (!b) return;
-      openArchive({
-        title: '療癒分享', items: healing, cat: b.dataset.allHealing, detail: storyDetail,
-        cats: pets.length && people.length ? [['個案', '一對一陪伴'], ['寵物', '毛孩陪伴']] : null,
-      });
+      openStories(b.dataset.allHealing);
     });
   }
 
