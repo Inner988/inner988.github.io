@@ -90,6 +90,10 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 .nav-drop:hover .nav-drop-menu, .nav-drop:focus-within .nav-drop-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
 .nav .nav-drop-menu a { color: var(--ink) !important; padding: 8px 14px; border-radius: 8px; text-align: center; white-space: nowrap; }
 .nav .nav-drop-menu a:hover { background: var(--sand); color: var(--bronze-deep) !important; }
+/* 下拉選單裡的組名與分隔線（轉化故事：學員課後分享／一對一體驗分享） */
+.nav-lbl { display: block; padding: 8px 14px 2px; font-size: .74rem; font-weight: 600; letter-spacing: .12em; color: var(--bronze); text-align: center; }
+.nav-lbl[hidden], .nav-sep[hidden] { display: none; }
+.nav-sep { display: block; height: 0; margin: 6px 10px; border-top: 1px dashed var(--line); }
 .nav-toggle { display: none; background: none; border: 0; width: 40px; height: 40px; cursor: pointer; position: relative; }
 .nav-toggle span { position: absolute; left: 9px; right: 9px; height: 1.5px; background: var(--ink); transition: transform .3s; }
 .nav-toggle span:first-child { top: 15px; }
@@ -588,6 +592,20 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
 /* 全部文章列表 */
 .archive-tools { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .modal-body h2 + .archive-intro { margin: -14px 0 20px; color: var(--muted); font-size: .95rem; }
+/* 「轉化故事」分組：學員課後分享（白框）、一對一體驗分享（淡金框） */
+.archive-group { margin: 0 0 12px; padding: 12px 14px 4px; border-radius: 14px; background: #fff; border: 1px solid var(--line); }
+.archive-group.is-client { background: #fbf6ee; border-color: rgba(201, 154, 78, .35); }
+.archive-group h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0 0 8px; font: 600 .92rem var(--serif); letter-spacing: .1em; color: var(--bronze-deep); }
+.archive-group h3 small { font: 400 .78rem var(--sans); letter-spacing: 0; color: var(--muted); }
+.archive-group .archive-chips { margin-bottom: 8px; }
+.archive-chips .chip .paw { width: 1.25em; height: 1.25em; vertical-align: -0.2em; margin-right: 4px; }
+/* 第三組「毛孩的故事」：淡淡的暖粉色框，標題前有小腳掌 */
+.archive-group.is-pet { background: #fcf4f0; border-color: rgba(196, 140, 112, .35); }
+.archive-group h3 .paw { width: 1.3em; height: 1.3em; margin-right: -4px; align-self: center; }
+.archive-tag.is-pet { background: #f6e1d8; color: #8f4e36; }
+/* 列表上的小標籤：學員課後／一對一體驗／毛孩的故事 */
+.archive-tag { display: inline-block; margin-left: 8px; padding: 0 8px; border-radius: 99px; font-size: .72rem; font-weight: 500; background: var(--sand); color: var(--bronze-deep); }
+.archive-tag.is-client { background: #f1e3cf; color: #8a5a2a; }
 .archive-search { flex: 1; min-width: 0; font: inherit; color: var(--ink); padding: 10px 16px; border: 1px solid var(--line); border-radius: 99px; background: #fff; }
 .archive-search:focus { outline: 2px solid var(--gold); border-color: transparent; }
 .archive-count { flex: none; font-size: .85rem; color: var(--muted); }
