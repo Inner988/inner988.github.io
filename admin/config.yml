@@ -282,19 +282,20 @@ collections:
             summary: "{{fields.date}}｜{{fields.student}}｜{{fields.title}}"
             fields:
               - { name: title, label: 標題, widget: string }
-              - { name: student, label: 學員稱呼（可不填）, widget: string, required: false, hint: "例：護理師・頌缽初階學員。沒填時網站顯示「學員」" }
+              - { name: student, label: 學員／個案稱呼（可不填）, widget: string, required: false, hint: "例：護理師・頌缽初階學員、貓咪家長。沒填時網站顯示「學員」" }
               - name: category
                 label: 分類
                 widget: select
+                hint: "上過課的學員選「學員課後分享」；沒上課、直接來找老師的選「一對一個案體驗」；跟毛孩有關的（不論學員或個案）都選「毛孩的故事」"
                 options:
-                  - { label: 頌缽, value: 頌缽 }
-                  - { label: 大地靈氣, value: 大地靈氣 }
-                  - { label: 靈魂藍圖, value: 靈魂藍圖 }
-                  - { label: 塔羅, value: 塔羅 }
-                  - { label: 一對一陪伴, value: 個案 }
-                  - { label: 毛孩陪伴（寵物）, value: 寵物 }
+                  - { label: 學員課後分享｜頌缽, value: 頌缽 }
+                  - { label: 學員課後分享｜大地靈氣, value: 大地靈氣 }
+                  - { label: 學員課後分享｜靈魂藍圖, value: 靈魂藍圖 }
+                  - { label: 學員課後分享｜塔羅, value: 塔羅 }
+                  - { label: 一對一個案體驗, value: 個案 }
+                  - { label: 毛孩的故事（學員或個案的毛孩都選這個）, value: 寵物 }
                 default: 頌缽
-              - { name: course, label: 上過的課程, widget: string, required: false }
+              - { name: course, label: 上過的課程／體驗的服務（可不填）, widget: string, required: false, hint: "例：大地靈氣初階班、頌缽一對一、遠距大地靈氣。會顯示在卡片的小標籤上" }
               - { name: date, label: 日期（可不填）, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD", required: false, hint: "沒填日期的文章會排在列表最後面" }
               - { name: quote, label: 一句話引言（卡片上的大字）, widget: string, required: false }
               - { name: summary, label: 摘要（卡片上的小字）, widget: text, required: false }
