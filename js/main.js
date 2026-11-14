@@ -58,6 +58,10 @@
     $$('[data-site-list]').forEach((el) => {
       el.innerHTML = (site[el.dataset.siteList] || []).map((t) => `<li>${esc(t)}</li>`).join('');
     });
+    // 老師照片的外框形狀（後台可選）：拱門、圓形、橢圓、圓角方形、柔和花瓣
+    const shape = ['arch', 'circle', 'oval', 'rounded', 'blob'].includes(site.teacherPhotoShape) ? site.teacherPhotoShape : 'arch';
+    const photoBox = $('.about-photo');
+    if (photoBox) photoBox.classList.add(`shape-${shape}`);
     $$('[data-site-benefits]').forEach((el) => {
       el.innerHTML = (site[el.dataset.siteBenefits] || []).map(benefitCard).join('');
     });
