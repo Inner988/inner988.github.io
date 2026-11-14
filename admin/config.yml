@@ -389,6 +389,18 @@ collections:
           - { name: heroSubtitle, label: 首頁副標, widget: string, required: false }
           - { name: heroImage, label: 首頁背景照片（可不放）, widget: image, required: false }
           - { name: teacherPhoto, label: 老師照片, widget: image, required: false }
+          - name: teacherPhotoShape
+            label: 老師照片的外框形狀
+            widget: select
+            required: false
+            default: arch
+            hint: "選好後按儲存，網站上的老師照片會換成這個形狀（外圍的金色細框也會跟著變）"
+            options:
+              - { label: 拱門（上圓下方）, value: arch }
+              - { label: 圓形, value: circle }
+              - { label: 橢圓, value: oval }
+              - { label: 圓角方形, value: rounded }
+              - { label: 柔和花瓣（會慢慢變化的有機曲線）, value: blob }
           - { name: about, label: 關於老師, widget: markdown }
           - name: credentials
             label: 身分標籤
