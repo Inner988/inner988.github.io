@@ -280,6 +280,22 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.4; marg
   color: rgba(255, 255, 255, .8); font: 600 5rem var(--serif);
 }
 .about-photo img:not([hidden]) + .photo-placeholder { display: none; }
+/* 老師照片外框（後台「老師照片的外框形狀」可選）；金色細框跟著同一個形狀 */
+.about-photo { --shape: 200px 200px var(--radius) var(--radius); }
+.about-photo::before, .about-photo img, .about-photo .photo-placeholder { border-radius: var(--shape); }
+.about-photo.shape-circle { aspect-ratio: 1 / 1; --shape: 50%; }
+.about-photo.shape-circle::before { inset: 16px -16px -16px 16px; }
+.about-photo.shape-oval { --shape: 50%; }
+.about-photo.shape-rounded { --shape: 32px; }
+.about-photo.shape-blob { --shape: 62% 38% 46% 54% / 58% 44% 56% 42%; }
+.about-photo.shape-blob img, .about-photo.shape-blob .photo-placeholder { animation: photoBlob 14s ease-in-out infinite alternate; }
+.about-photo.shape-blob::before { animation: breathe 7s ease-in-out infinite, photoBlob 14s ease-in-out infinite alternate-reverse; }
+@keyframes photoBlob {
+  0% { border-radius: 62% 38% 46% 54% / 58% 44% 56% 42%; }
+  50% { border-radius: 44% 56% 58% 42% / 46% 58% 42% 54%; }
+  100% { border-radius: 54% 46% 40% 60% / 60% 40% 60% 40%; }
+}
+@media (prefers-reduced-motion: reduce) { .about-photo.shape-blob img, .about-photo.shape-blob::before, .about-photo.shape-blob .photo-placeholder { animation: none; } }
 .about-text .section-title { margin-bottom: 26px; }
 
 /* ========== 頌缽／靈氣介紹 ========== */
