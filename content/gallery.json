@@ -1,22 +1,6 @@
 {
   "albums": [
     {
-      "name": "頌缽日常",
-      "media": [
-        "/images/uploads/class-1.jpg",
-        "/images/uploads/class-2.jpg",
-        "/images/uploads/676367_0.jpg",
-        "/images/uploads/676377_0.jpg",
-        "/images/uploads/676381_0.jpg",
-        "/images/uploads/676410_0.jpg",
-        "/images/uploads/676414_0.jpg",
-        "/images/uploads/676796.jpg",
-        "/images/uploads/513667.jpg",
-        "/images/uploads/513671.jpg"
-      ],
-      "videos": []
-    },
-    {
       "name": "大地靈氣初階/進階/高階/大師階",
       "media": [
         "/images/uploads/676763_1.jpg",
@@ -42,7 +26,13 @@
         "/images/uploads/513659.jpg",
         "/images/uploads/513580_0.jpg",
         "/images/uploads/513587_0.jpg",
-        "/images/uploads/513590_0.jpg"
+        "/images/uploads/513590_0.jpg",
+        "/images/uploads/676363_0.jpg",
+        "/images/uploads/676368_0.jpg",
+        "/images/uploads/676773_0.jpg",
+        "/images/uploads/676771_0.jpg",
+        "/images/uploads/676775_0.jpg",
+        "/images/uploads/676774_0.jpg"
       ],
       "videos": []
     },
@@ -52,17 +42,20 @@
         "/images/uploads/f6a1a703-b26c-49bd-ac68-d3e28f5924a0.mp4",
         "/images/uploads/31798432-11c6-4724-8821-acb175d62d30.mp4",
         "/images/uploads/c9961780-8d06-4fcb-b811-fe7f070d03d9.mp4",
-        "/images/uploads/676363_0.jpg",
-        "/images/uploads/676365_0.jpg",
-        "/images/uploads/676368_0.jpg",
-        "/images/uploads/676759_0.jpg",
-        "/images/uploads/676760_0.jpg",
-        "/images/uploads/676771_0.jpg",
-        "/images/uploads/676773_0.jpg",
-        "/images/uploads/676774_0.jpg",
-        "/images/uploads/676775_0.jpg",
-        "/images/uploads/676778_0.jpg",
-        "/images/uploads/676784_0.jpg"
+        "/images/uploads/676367_0.jpg",
+        "/images/uploads/676377_0.jpg",
+        "/images/uploads/676381_0.jpg",
+        "/images/uploads/676410_0.jpg",
+        "/images/uploads/676414_0.jpg",
+        "/images/uploads/class-3.jpg",
+        "/images/uploads/class-2.jpg",
+        "/images/uploads/class-1.jpg",
+        "/images/uploads/676796.jpg",
+        "/images/uploads/513667.jpg",
+        "/images/uploads/513671.jpg",
+        "/images/uploads/496509644_1268370945290295_8131867638427855302_n.jpg",
+        "/images/uploads/505957670_1293258759468180_8473788852880739141_n.jpg",
+        "/images/uploads/494679667_1264839495643440_906765301071666069_n.jpg"
       ],
       "videos": []
     },
